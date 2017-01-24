@@ -1,0 +1,22 @@
+[
+    {
+      "idUser": 1,
+      "volume": "1",
+      "vibreur": "on"
+    },
+    {
+      "idUser": 2,
+      "volume": "1",
+      "vibreur": "on"
+    },
+    {
+      "idUser": 3,
+      "volume": "1",
+      "vibreur": "on"
+    },
+    {
+      "idUser": 4,
+      "volume": "1",
+      "vibreur": "on"
+    }
+  ]
