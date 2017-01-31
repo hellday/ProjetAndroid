@@ -38,16 +38,20 @@ public class SettingsScreen implements Screen {
 
     private boolean vibreurIsOn;
     private TextButton onOffButton;
+    private String usernameSession;
 
     public DataBaseTest db;
 
     private Label title, vibreur, volume;
 
-    public SettingsScreen(GameTest pgame)
+    public SettingsScreen(GameTest pgame, String user)
     {
         this.game = pgame;
-        atlas = new TextureAtlas("ui/defaultskin.atlas");
-        skin = new Skin(Gdx.files.internal("ui/defaultskin.json"), atlas);
+        this.usernameSession = user;
+        System.out.println("User connecté : " + usernameSession);
+
+        atlas = new TextureAtlas("skin/uiskin.atlas");
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"), atlas);
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -75,7 +79,7 @@ public class SettingsScreen implements Screen {
         db.createDatabase();
         db.selectData();
 
-        if(db.returnData("settings", "vibreur", "idUser", 1).equalsIgnoreCase("on")) {
+        if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) {
             vibreurIsOn = true;
         }else vibreurIsOn = false;
 
@@ -98,7 +102,7 @@ public class SettingsScreen implements Screen {
         returnButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new TestScreen(game));
+                ((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(game, usernameSession));
             }
         });
 
@@ -109,22 +113,22 @@ public class SettingsScreen implements Screen {
                     //Vibreur désactivé
                     onOffButton.setText("Off");
                     vibreurIsOn = false;
-                    db.updateData("settings", "vibreur", "off", "idUser", 1);
+                    db.updateData("settings", "vibreur", "off", "idUser", db.getIdFromNameUser(usernameSession));
                 }else {
                     //Vibreur activé
                     onOffButton.setText("On");
                     vibreurIsOn = true;
-                    db.updateData("settings", "vibreur", "on", "idUser", 1);
+                    db.updateData("settings", "vibreur", "on", "idUser", db.getIdFromNameUser(usernameSession));
                 }
             }
         });
 
 
         //Label
-        title = new Label("Paramètres", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        title = new Label("Parametres", skin);
         title.setFontScale(2);
-        vibreur = new Label("Vibreur :", new Label.LabelStyle(new BitmapFont(), Color.GRAY));
-        volume = new Label("Volume :", new Label.LabelStyle(new BitmapFont(), Color.GRAY));
+        vibreur = new Label("Vibreur :", skin);
+        volume = new Label("Volume :", skin);
 
         //Add buttons to table
         mainTable.add(returnButton).width(100).height(25);
@@ -133,13 +137,7 @@ public class SettingsScreen implements Screen {
         mainTable.add(volume).expandX().padTop(25);
         mainTable.row();
         mainTable.add(vibreur).expandX().padTop(25);
-        mainTable.add(onOffButton).width(100).height(25);
-//        mainTable.row();
-//        mainTable.add(playButton).width(100).height(25);
-//        mainTable.row();
-//        mainTable.add(optionsButton).width(100).height(25).padTop(10);
-//        mainTable.row();
-//        mainTable.add(exitButton).width(100).height(25).padTop(10);
+        mainTable.add(onOffButton).width(100).height(25).padTop(25);
 
         //Add table to stage
         stage.addActor(mainTable);

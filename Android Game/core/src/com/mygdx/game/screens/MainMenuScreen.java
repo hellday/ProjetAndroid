@@ -1,126 +1,260 @@
 package com.mygdx.game.screens;
-  import com.badlogic.gdx.Game;
-  import com.badlogic.gdx.Gdx;
-        import com.badlogic.gdx.Screen;
-        import com.badlogic.gdx.graphics.GL20;
-  import com.badlogic.gdx.graphics.OrthographicCamera;
-  import com.badlogic.gdx.graphics.Texture;
-  import com.badlogic.gdx.scenes.scene2d.InputEvent;
-        import com.badlogic.gdx.scenes.scene2d.Stage;
-        import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-        import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-        import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-        import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-        import com.badlogic.gdx.scenes.scene2d.ui.Table;
-        import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-        import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-        import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-  import com.badlogic.gdx.utils.viewport.FitViewport;
-  import com.badlogic.gdx.utils.viewport.Viewport;
-  import com.mygdx.game.GameTest;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.mygdx.game.Database.DataBaseTest;
+import com.mygdx.game.GameTest;
+
+import java.util.ArrayList;
+
+/**
+ * Created by Terry on 11/01/2017.
+ */
 
 public class MainMenuScreen implements Screen {
 
-    Skin skin;
+    private SpriteBatch batch;
+    protected Stage stage;
     private Viewport viewport;
-    Stage stage;
-    GameTest game;
-    Texture background, settings;
+    private OrthographicCamera camera;
+    private TextureAtlas atlas;
+    protected Skin skin, mySkin;
+    protected GameTest game;
 
-    // constructor to keep a reference to the main Game class
-    public MainMenuScreen(GameTest pgame){
+    private Label title, user;
+
+    private Dialog pseudo;
+    private TextField username;
+    private SelectBox selectUsername;
+    private String newUsername;
+    private ArrayList<String> allUser;
+    private String usernameSession;
+
+    private DataBaseTest db;
+
+    public MainMenuScreen(GameTest pgame, String user)
+    {
         this.game = pgame;
+        this.usernameSession = user;
+        System.out.println("User connecté : " + usernameSession);
 
-        background = new Texture("ui/bg.png");
-        settings = new Texture("ui/settings.png");
+        atlas = new TextureAtlas("skin/uiskin.atlas");
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"), atlas);
+        mySkin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
+
+        batch = new SpriteBatch();
+        camera = new OrthographicCamera();
+        viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, camera);
+        viewport.apply();
+
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        camera.update();
+
+        stage = new Stage(viewport, batch);
 
 
-        viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport, game.batch);
+        //Database
+        db = new DataBaseTest();
+
+        //Stage should control input:
         Gdx.input.setInputProcessor(stage);
 
-        skin = new Skin( Gdx.files.internal( "ui/defaultskin.json" ));
+    }
 
-        Table table=new Table();
-        table.center();
-        table.setFillParent(true);
 
-        final TextButton startGame=new TextButton("Jouer", skin);
-        startGame.getLabel().setFontScale(0.8f, 0.8f);
-        table.add(startGame).width(100).height(25);
-        table.row();
+    @Override
+    public void show() {
+        //Database
+        db.createDatabase();
 
-        TextButton score=new TextButton("Score", skin);
-        //score.getLabel().setFontScale(0.8f, 0.8f);
-        table.add(score).width(100).height(25).padTop(10);
-        table.row();
+        //Create Table
+        final Table mainTable = new Table();
+        //Set table to fill stage
+        mainTable.setFillParent(true);
+        //Set alignment of contents in the table.
+        mainTable.top();
 
-        stage.addActor(table);
+        //Create buttons
+        TextButton playButton = new TextButton("JOUER", skin);
+        TextButton scoreButton = new TextButton("SCORE", skin);
+        final TextButton settingsButton = new TextButton("OPTIONS", skin);
+        TextButton exitButton = new TextButton("QUITTER", skin);
 
-        startGame.addListener(new ClickListener(){
+        //Image buttons
+        ImageButton testImageButton = new ImageButton(mySkin);
+        testImageButton.sizeBy(0.1f);
+        testImageButton.getStyle().imageUp = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("switch_off.png"))));
+        testImageButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("switch_on.png"))));
+
+
+        //Labels
+        title = new Label("BILLY", skin);
+        title.setFontScale(2);
+
+        //Add listeners to buttons
+        playButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                startGame.addAction(Actions.fadeOut(0.7f));
-                game.setScreen(new PlayScreen(game));
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new LevelSelectScreen(game, usernameSession));
+            }
+        });
+        scoreButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new ScoreScreen(game, usernameSession));
+            }
+        });
+        settingsButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new SettingsScreen(game, usernameSession));
+            }
+        });
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                Gdx.app.exit();
             }
         });
 
-        startGame.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                startGame.addAction(Actions.fadeOut(0.7f));
-            }
-        });
+        //Add buttons to table
+        mainTable.add(title).expandX();
+        mainTable.row();
+        mainTable.add(playButton).width(100).height(25).padTop(20);
+        mainTable.row();
+        mainTable.add(scoreButton).width(100).height(25).padTop(10);
+        mainTable.row();
+        mainTable.add(settingsButton).width(100).height(25).padTop(10);
+        mainTable.row();
+//        mainTable.add(exitButton).width(100).height(25).padTop(10);
+//        mainTable.row();
+//        mainTable.add(testImageButton).padTop(10);
+        mainTable.setVisible(false);
+
+        //POP-UP : Choix/Création > Utilisateur
+
+        if (usernameSession == null){ //Si l'utilisateur n'est pas encore connecté
+            pseudo = new Dialog("Pseudo", skin) {
+
+                {
+                    this.setMovable(false);
+
+                    allUser = db.returnAllUser();
+                    selectUsername = new SelectBox(skin);
+                    selectUsername.setItems(allUser.toArray());
+
+                    this.getButtonTable().add(selectUsername);
+                    button("Connexion", "con");
+                    button("Nouveau", "new");
+
+                }
+
+                @Override
+                protected void result(final Object object) {
+
+                    if (object.equals("new")) {
+
+                        new Dialog("Nouveau pseudo", skin) {
+
+                            {
+                                username = new TextField("", skin);
+                                username.setMessageText("");
+                                this.getButtonTable().add(username);
+                                button("Nouveau");
+                            }
+
+                            @Override
+                            protected void result(final Object object) {
+                                //Création du nouvel utilisateur
+                                newUsername = username.getText();
+                                db.insertUser(newUsername);
+                                db.newUserData(newUsername);
+                                mainTable.setVisible(true);
+                            }
+
+                        }.show(stage);
+                    } else {
+                        //Connexion de l'utilisateur
+//                        user = new Label(selectUsername.getSelected().toString(), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+//                        mainTable.add(user).expandX();
+                        mainTable.setVisible(true);
+                        usernameSession = selectUsername.getSelected().toString();
+
+                    }
+
+                }
+
+            }.show(stage);
+    }else mainTable.setVisible(true);
+
+        //Add table to stage
+        stage.addActor(mainTable);
     }
 
     @Override
     public void render(float delta) {
-        // clear the screen
-        Gdx.gl.glClearColor(0 ,0 ,0 , 1);
+        Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.batch.begin();
-        game.batch.draw(background, 0, 0, GameTest.V_WIDTH, GameTest.V_HEIGHT);
-        game.batch.draw(settings, 530, 10, 100, 100);
-        game.batch.end();
-
-        // let the stage act and draw
-        stage.act(delta);
+        stage.act();
         stage.draw();
+    }
 
-
+    /** Actualise les informations à l'écran */
+    public void update(float dt){
+        camera.update();
     }
 
     @Override
     public void resize(int width, int height) {
-    }
-
-    @Override
-    public void show() {
-        // called when this screen is set as the screen with game.setScreen();
-    }
-
-    @Override
-    public void hide() {
-        // called when current screen changes from this to a different screen
-        stage.dispose();
+        viewport.update(width, height);
+        camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
+        camera.update();
     }
 
     @Override
     public void pause() {
+
     }
 
     @Override
     public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
     }
 
     @Override
     public void dispose() {
-        // never called automatically
-        stage.dispose();
+        skin.dispose();
+        atlas.dispose();
     }
 }
-
-
-
-
