@@ -1,6 +1,7 @@
 package com.mygdx.game.sprites.Player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -82,22 +83,27 @@ public class Mario extends Sprite {
 
         //Animation LITTLE : COURIR
 
-        for(int i = 0; i < 2; i++){
-            frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234 - 32, 0, 234, 255));
+//        for(int i = 0; i < 2; i++){
+//            frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234 - 32, 0, 234, 255));
+//        }
+        for(int i = 1; i < 4; i++){
+            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 30, 0, 156, 170));
         }
-        marioRun = new Animation(0.2f, frames);
+        for(int i = 0; i < 3; i++){
+                frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 26, 170, 156, 170));
+        }
+        marioRun = new Animation(0.08f, frames);
         frames.clear();
 
         //Animation ATTACK
 
-        for(int i = 0; i < 6; i++){
-            if(i < 3) {
-                frames.add(new TextureRegion(atlas.findRegion("knight_attack"), i * 234 - 32, 0, 234, 255));
-            }else {
-                frames.add(new TextureRegion(atlas.findRegion("knight_attack"), i * 234 - 32, 0, 234, 255));
-            }
+        for(int i = 1; i < 4; i++){
+            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 30, 0, 156, 170));
         }
-        marioAttack = new Animation(0.1f, frames);
+        for(int i = 0; i < 3; i++){
+            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 26, 170, 156, 170));
+        }
+        marioAttack = new Animation(0.5f, frames);
         frames.clear();
 
         //Animation BIG : COURIR
@@ -355,6 +361,9 @@ public class Mario extends Sprite {
             default:
                 region = marioIsBig ? bigMarioStand : marioStand;
                 break;
+            case ATTACKING:
+                region = marioAttack.getKeyFrame(stateTimer, true);
+                break;
         }
 
         //if mario is running left and the texture isnt facing left... flip it.
@@ -383,6 +392,8 @@ public class Mario extends Sprite {
         //Si il meurt
         if(marioIsDead){
             return State.DEAD;
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+           return State.ATTACKING;
         }
 
         //Si il grandi

@@ -124,4 +124,5 @@ idea {
 }
 dependencies {
     compile files('D:/Android Game/core/src/libs/gdx-sqlite-android.jar')
+    compile files('C:/Users/Terry/ProjetAndroid/Android Game/core/src/libs/gdx-sqlite-android.jar')
 }
