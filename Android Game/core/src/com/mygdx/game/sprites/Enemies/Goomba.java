@@ -3,6 +3,7 @@ package com.mygdx.game.sprites.Enemies;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -25,6 +26,7 @@ import com.mygdx.game.tools.B2WorldCreator;
 
 public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
 
+    private TextureAtlas atlas;
     private float stateTime;
     private Animation walkAnimation;
     private Array<TextureRegion> frames;
@@ -41,13 +43,18 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
         super(screen, x, y);
         frames = new Array<TextureRegion>();
 
-        for(int i = 0; i < 2; i++){
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("goomba"), i * 16, 0, 16, 16));
+//        for(int i = 0; i < 2; i++){
+//            frames.add(new TextureRegion(screen.getAtlas().findRegion("goomba"), i * 16, 0, 16, 16));
+//        }
+
+        atlas = new TextureAtlas("sprites/ghost.pack");
+
+        for(int i = 1; i < 5; i++){
+            frames.add(new TextureRegion(atlas.findRegion("ghost"), i * 96, 0, 96, 128));
         }
 
-        walkAnimation = new Animation(0.4f, frames);
-        stateTime = 0;
-        setBounds(getX(), getY(), 16 / GameTest.PPM, 16 / GameTest.PPM);
+        walkAnimation = new Animation(0.2f, frames);
+        setBounds(getX(), getY(), 24 / GameTest.PPM, 24 / GameTest.PPM);
         setToDestroy = false;
         destroyed = false;
         canBeRemoved = false;
@@ -56,17 +63,43 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
         deadRotationDegrees = 0;
     }
 
+    public TextureRegion getFrame(float dt){
+        TextureRegion region;
+
+        switch (currentState){
+            case WALKING:
+            default:
+                region = walkAnimation.getKeyFrame(stateTime, true);
+                break;
+        }
+
+        if(velocity.x > 0 && !region.isFlipX()){
+            region.flip(true, false);
+        }
+
+        if(velocity.x < 0 && region.isFlipX()){
+            region.flip(true, false);
+        }
+
+        //if the current state is the same as the previous state increase the state timer.
+        //otherwise the state has changed and we need to reset timer.
+        stateTime = currentState == previousState ? stateTime + dt : 0;
+        //update previous state
+        previousState = currentState;
+        //return our final adjusted frame
+        return region;
+    }
+
     public void update(float dt){
-        stateTime += dt;
+        setRegion(getFrame(dt));
 
         if(setToDestroy && !destroyed){
             world.destroyBody(b2body);
             destroyed = true;
             callRemove();
 
-
             setRegion(new TextureRegion(screen.getAtlas().findRegion("goomba"), 32, 0, 16, 16));
-            stateTime = 0;
+            //stateTime = 0;
         }else if(!destroyed) {
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
             setRegion(walkAnimation.getKeyFrame(stateTime, true));

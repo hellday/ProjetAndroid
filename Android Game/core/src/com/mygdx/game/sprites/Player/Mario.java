@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTest;
@@ -28,7 +30,7 @@ import com.mygdx.game.sprites.Other.FireBall;
  */
 
 public class Mario extends Sprite {
-    public enum State { FALLING, JUMPING, STANDING, RUNNING, GROWING, DEAD};
+    public enum State { FALLING, JUMPING, STANDING, RUNNING, GROWING, ATTACKING, DEAD};
     public State currentState;
     public State previousState;
     public World world;
@@ -39,6 +41,8 @@ public class Mario extends Sprite {
     private Animation marioRun;
     private TextureRegion marioJump;
     private TextureRegion marioDead;
+
+    private Animation marioAttack;
 
     //Big Mario
     private TextureRegion bigMarioStand;
@@ -54,6 +58,8 @@ public class Mario extends Sprite {
     private boolean timeToRedefineMario;
     private boolean marioIsDead;
     private boolean ground;
+
+    private TextureAtlas atlas, atlasAttack;
 
     private PlayScreen screen;
 
@@ -71,11 +77,27 @@ public class Mario extends Sprite {
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
+        atlas = new TextureAtlas("sprites/knight_grey.pack");
+        atlasAttack = new TextureAtlas("sprites/knight_grey_attack.pack");
+
         //Animation LITTLE : COURIR
-        for(int i = 1; i < 4; i++){
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("little_mario"), i * 16, 0, 16, 16));
+
+        for(int i = 0; i < 2; i++){
+            frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234 - 32, 0, 234, 255));
         }
-        marioRun = new Animation(0.1f, frames);
+        marioRun = new Animation(0.2f, frames);
+        frames.clear();
+
+        //Animation ATTACK
+
+        for(int i = 0; i < 6; i++){
+            if(i < 3) {
+                frames.add(new TextureRegion(atlas.findRegion("knight_attack"), i * 234 - 32, 0, 234, 255));
+            }else {
+                frames.add(new TextureRegion(atlas.findRegion("knight_attack"), i * 234 - 32, 0, 234, 255));
+            }
+        }
+        marioAttack = new Animation(0.1f, frames);
         frames.clear();
 
         //Animation BIG : COURIR
@@ -93,18 +115,21 @@ public class Mario extends Sprite {
         growMario = new Animation(0.2f, frames);
 
         //Animation : SAUT (1 seule animation donc : TextureRegion et pas Animation)
-        marioJump = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 80, 0, 16, 16);
+        //marioJump = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 80, 0, 16, 16);
+        marioJump = new TextureRegion(atlas.findRegion("knight_walk"), 234 - 32, 255, 234, 255);
         bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 80, 0, 16, 32);
 
         //Création de la texture pour Mario immobile
-        marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 0, 0, 16, 16);
+        //marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 0, 0, 16, 16);
+        marioStand = new TextureRegion(atlas.findRegion("knight_walk"), -32, 0, 234, 255);
+
         bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
 
         //Création de la texture Mario mort
         marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
 
         defineMario();
-        setBounds(0, 0, 16 / GameTest.PPM, 16 / GameTest.PPM);
+        setBounds(0, 0, 48 / GameTest.PPM, 48 / GameTest.PPM);
         setRegion(marioStand);
 
         //Fireball
@@ -157,8 +182,11 @@ public class Mario extends Sprite {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(6 / GameTest.PPM); //Taille du personnage
+        //CircleShape shape = new CircleShape();
+        //shape.setRadius(14 / GameTest.PPM); //Taille du personnage
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(9 / GameTest.PPM, 12 / GameTest.PPM);
+
         fdef.filter.categoryBits = GameTest.MARIO_BIT;
         fdef.filter.maskBits = GameTest.GROUND_BIT |
                 GameTest.COIN_BIT |
@@ -184,7 +212,7 @@ public class Mario extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
 
         // Mario's feet
-        head.set(new Vector2(-(6 / GameTest.PPM), -(6 / GameTest.PPM)), new Vector2(6 / GameTest.PPM, -(6 / GameTest.PPM)));
+        head.set(new Vector2(-(6 / GameTest.PPM), -(12 / GameTest.PPM)), new Vector2(6 / GameTest.PPM, -(12 / GameTest.PPM)));
         fdef.filter.categoryBits = GameTest.MARIO_FOOT_BIT;
         fdef.shape = head;
         fdef.isSensor = true;

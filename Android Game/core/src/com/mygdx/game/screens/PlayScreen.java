@@ -88,13 +88,16 @@ public class PlayScreen implements Screen{
     private static boolean canPlay;
     private static boolean movePlayerEnd;
 
+    private String usernameSession;
 
 
     /** Constructeur de l'écran */
-    public PlayScreen(GameTest game){
+    public PlayScreen(GameTest game, String user){
+
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
         this.game = game;
+        this.usernameSession = user;
 
 
         //Création d'une caméra qui va suivre notre personnage dans notre monde
@@ -184,7 +187,7 @@ public class PlayScreen implements Screen{
         if(canPlay) {
             if (player.currentState != Mario.State.DEAD) {
                 if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) { //SAUT
-                    player.b2body.applyLinearImpulse(new Vector2(0, 5f), player.b2body.getWorldCenter(), true);
+                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
                     GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
                 }
 
@@ -212,7 +215,7 @@ public class PlayScreen implements Screen{
                     player.b2body.setLinearVelocity(new Vector2(0, player.b2body.getLinearVelocity().y));
 
                 if (controller.isUpPressed() && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) {
-                    player.b2body.applyLinearImpulse(new Vector2(0, 5f), player.b2body.getWorldCenter(), true);
+                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
                     GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
                 }
 
@@ -286,7 +289,7 @@ public class PlayScreen implements Screen{
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
-                    game.setScreen(new GameOverScreen(game));
+                    game.setScreen(new GameOverScreen(game, usernameSession));
                     dispose();
                 }
             }, delay);
@@ -308,7 +311,7 @@ public class PlayScreen implements Screen{
         renderer.render();
 
         //Affichage des DEBUG (Bodies et collision..)
-        //b2dr.render(world, gamecam.combined);
+        b2dr.render(world, gamecam.combined);
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();
@@ -333,7 +336,7 @@ public class PlayScreen implements Screen{
 
         //Si il y a GameOver, on affiche l'écran de fin
         if(gameOver()){
-            game.setScreen(new GameOverScreen(game));
+            game.setScreen(new GameOverScreen(game, usernameSession));
             dispose();
         }
 
@@ -427,7 +430,7 @@ public class PlayScreen implements Screen{
         Timer.schedule(new Timer.Task(){
             @Override
             public void run() {
-                game.setScreen(new GameOverScreen(game));
+                game.setScreen(new GameOverScreen(game, usernameSession));
                 dispose();
             }
         }, delay);

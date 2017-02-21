@@ -1,0 +1,13 @@
+
+knight_grey_attack.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+knight_attack
+  rotate: false
+  xy: 1, 1
+  size: 624, 340
+  orig: 624, 340
+  offset: 0, 0
+  index: -1
+

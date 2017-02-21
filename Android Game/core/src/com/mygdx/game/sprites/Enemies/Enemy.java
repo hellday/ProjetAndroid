@@ -23,7 +23,7 @@ public abstract class Enemy extends Sprite {
         this.screen = screen;
         setPosition(x, y);
         defineEnemy();
-        velocity = new Vector2(-1, -2); //Vitesse de l'ennemi
+        velocity = new Vector2(1, -2); //Vitesse de l'ennemi
         b2body.setActive(false);
     }
 

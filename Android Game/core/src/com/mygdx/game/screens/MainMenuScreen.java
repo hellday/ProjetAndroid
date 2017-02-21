@@ -168,8 +168,13 @@ public class MainMenuScreen implements Screen {
                     selectUsername = new SelectBox(skin);
                     selectUsername.setItems(allUser.toArray());
 
-                    this.getButtonTable().add(selectUsername);
-                    button("Connexion", "con");
+                    if(allUser.isEmpty()){
+                        //Si il n'y a pas d'utilisateurs
+                    }else {
+                        this.getButtonTable().add(selectUsername);
+                        button("Connexion", "con");
+                    }
+
                     button("Nouveau", "new");
 
                 }
@@ -182,6 +187,7 @@ public class MainMenuScreen implements Screen {
                         new Dialog("Nouveau pseudo", skin) {
 
                             {
+                                this.setMovable(false);
                                 username = new TextField("", skin);
                                 username.setMessageText("");
                                 this.getButtonTable().add(username);
@@ -191,9 +197,11 @@ public class MainMenuScreen implements Screen {
                             @Override
                             protected void result(final Object object) {
                                 //Création du nouvel utilisateur
+                                this.setMovable(false);
                                 newUsername = username.getText();
                                 db.insertUser(newUsername);
                                 db.newUserData(newUsername);
+                                usernameSession = newUsername;
                                 mainTable.setVisible(true);
                             }
 

@@ -86,6 +86,7 @@ public class ScoreScreen implements Screen {
         arr.setScale(0.15f, 0.15f);
         arr.setPosition(180, 85);
 
+
         db.createDatabase();
         db.selectData();
 

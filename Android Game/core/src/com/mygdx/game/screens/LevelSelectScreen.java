@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -36,6 +37,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.GameTest;
 
+import java.util.ArrayList;
+
 /**
  * Created by Terry on 28/01/2017.
  */
@@ -54,12 +57,18 @@ public class LevelSelectScreen implements Screen {
     private DataBaseTest db;
     private TextureAtlas atlas;
 
-    private Label title;
+    private Label title, locked;
 
     private Texture TextureLeft, TextureRight;
     private TextureRegion TextureRegionLeft, TextureRegionRight;
     private TextureRegionDrawable TextRegionDrawableLeft, TextRegionDrawableRight;
-    private ImageButton leftArrow, rightArrow;
+    private Image leftArrow, rightArrow;
+
+    private TextButton playButton;
+
+    private int levelAmount;
+    private ArrayList<String> checkLevelLock;
+
 
     public LevelSelectScreen(GameTest pgame, String user) {
 
@@ -84,6 +93,9 @@ public class LevelSelectScreen implements Screen {
         //Stage should control input:
         Gdx.input.setInputProcessor(stage);
 
+        //Initialisation des niveaux
+        levelAmount = 1;
+
     }
 
     public void render(float delta) {
@@ -92,29 +104,50 @@ public class LevelSelectScreen implements Screen {
 
         stage.act();
         stage.draw();
+
+        update(delta);
     }
 
     @Override
     public void show() {
 
+        //Database
+        db.createDatabase();
+
+        //CheckLevel
+        checkLevelLock = db.checkLevel(usernameSession);
+        System.out.println(checkLevelLock);
+
+
+
         //ImageButton
         TextureLeft = new Texture(Gdx.files.internal("controller/left_controller.png"));
-        TextureRegionLeft = new TextureRegion(TextureLeft);
-        TextRegionDrawableLeft = new TextureRegionDrawable(TextureRegionLeft);
-        leftArrow = new ImageButton(TextRegionDrawableLeft); //Set the button up
-        leftArrow.setPosition(10, 10);
+        leftArrow = new Image(TextureLeft); //Set the button up
+        leftArrow.setPosition(20, 10);
+        leftArrow.setScale(0.75f, 0.75f);
+        leftArrow.setVisible(false);
 
         leftArrow.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 System.out.println("Image gauche pressé");
+                levelAmount--;
             }
         });
 
+        TextureRight = new Texture(Gdx.files.internal("controller/right_controller.png"));
+        rightArrow = new Image(TextureRight); //Set the button up
+        rightArrow.setPosition(320, 10);
+        rightArrow.setScale(0.75f, 0.75f);
 
-        //Database
-        db.createDatabase();
-        db.selectData();
+        rightArrow.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                System.out.println("Image droite pressé");
+                levelAmount++;
+            }
+        });
+
 
         //Create Table
         Table mainTable = new Table();
@@ -135,10 +168,27 @@ public class LevelSelectScreen implements Screen {
             }
         });
 
+        playButton = new TextButton("Jouer", skin);
+        playButton.setWidth(100);
+        playButton.setHeight(25);
+        playButton.setPosition(150, 0);
+        playButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(levelAmount == 1) {
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession));
+                }else System.out.println("En création");
+            }
+        });
+
         //Label
         title = new Label("Niveaux", skin);
         title.setFontScale(2);
         title.setPosition(150, 180);
+
+        locked = new Label("Locked", skin);
+        locked.setPosition(170, 0);
+        locked.setVisible(false);
 
         //Add buttons to table
         mainTable.add(returnButton).width(100).height(25);
@@ -147,8 +197,11 @@ public class LevelSelectScreen implements Screen {
         //Add table to stage
         //stage.addActor(mainTable);
         stage.addActor(returnButton);
+        stage.addActor(playButton);
         stage.addActor(title);
+        stage.addActor(locked);
         stage.addActor(leftArrow);
+        stage.addActor(rightArrow);
     }
 
     @Override
@@ -179,6 +232,35 @@ public class LevelSelectScreen implements Screen {
 
     public void update(float dt){
         camera.update();
+
+        //Gestion des touches Gauche et Droite de Sélection
+        if(levelAmount == 1){
+            leftArrow.setVisible(false);
+        }else leftArrow.setVisible(true);
+
+        if(levelAmount == 3){
+            rightArrow.setVisible(false);
+        }else rightArrow.setVisible(true);
+
+        //En fonction des Level débloqués
+        if(checkLevelLock.isEmpty() && levelAmount == 1){
+            playButton.setVisible(true);
+            locked.setVisible(false);
+        }else if(checkLevelLock.size() == 2 && levelAmount == 2){
+            System.out.println("Il y deux un enregistrement.");
+            playButton.setVisible(true);
+            locked.setVisible(false);
+        }else  if(checkLevelLock.size() == 3 && levelAmount == 3){
+            System.out.println("Il y a trois enregistrement.");
+            playButton.setVisible(true);
+            locked.setVisible(false);
+        }else {
+            playButton.setVisible(false);
+            locked.setVisible(true);
+        }
+
+
+
     }
 
 

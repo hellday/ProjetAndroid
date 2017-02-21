@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.screens.MainMenuScreen;
+import com.mygdx.game.screens.PlayScreen;
 
 public class GameTest extends com.badlogic.gdx.Game {
 	public static final int V_WIDTH = 400;
@@ -65,7 +66,8 @@ public class GameTest extends com.badlogic.gdx.Game {
 		//db.insertData();
 		db.selectData();
 
-		setScreen(new MainMenuScreen(this, null));
+		//setScreen(new MainMenuScreen(this, null));
+		setScreen(new PlayScreen(this, null));
 	}
 
 	@Override

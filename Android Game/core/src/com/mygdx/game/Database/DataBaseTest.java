@@ -167,6 +167,7 @@ public class DataBaseTest {
         if(cursor != null) {
             while (cursor.next()) {
                 Gdx.app.log("FromDb Users", String.valueOf(cursor.getString(1)));
+                Gdx.app.log("FromDb Users ID", String.valueOf(cursor.getInt(0)));
             }
         }
     }
@@ -237,7 +238,7 @@ public class DataBaseTest {
         ArrayList<String> obj = new ArrayList<String>();
 
         try {
-            System.out.println("SELECT * FROM users NATIVE");
+            System.out.println("SELECT * FROM users");
             cursor = dbHandler.rawQuery("SELECT * FROM users");
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
@@ -246,9 +247,8 @@ public class DataBaseTest {
         if(cursor != null) {
 
                 while (cursor.next()) {
-                    Gdx.app.log("returnData", String.valueOf(cursor.getString(1)));
+                    Gdx.app.log("returnAllUser", String.valueOf(cursor.getString(1)));
                     obj.add(String.valueOf(cursor.getString(1)));
-                    System.out.println(String.valueOf(cursor.getString(1)));
                 }
 
         }
@@ -278,6 +278,31 @@ public class DataBaseTest {
         }
 
         return val;
+    }
+
+    //Retourne les scores de chaques niveaux
+    public ArrayList<String> checkLevel(String username){
+        DatabaseCursor cursor = null;
+        ArrayList<String> obj = new ArrayList<String>();
+
+        try {
+            System.out.println("SELECT * FROM scores WHERE idUser = " + getIdFromNameUser(username) + " AND finished = 'true'");
+            cursor = dbHandler.rawQuery("SELECT * FROM scores WHERE idUser = " + getIdFromNameUser(username) + " AND finished = 'true'");
+        } catch (SQLiteGdxException e) {
+            e.printStackTrace();
+        }
+
+        if(cursor != null) {
+
+            while (cursor.next()) {
+                Gdx.app.log("CheckLevel", String.valueOf(cursor.getString(2)));
+                obj.add(String.valueOf(cursor.getString(2)));
+            }
+
+        }
+
+
+        return obj;
     }
 
     public void updateData(String table, String column,String newData, String parameter, int data){
