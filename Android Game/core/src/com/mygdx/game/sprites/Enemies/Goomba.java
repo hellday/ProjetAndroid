@@ -128,8 +128,8 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(6 / GameTest.PPM); //Taille du personnage
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(9 / GameTest.PPM, 11 / GameTest.PPM);
         fdef.filter.categoryBits = GameTest.ENEMY_BIT;
         fdef.filter.maskBits = GameTest.GROUND_BIT |
                 GameTest.COIN_BIT |

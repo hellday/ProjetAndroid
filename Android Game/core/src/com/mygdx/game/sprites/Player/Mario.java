@@ -27,8 +27,6 @@ import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Enemies.Turtle;
 import com.mygdx.game.sprites.Other.FireBall;
 
-import sun.rmi.runtime.Log;
-
 import static com.mygdx.game.scenes.Hud.damage;
 import static com.mygdx.game.scenes.Hud.heartcount;
 
@@ -66,6 +64,7 @@ public class Mario extends Sprite {
     private boolean marioIsDead;
 
     private boolean marioIsAttacking;
+    private boolean marioCanAttack;
 
     private TextureAtlas atlas, atlasAttack;
 
@@ -83,23 +82,19 @@ public class Mario extends Sprite {
         stateTimer = 0;
         runningRight = true;
         marioIsAttacking = false;
+        marioCanAttack = true;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
         atlas = new TextureAtlas("sprites/knight_grey.pack");
         atlasAttack = new TextureAtlas("sprites/knight_grey_attack.pack");
 
-        //Animation LITTLE : COURIR
+        //Animation : COURIR
 
         for(int i = 0; i < 2; i++){
             frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234, 0, 234, 255));
         }
-//        for(int i = 1; i < 4; i++){
-//            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 0, 156, 170));
-//        }
-//        for(int i = 0; i < 3; i++){
-//                frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 170, 156, 170));
-//        }
+
         marioRun = new Animation(0.08f, frames);
         frames.clear();
 
@@ -130,13 +125,10 @@ public class Mario extends Sprite {
         frames.clear();
 
         //Animation : SAUT (1 seule animation donc : TextureRegion et pas Animation)
-        //marioJump = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 80, 0, 16, 16);
         marioJump = new TextureRegion(atlas.findRegion("knight_walk"), 234, 255, 234, 255);
         bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 80, 0, 16, 32);
 
         //Création de l'animation pour Mario immobile
-        //marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 0, 0, 16, 16);
-        //marioStand = new TextureRegion(atlas.findRegion("knight_walk"), -32, 0, 234, 255);
         frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 0, 234, 255));
         frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 255, 234, 255));
         marioStand = new Animation(0.8f, frames);
@@ -178,10 +170,12 @@ public class Mario extends Sprite {
 
         if(marioIsAttacking)
         {
+            marioIsAttacking = false;
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
-                    marioIsAttacking = false;
+                    marioCanAttack = true;
+                    System.out.println("Stop");
                 }
             }, 0.56f);
         }
@@ -252,15 +246,6 @@ public class Mario extends Sprite {
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
 
-        //Mario's blade sides
-       /* EdgeShape blade = new EdgeShape();
-        head.set(new Vector2(-20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(-20 / GameTest.PPM, 10 / GameTest.PPM));
-        fdef.filter.categoryBits = GameTest.NOTHING_BIT;
-        fdef.shape = head;
-        fdef.friction = 0;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this); */
-
         shape.dispose();
         head.dispose();
 
@@ -315,10 +300,16 @@ public class Mario extends Sprite {
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
 
+        //Mario's blade sides
+       /* EdgeShape blade = new EdgeShape();
+        head.set(new Vector2(-20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(-20 / GameTest.PPM, 10 / GameTest.PPM));
+        fdef.filter.categoryBits = GameTest.NOTHING_BIT;
+        fdef.shape = head;
+        fdef.friction = 0;
+        fdef.isSensor = true;
+        b2body.createFixture(fdef).setUserData(this); */
+
         timeToDefineBigMario = false;
-
-
-
 
         shape.dispose();
         head.dispose();
@@ -432,9 +423,11 @@ public class Mario extends Sprite {
         //Si il meurt
         if(marioIsDead){
             return State.DEAD;
-        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !marioIsAttacking) {
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && marioCanAttack) {
             marioIsAttacking = true;
-            return State.ATTACKING;
+            marioCanAttack = false;
+            System.out.println("Attack");
+           return State.ATTACKING;
         }
 
         //Si il grandi
@@ -447,9 +440,9 @@ public class Mario extends Sprite {
         }
         else if(b2body.getLinearVelocity().y > 0){
             return State.FALLING;
-        }else if(b2body.getLinearVelocity().x != 0 && !marioIsAttacking){
+        }else if(b2body.getLinearVelocity().x != 0 && marioCanAttack){
             return State.RUNNING;
-        }else if(marioIsAttacking)
+        }else if(!marioCanAttack)
             return State.ATTACKING;
         else return State.STANDING;
     }
@@ -490,29 +483,26 @@ public class Mario extends Sprite {
                     //Saut de la mort
                     b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
                 }
-            }
-
-
-
         }
+    }
     }
 
     public void die(){ //Si Mario se fait toucher par un ennemi
 
-        //On stop la musique
-        GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
-        //On lance le son de la mort de Mario
-        GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
-        marioIsDead = true;
+                //On stop la musique
+                GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
+                //On lance le son de la mort de Mario
+                GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
+                marioIsDead = true;
 
-        //On applique un filtre pour enlever les collisions
-        Filter filter = new Filter();
-        filter.maskBits = GameTest.NOTHING_BIT;
-        for (Fixture fixture : b2body.getFixtureList()) {
-            fixture.setFilterData(filter);
-        }
-        //Saut de la mort
-        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+                //On applique un filtre pour enlever les collisions
+                Filter filter = new Filter();
+                filter.maskBits = GameTest.NOTHING_BIT;
+                for (Fixture fixture : b2body.getFixtureList()) {
+                    fixture.setFilterData(filter);
+                }
+                //Saut de la mort
+                b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
 
         if (marioIsBig) {
             marioIsBig = false;
@@ -534,21 +524,6 @@ public class Mario extends Sprite {
 
     public void fire(){
         fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
-    }
-
-    public void attack()
-    {
-        if(marioIsAttacking)
-        {
-            if(runningRight)
-            {
-                /// attack zone on the right is activated
-            }
-            else
-            {
-                /// attack zone on the left is activated
-            }
-        }
     }
 
     public void draw(Batch batch){
