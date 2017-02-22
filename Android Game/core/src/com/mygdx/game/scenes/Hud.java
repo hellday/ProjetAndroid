@@ -1,11 +1,14 @@
 package com.mygdx.game.scenes;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -31,11 +34,17 @@ public class Hud  implements Disposable{
     private Label worldLabel;
     private Label marioLabel;
 
+    private TextureAtlas atlas;
+    private Skin skin;
+
     /** Informations au top de l'écran (score etc...), fondu avec le Playscreen **/
     public Hud(SpriteBatch sb){
         worldTimer = 300;
         timeCount = 0;
         score = 0;
+
+        atlas = new TextureAtlas("skin/uiskin.atlas");
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"), atlas);
 
         viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, sb);
@@ -44,12 +53,13 @@ public class Hud  implements Disposable{
         table.top();
         table.setFillParent(true);
 
-        countdownLabel = new Label(String.format("%03d", worldTimer), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        scoreLabel = new Label(String.format("%06d", score), new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        levelLabel = new Label("1-1", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        worldLabel = new Label("WORLD", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        marioLabel = new Label("SCORE", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        countdownLabel = new Label(String.format("%03d", worldTimer), skin);
+        scoreLabel = new Label(String.format("%06d", score), skin);
+        //timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
+        timeLabel = new Label("TIME", skin);
+        levelLabel = new Label("1-1", skin);
+        worldLabel = new Label("WORLD", skin);
+        marioLabel = new Label("SCORE", skin);
 
         table.add(marioLabel).expandX().padTop(10);
         table.add(worldLabel).expandX().padTop(10);

@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Enemies.Enemy;
@@ -38,7 +39,7 @@ public class Mario extends Sprite {
     public Body b2body;
     public BodyDef bdef;
 
-    private TextureRegion marioStand;
+    private Animation marioStand;
     private Animation marioRun;
     private TextureRegion marioJump;
     private TextureRegion marioDead;
@@ -58,7 +59,8 @@ public class Mario extends Sprite {
     private boolean timeToDefineBigMario;
     private boolean timeToRedefineMario;
     private boolean marioIsDead;
-    private boolean ground;
+
+    private boolean marioIsAttacking;
 
     private TextureAtlas atlas, atlasAttack;
 
@@ -75,6 +77,7 @@ public class Mario extends Sprite {
         previousState = State.STANDING;
         stateTimer = 0;
         runningRight = true;
+        marioIsAttacking = false;
 
         Array<TextureRegion> frames = new Array<TextureRegion>();
 
@@ -83,27 +86,27 @@ public class Mario extends Sprite {
 
         //Animation LITTLE : COURIR
 
-//        for(int i = 0; i < 2; i++){
-//            frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234 - 32, 0, 234, 255));
+        for(int i = 0; i < 2; i++){
+            frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234, 0, 234, 255));
+        }
+//        for(int i = 1; i < 4; i++){
+//            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 0, 156, 170));
 //        }
-        for(int i = 1; i < 4; i++){
-            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 30, 0, 156, 170));
-        }
-        for(int i = 0; i < 3; i++){
-                frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 26, 170, 156, 170));
-        }
+//        for(int i = 0; i < 3; i++){
+//                frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 170, 156, 170));
+//        }
         marioRun = new Animation(0.08f, frames);
         frames.clear();
 
         //Animation ATTACK
 
         for(int i = 1; i < 4; i++){
-            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 30, 0, 156, 170));
+            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 0, 156, 170));
         }
         for(int i = 0; i < 3; i++){
-            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156 - 26, 170, 156, 170));
+            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 170, 156, 170));
         }
-        marioAttack = new Animation(0.5f, frames);
+        marioAttack = new Animation(0.08f, frames);
         frames.clear();
 
         //Animation BIG : COURIR
@@ -119,15 +122,21 @@ public class Mario extends Sprite {
         frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
         frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
         growMario = new Animation(0.2f, frames);
+        frames.clear();
 
         //Animation : SAUT (1 seule animation donc : TextureRegion et pas Animation)
         //marioJump = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 80, 0, 16, 16);
-        marioJump = new TextureRegion(atlas.findRegion("knight_walk"), 234 - 32, 255, 234, 255);
+        marioJump = new TextureRegion(atlas.findRegion("knight_walk"), 234, 255, 234, 255);
         bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 80, 0, 16, 32);
 
-        //Création de la texture pour Mario immobile
+        //Création de l'animation pour Mario immobile
         //marioStand = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 0, 0, 16, 16);
-        marioStand = new TextureRegion(atlas.findRegion("knight_walk"), -32, 0, 234, 255);
+        //marioStand = new TextureRegion(atlas.findRegion("knight_walk"), -32, 0, 234, 255);
+        frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 0, 234, 255));
+        frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 255, 234, 255));
+        marioStand = new Animation(0.8f, frames);
+        frames.clear();
+
 
         bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
 
@@ -136,17 +145,21 @@ public class Mario extends Sprite {
 
         defineMario();
         setBounds(0, 0, 48 / GameTest.PPM, 48 / GameTest.PPM);
-        setRegion(marioStand);
+        //setRegion(marioStand);
 
         //Fireball
         fireballs = new Array<FireBall>();
     }
 
     public void update(float dt){
+        //Attache le Sprite au body
         if(marioIsBig)
             setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 - 6 / GameTest.PPM);
-        else
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        else {
+            if(runningRight) {
+                setPosition(b2body.getPosition().x + 0.06f - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+            }else setPosition(b2body.getPosition().x - 0.06f - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
+        }
 
         setRegion(getFrame(dt));
 
@@ -156,6 +169,16 @@ public class Mario extends Sprite {
 
         if(timeToRedefineMario){
             redefineMario();
+        }
+
+        if(marioIsAttacking)
+        {
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    marioIsAttacking = false;
+                }
+            }, 0.56f);
         }
 
         //Fireball
@@ -351,15 +374,15 @@ public class Mario extends Sprite {
                     runGrowAnimation = false;
                 break;
             case JUMPING:
+            case FALLING:
                 region = marioIsBig ? bigMarioJump : marioJump;
                 break;
             case RUNNING:
                 region = marioIsBig ? bigMarioRun.getKeyFrame(stateTimer, true) : marioRun.getKeyFrame(stateTimer, true);
                 break;
-            case FALLING:
             case STANDING:
             default:
-                region = marioIsBig ? bigMarioStand : marioStand;
+                region = marioIsBig ? bigMarioStand : marioStand.getKeyFrame(stateTimer, true);
                 break;
             case ATTACKING:
                 region = marioAttack.getKeyFrame(stateTimer, true);
@@ -392,7 +415,8 @@ public class Mario extends Sprite {
         //Si il meurt
         if(marioIsDead){
             return State.DEAD;
-        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !marioIsAttacking) {
+            marioIsAttacking = true;
            return State.ATTACKING;
         }
 
@@ -406,9 +430,11 @@ public class Mario extends Sprite {
         }
         else if(b2body.getLinearVelocity().y > 0){
             return State.FALLING;
-        }else if(b2body.getLinearVelocity().x != 0){
+        }else if(b2body.getLinearVelocity().x != 0 && !marioIsAttacking){
             return State.RUNNING;
-        }else return State.STANDING;
+        }else if(marioIsAttacking)
+            return State.ATTACKING;
+        else return State.STANDING;
     }
 
     public void hit(Enemy enemy){ //Si Mario se fait toucher par un ennemi
