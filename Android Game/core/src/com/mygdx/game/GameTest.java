@@ -31,6 +31,7 @@ public class GameTest extends com.badlogic.gdx.Game {
 	public static final short DEAD_ZONE_BIT = 4096;
 	public static final short MARIO_FOOT_BIT = 8192;
 	public static final short AREA_BIT = 16384;
+	public static final int  ATTACK_BIT = 32768;
 
 	public static SpriteBatch batch;
 

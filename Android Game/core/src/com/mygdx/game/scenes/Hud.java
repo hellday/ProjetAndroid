@@ -3,10 +3,13 @@ package com.mygdx.game.scenes;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -26,6 +29,7 @@ public class Hud  implements Disposable{
     private Integer worldTimer;
     private float timeCount;
     private static Integer score;
+    public static int heartcount;
 
     private Label countdownLabel;
     private static Label scoreLabel;
@@ -33,6 +37,8 @@ public class Hud  implements Disposable{
     private Label levelLabel;
     private Label worldLabel;
     private Label marioLabel;
+    private static Image[] hearts;
+
 
     private TextureAtlas atlas;
     private Skin skin;
@@ -70,6 +76,16 @@ public class Hud  implements Disposable{
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);
+        hearts = new Image[3];
+        heartcount = 3;
+        for (int i=0; i<3;i++)
+        {
+            hearts[i] = new Image(new Texture("heart.png"));
+            hearts[i].setHeight(20);
+            hearts[i].setWidth(20);
+            hearts[i].setPosition(20+i*20,175);
+            stage.addActor(hearts[i]);
+        }
 
     }
 
@@ -93,5 +109,22 @@ public class Hud  implements Disposable{
     public static void addScore(int value){
         score += value;
         scoreLabel.setText(String.format("%06d", score));
+    }
+
+    public static void damage(int value){
+        heartcount -=value;
+        System.out.print(" dans damage");
+        for (int i = 2;i>=heartcount;i--)
+        {
+            hearts[i].setVisible(false);
+        }
+    }
+
+    public static  void heal(int value){
+        heartcount +=value;
+        for (int i = 0;i<heartcount;i++)
+        {
+            hearts[i].setVisible(true);
+        }
     }
 }

@@ -27,6 +27,11 @@ import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Enemies.Turtle;
 import com.mygdx.game.sprites.Other.FireBall;
 
+import sun.rmi.runtime.Log;
+
+import static com.mygdx.game.scenes.Hud.damage;
+import static com.mygdx.game.scenes.Hud.heartcount;
+
 /**
  * Created by Terry on 10/11/2016.
  */
@@ -247,6 +252,15 @@ public class Mario extends Sprite {
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
 
+        //Mario's blade sides
+       /* EdgeShape blade = new EdgeShape();
+        head.set(new Vector2(-20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(-20 / GameTest.PPM, 10 / GameTest.PPM));
+        fdef.filter.categoryBits = GameTest.NOTHING_BIT;
+        fdef.shape = head;
+        fdef.friction = 0;
+        fdef.isSensor = true;
+        b2body.createFixture(fdef).setUserData(this); */
+
         shape.dispose();
         head.dispose();
 
@@ -302,6 +316,9 @@ public class Mario extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
 
         timeToDefineBigMario = false;
+
+
+
 
         shape.dispose();
         head.dispose();
@@ -417,7 +434,7 @@ public class Mario extends Sprite {
             return State.DEAD;
         }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && !marioIsAttacking) {
             marioIsAttacking = true;
-           return State.ATTACKING;
+            return State.ATTACKING;
         }
 
         //Si il grandi
@@ -449,41 +466,53 @@ public class Mario extends Sprite {
                 setBounds(getX(), getY(), getWidth(), getHeight() / 2);
                 GameTest.manager.get("audio/sounds/powerdown.wav", Sound.class).play();
 
-            } else {
-                //On stop la musique
-                GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
-                //On lance le son de la mort de Mario
-                GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
-                marioIsDead = true;
-
-                //On applique un filtre pour enlever les collisions
-                Filter filter = new Filter();
-                filter.maskBits = GameTest.NOTHING_BIT;
-                for (Fixture fixture : b2body.getFixtureList()) {
-                    fixture.setFilterData(filter);
-                }
-                //Saut de la mort
-                b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
             }
+            else
+            {
+                damage(1);
+
+                if (heartcount>0){
+                    /// on fait un bruit de dégat
+                }
+                else {
+                    //On stop la musique
+                    GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
+                    //On lance le son de la mort de Mario
+                    GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
+                    marioIsDead = true;
+
+                    //On applique un filtre pour enlever les collisions
+                    Filter filter = new Filter();
+                    filter.maskBits = GameTest.NOTHING_BIT;
+                    for (Fixture fixture : b2body.getFixtureList()) {
+                        fixture.setFilterData(filter);
+                    }
+                    //Saut de la mort
+                    b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+                }
+            }
+
+
+
         }
     }
 
     public void die(){ //Si Mario se fait toucher par un ennemi
 
-                //On stop la musique
-                GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
-                //On lance le son de la mort de Mario
-                GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
-                marioIsDead = true;
+        //On stop la musique
+        GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
+        //On lance le son de la mort de Mario
+        GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
+        marioIsDead = true;
 
-                //On applique un filtre pour enlever les collisions
-                Filter filter = new Filter();
-                filter.maskBits = GameTest.NOTHING_BIT;
-                for (Fixture fixture : b2body.getFixtureList()) {
-                    fixture.setFilterData(filter);
-                }
-                //Saut de la mort
-                b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+        //On applique un filtre pour enlever les collisions
+        Filter filter = new Filter();
+        filter.maskBits = GameTest.NOTHING_BIT;
+        for (Fixture fixture : b2body.getFixtureList()) {
+            fixture.setFilterData(filter);
+        }
+        //Saut de la mort
+        b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
 
         if (marioIsBig) {
             marioIsBig = false;
@@ -504,7 +533,22 @@ public class Mario extends Sprite {
     }
 
     public void fire(){
-        fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight ? true : false));
+        fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
+    }
+
+    public void attack()
+    {
+        if(marioIsAttacking)
+        {
+            if(runningRight)
+            {
+                /// attack zone on the right is activated
+            }
+            else
+            {
+                /// attack zone on the left is activated
+            }
+        }
     }
 
     public void draw(Batch batch){
