@@ -212,7 +212,18 @@ public class PlayScreen implements Screen{
                     player.b2body.setLinearVelocity(new Vector2(-1, player.b2body.getLinearVelocity().y));
 
                 else
-                    player.b2body.setLinearVelocity(new Vector2(0, player.b2body.getLinearVelocity().y));
+                    if (player.b2body.getLinearVelocity().x>2)
+                    {
+                        player.b2body.setLinearVelocity(new Vector2(player.b2body.getLinearVelocity().x-0.1f, player.b2body.getLinearVelocity().y));
+                    }
+                    else if (player.b2body.getLinearVelocity().x<-2)
+                    {
+                        player.b2body.setLinearVelocity(new Vector2(player.b2body.getLinearVelocity().x+0.1f, player.b2body.getLinearVelocity().y));
+                    }
+                    else
+                    {
+                        player.b2body.setLinearVelocity(new Vector2(0, player.b2body.getLinearVelocity().y));
+                    }
 
                 if (controller.isUpPressed() && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) {
                     player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);

@@ -477,6 +477,18 @@ public class Mario extends Sprite {
         else return State.STANDING;
     }
 
+    public void knockBack (Enemy enemy)
+    {
+        if(enemy.velocity.x >0)
+        {
+            b2body.applyLinearImpulse(new Vector2(3f, 3f), b2body.getWorldCenter(), true);
+        }
+        else
+        {
+            b2body.applyLinearImpulse(new Vector2(-3f, 3f), b2body.getWorldCenter(), true);
+        }
+    }
+
     public void hit(Enemy enemy){ //Si Mario se fait toucher par un ennemi
 
         if(enemy instanceof Turtle && ((Turtle) enemy).getCurrentState() == Turtle.State.STANDING_SHELL){
@@ -493,6 +505,7 @@ public class Mario extends Sprite {
             else
             {
                 damage(1);
+                knockBack(enemy);
 
                 if (heartcount>0){
                     /// on fait un bruit de dégat
