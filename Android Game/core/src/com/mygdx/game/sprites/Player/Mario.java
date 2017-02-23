@@ -20,6 +20,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
@@ -67,6 +68,7 @@ public class Mario extends Sprite {
 
     private boolean marioIsAttacking;
     private boolean marioCanAttack;
+    private long bladeTime;
 
     private TextureAtlas atlas, atlasAttack;
 
@@ -188,6 +190,37 @@ public class Mario extends Sprite {
             if(ball.isDestroyed())
                 fireballs.removeValue(ball, true);
         }
+
+        if(TimeUtils.timeSinceNanos(bladeTime) > 2000000000)
+        {
+            bladeOn(false);
+        }
+
+    }
+
+    public void bladeOn(Boolean On)
+    {
+        if(On){
+            Filter filter = new Filter();
+            filter.categoryBits = GameTest.ATTACK_BIT;
+            if(runningRight)
+            {
+                rightBlade.setFilterData(filter);
+            }
+            else
+            {
+                leftBlade.setFilterData(filter);
+            }
+
+
+            bladeTime = TimeUtils.nanoTime();
+        }
+        else {
+            Filter filter = new Filter();
+            filter.categoryBits = GameTest.NOTHING_BIT;
+            rightBlade.setFilterData(filter);
+            leftBlade.setFilterData(filter);
+        }
     }
 
     //Mario grandi
@@ -256,6 +289,7 @@ public class Mario extends Sprite {
         fdef.isSensor = true;
         leftBlade = b2body.createFixture(fdef);
         leftBlade.setUserData(this);
+
         // right blade
         head.set(new Vector2(20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(20 / GameTest.PPM, 10 / GameTest.PPM));
         fdef.filter.categoryBits = GameTest.NOTHING_BIT;
@@ -265,12 +299,6 @@ public class Mario extends Sprite {
         rightBlade = b2body.createFixture(fdef);
         rightBlade.setUserData(this);
 
-
-
-        /*Array<Fixture> list = b2body.getFixtureList();
-        int i= list.size;
-        rightBlade = list.pop();
-        leftBlade = list.pop();*/
 
 
         shape.dispose();
@@ -567,12 +595,9 @@ public class Mario extends Sprite {
     }
 
     public void fire(){
-        fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
+       // fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
 
-        Filter filter = new Filter();
-        filter.categoryBits = GameTest.ATTACK_BIT;
-        rightBlade.setFilterData(filter);
-        leftBlade.setFilterData(filter);
+        bladeOn(true);
 
 
     }

@@ -138,6 +138,7 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
                 GameTest.OBJECT_BIT |
                 GameTest.MARIO_BIT |
                 GameTest.FIREBALL_BIT |
+                GameTest.ATTACK_BIT|
                 GameTest.ENEMY_WALL_BIT; //Avec quoi il y a collision
 
         fdef.shape = shape;
