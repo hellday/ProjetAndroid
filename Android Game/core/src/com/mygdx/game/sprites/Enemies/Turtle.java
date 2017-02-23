@@ -1,5 +1,6 @@
 package com.mygdx.game.sprites.Enemies;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -174,6 +175,9 @@ public class Turtle extends  Enemy {
         else if(currentState != State.MOVING_SHELL){
             reverseVelocity(true, false);
         }
+    }
+
+    public void onBladeHit(){
     }
 
 

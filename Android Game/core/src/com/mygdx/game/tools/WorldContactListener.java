@@ -52,6 +52,12 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Enemy)fixB.getUserData()).reverseVelocity(true, false);
                 break;
+            case GameTest.ENEMY_BIT | GameTest.ATTACK_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.ENEMY_BIT)
+                    ((Enemy)fixA.getUserData()).onBladeHit();
+                else
+                    ((Enemy)fixB.getUserData()).onBladeHit();
+                break;
             case GameTest.MARIO_BIT | GameTest.ENEMY_BIT:
                 if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)
                     ((Mario) fixA.getUserData()).hit((Enemy)fixB.getUserData());
@@ -62,6 +68,7 @@ public class WorldContactListener implements ContactListener {
                 ((Enemy)fixA.getUserData()).onEnemyHit((Enemy)fixB.getUserData());
                 ((Enemy)fixB.getUserData()).onEnemyHit((Enemy)fixA.getUserData());
                 break;
+
             case GameTest.ENEMY_BIT | GameTest.ENEMY_WALL_BIT: //Collision Ennemies et Mur Invisible
                 if(fixA.getFilterData().categoryBits == GameTest.ENEMY_BIT)
                     ((Enemy)fixA.getUserData()).reverseVelocity(true, false);

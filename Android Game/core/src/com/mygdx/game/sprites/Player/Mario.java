@@ -41,6 +41,8 @@ public class Mario extends Sprite {
     public World world;
     public Body b2body;
     public BodyDef bdef;
+    public Fixture leftBlade;
+    public Fixture rightBlade;
 
     private Animation marioStand;
     private Animation marioRun;
@@ -246,6 +248,31 @@ public class Mario extends Sprite {
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
 
+        //left blade
+        head.set(new Vector2(-20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(-20 / GameTest.PPM, 10 / GameTest.PPM));
+        fdef.filter.categoryBits = GameTest.NOTHING_BIT;
+        fdef.shape = head;
+        fdef.friction = 0;
+        fdef.isSensor = true;
+        leftBlade = b2body.createFixture(fdef);
+        leftBlade.setUserData(this);
+        // right blade
+        head.set(new Vector2(20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(20 / GameTest.PPM, 10 / GameTest.PPM));
+        fdef.filter.categoryBits = GameTest.NOTHING_BIT;
+        fdef.shape = head;
+        fdef.friction = 0;
+        fdef.isSensor = true;
+        rightBlade = b2body.createFixture(fdef);
+        rightBlade.setUserData(this);
+
+
+
+        /*Array<Fixture> list = b2body.getFixtureList();
+        int i= list.size;
+        rightBlade = list.pop();
+        leftBlade = list.pop();*/
+
+
         shape.dispose();
         head.dispose();
 
@@ -419,7 +446,10 @@ public class Mario extends Sprite {
 
     }
 
-    public State getState(){ //La position de Mario
+    //La position de Mario
+    public State getState(){
+
+
         //Si il meurt
         if(marioIsDead){
             return State.DEAD;
@@ -487,7 +517,8 @@ public class Mario extends Sprite {
     }
     }
 
-    public void die(){ //Si Mario se fait toucher par un ennemi
+    //Si Mario se fait toucher par un ennemi
+    public void die(){
 
                 //On stop la musique
                 GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
@@ -524,7 +555,15 @@ public class Mario extends Sprite {
 
     public void fire(){
         fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
+
+        Filter filter = new Filter();
+        filter.categoryBits = GameTest.ATTACK_BIT;
+        rightBlade.setFilterData(filter);
+        leftBlade.setFilterData(filter);
+
+
     }
+
 
     public void draw(Batch batch){
         super.draw(batch);

@@ -39,5 +39,6 @@ public abstract class Enemy extends Sprite {
     }
 
     public abstract void onEnemyHit(Enemy enemy);
+    public abstract void onBladeHit();
 
 }

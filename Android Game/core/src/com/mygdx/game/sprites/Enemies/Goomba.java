@@ -179,6 +179,11 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
         }
     }
 
+    public void onBladeHit(){
+        setToDestroy = true;
+        GameTest.manager.get("audio/sounds/stomp.wav", Sound.class).play();
+    }
+
 
 
     public void killed(){

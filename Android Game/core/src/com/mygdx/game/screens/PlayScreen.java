@@ -311,7 +311,7 @@ public class PlayScreen implements Screen{
         renderer.render();
 
         //Affichage des DEBUG (Bodies et collision..)
-        //b2dr.render(world, gamecam.combined);
+        b2dr.render(world, gamecam.combined);
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();

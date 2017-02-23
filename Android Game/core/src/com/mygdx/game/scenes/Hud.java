@@ -67,12 +67,12 @@ public class Hud  implements Disposable{
         worldLabel = new Label("WORLD", skin);
         marioLabel = new Label("SCORE", skin);
 
+        table.add().expandX().padTop(10);
         table.add(marioLabel).expandX().padTop(10);
-        table.add(worldLabel).expandX().padTop(10);
         table.add(timeLabel).expandX().padTop(10);
         table.row();
+        table.add().expandX();
         table.add(scoreLabel).expandX();
-        table.add(levelLabel).expandX();
         table.add(countdownLabel).expandX();
 
         stage.addActor(table);

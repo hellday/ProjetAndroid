@@ -18,7 +18,7 @@ public class GameTest extends com.badlogic.gdx.Game {
 	public static final short NOTHING_BIT = 0;
 	public static final short GROUND_BIT = 1;
 	public static final short MARIO_BIT = 2;
-	public static final short BRICK_BIT = 4;
+	public static final short BRICK_BIT = 15;
 	public static final short COIN_BIT = 8;
 	public static final short DESTROYED_BIT = 16;
 	public static final short OBJECT_BIT = 32;
@@ -31,7 +31,7 @@ public class GameTest extends com.badlogic.gdx.Game {
 	public static final short DEAD_ZONE_BIT = 4096;
 	public static final short MARIO_FOOT_BIT = 8192;
 	public static final short AREA_BIT = 16384;
-	public static final int  ATTACK_BIT = 32768;
+	public static final short ATTACK_BIT = 4;
 
 	public static SpriteBatch batch;
 
