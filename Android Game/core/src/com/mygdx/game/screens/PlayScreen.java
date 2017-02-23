@@ -30,6 +30,7 @@ import com.mygdx.game.GameTest;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.ItemDef;
 import com.mygdx.game.Items.Mushroom;
+import com.mygdx.game.scenes.EndLevel;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.sprites.CollisionWall.Area;
 import com.mygdx.game.sprites.Enemies.Enemy;
@@ -51,6 +52,7 @@ public class PlayScreen implements Screen{
     private OrthographicCamera gamecam;
     public Viewport gamePort;
     private Hud hud;
+    private EndLevel endLevel;
 
     //WorldContactListener
     private WorldContactListener wcl;
@@ -89,15 +91,17 @@ public class PlayScreen implements Screen{
     private static boolean movePlayerEnd;
 
     private String usernameSession;
+    private int level;
 
 
     /** Constructeur de l'écran */
-    public PlayScreen(GameTest game, String user){
+    public PlayScreen(GameTest game, String user, int lvl){
 
         atlas = new TextureAtlas("Mario_and_Enemies.pack");
 
         this.game = game;
         this.usernameSession = user;
+        this.level = lvl;
 
 
         //Création d'une caméra qui va suivre notre personnage dans notre monde
@@ -108,9 +112,12 @@ public class PlayScreen implements Screen{
         //Création du HUD (scores,timers...)
         hud = new Hud(game.batch);
 
+        //Création de l'écran de fin de niveau
+        endLevel = new EndLevel(game.batch);
+
         //Chargement de la map
         mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level1.tmx");
+        map = mapLoader.load("level" + level + ".tmx");
         MapProperties props = map.getProperties();
         levelWidth = props.get("width", Integer.class);
         levelHeight = props.get("height", Integer.class);
@@ -136,7 +143,7 @@ public class PlayScreen implements Screen{
         //Musique utilisation
         music = GameTest.manager.get("audio/music/mario_music.ogg", Music.class);
         music.setLooping(true);
-        music.play();
+        //music.play();
 
         //Items
         items = new Array<Item>();
@@ -262,6 +269,7 @@ public class PlayScreen implements Screen{
         }
 
         hud.update(dt);
+        endLevel.update(dt);
 
         //Controle de la caméra
         float startX = gamecam.viewportWidth / 2;
@@ -289,8 +297,9 @@ public class PlayScreen implements Screen{
 
         //Quand le joueur atteint la fin du niveau
         if(movePlayerEnd){
-            player.b2body.setLinearVelocity(1, 0);
+            //player.b2body.setLinearVelocity(1, 0);
             controller.dispose();
+            hud.dispose();
 
             GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
             GameTest.manager.get("audio/music/stage_clear.ogg", Music.class).play();
@@ -300,8 +309,11 @@ public class PlayScreen implements Screen{
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
-                    game.setScreen(new GameOverScreen(game, usernameSession));
-                    dispose();
+                   //game.setScreen(new GameOverScreen(game, usernameSession));
+//                    game.batch.setProjectionMatrix(endLevel.stage.getCamera().combined);
+//                    endLevel.stage.draw();
+                    String score = hud.getScore().toString();
+                    game.setScreen(new EndLevelScreen(game, usernameSession, level));
                 }
             }, delay);
 
@@ -341,13 +353,18 @@ public class PlayScreen implements Screen{
         //HUD
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+        //Stage should control input:
+//        Gdx.input.setInputProcessor(endLevel.stage);
+//        endLevel.stage.draw();
+//        endLevel.stage.dispose();
+
 
         //Controller
         controller.draw();
 
         //Si il y a GameOver, on affiche l'écran de fin
         if(gameOver()){
-            game.setScreen(new GameOverScreen(game, usernameSession));
+            game.setScreen(new GameOverScreen(game, usernameSession, level));
             dispose();
         }
 
@@ -441,7 +458,7 @@ public class PlayScreen implements Screen{
         Timer.schedule(new Timer.Task(){
             @Override
             public void run() {
-                game.setScreen(new GameOverScreen(game, usernameSession));
+                game.setScreen(new GameOverScreen(game, usernameSession, level));
                 dispose();
             }
         }, delay);

@@ -46,7 +46,6 @@ import java.util.ArrayList;
 public class LevelSelectScreen implements Screen {
     private Skin skin;
     private Stage stage;
-    private Table container;
 
     protected GameTest game;
     private String usernameSession;
@@ -60,8 +59,6 @@ public class LevelSelectScreen implements Screen {
     private Label title, locked;
 
     private Texture TextureLeft, TextureRight;
-    private TextureRegion TextureRegionLeft, TextureRegionRight;
-    private TextureRegionDrawable TextRegionDrawableLeft, TextRegionDrawableRight;
     private Image leftArrow, rightArrow;
 
     private TextButton playButton;
@@ -176,7 +173,7 @@ public class LevelSelectScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(levelAmount == 1) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession));
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, levelAmount));
                 }else System.out.println("En création");
             }
         });

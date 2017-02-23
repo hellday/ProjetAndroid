@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.GameTest;
+import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Other.FireBall;
 import com.mygdx.game.sprites.Player.Mario;
@@ -183,6 +184,7 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
     public void onBladeHit(){
         setToDestroy = true;
         GameTest.manager.get("audio/sounds/stomp.wav", Sound.class).play();
+        Hud.addScore(200);
     }
 
 

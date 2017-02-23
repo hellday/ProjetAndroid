@@ -24,11 +24,14 @@ public class GameOverScreen implements Screen{
 
     private GameTest game;
     private String usernameSession;
+    private int level;
 
     /** Contructeur de l'écran Game Over */
-    public GameOverScreen(GameTest game, String user){
+    public GameOverScreen(GameTest game, String user, int lvl){
         this.game = game;
         this.usernameSession = user;
+        this.level = lvl;
+
         viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport, ((GameTest) game).batch);
 
@@ -56,7 +59,7 @@ public class GameOverScreen implements Screen{
     @Override
     public void render(float delta) {
         if(Gdx.input.justTouched()){
-            game.setScreen(new PlayScreen(game, usernameSession));
+            game.setScreen(new PlayScreen(game, usernameSession, level));
             dispose();
         }
         Gdx.gl.glClearColor(0, 0 ,0 ,1);

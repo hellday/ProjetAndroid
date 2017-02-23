@@ -34,7 +34,7 @@ public class Area extends InteractiveTileObject {
             PlayScreen.setEndLevel();
 
         }
-        }
+    }
 
 
 

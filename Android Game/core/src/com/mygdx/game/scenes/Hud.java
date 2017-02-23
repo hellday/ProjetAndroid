@@ -89,6 +89,11 @@ public class Hud  implements Disposable{
 
     }
 
+    //Constructeur par défaut
+    public Hud(){
+
+    }
+
     @Override
     public void dispose() {
         stage.dispose();
@@ -126,5 +131,9 @@ public class Hud  implements Disposable{
         {
             hearts[i].setVisible(true);
         }
+    }
+
+    public Integer getScore() {
+        return score;
     }
 }
