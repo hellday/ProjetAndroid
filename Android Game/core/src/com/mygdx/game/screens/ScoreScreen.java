@@ -124,11 +124,13 @@ public class ScoreScreen implements Screen {
 
         testTable.add(arr).width(50).height(50);
 
+        int test = db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1");
+
         //List
         list = new List<String>(skin);
         list2 = new List<String>(skin);
         list.setItems(new String[] {"Level 1", "Level 2", "Level 3"});
-        list2.setItems(new String[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
+        list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
         list2.setTouchable(Touchable.disabled); //Rendu intouchable
 
         //Scrollpane
@@ -167,15 +169,15 @@ public class ScoreScreen implements Screen {
 
         //Mise à jour des Scores selon le niveau choisi
         if(list.getSelected().toString().equalsIgnoreCase("Level 1")){
-            list2.setItems(new String[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
+            list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
         }
 
         if(list.getSelected().toString().equalsIgnoreCase("Level 2")){
-            list2.setItems(new String[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level2")});
+            list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level2")});
         }
 
         if(list.getSelected().toString().equalsIgnoreCase("Level 3")){
-            list2.setItems(new String[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level3")});
+            list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level3")});
         }
     }
 

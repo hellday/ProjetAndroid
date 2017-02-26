@@ -204,9 +204,9 @@ public class DataBaseTest {
     }
 
     //Retourne les scores de chaques niveaux
-    public String returnLevelScore(int data, String data2){
+    public int returnLevelScore(int data, String data2){
         DatabaseCursor cursor = null;
-        String val = null;
+        int val = 0;
 
         try {
             System.out.println("SELECT * FROM scores WHERE idUser = " + data + " AND nameLevel = '" + data2 + "'");
@@ -219,14 +219,9 @@ public class DataBaseTest {
 
                 while (cursor.next()) {
                     Gdx.app.log("returnData", String.valueOf(cursor.getInt(3)));
-                    val = String.valueOf(cursor.getInt(3));
+                    val = cursor.getInt(3);
                 }
 
-        }
-
-        //Adapte l'affichage des scores
-        if(val.equalsIgnoreCase("0")){
-            val = "...";
         }
 
         return val;
@@ -305,10 +300,20 @@ public class DataBaseTest {
         return obj;
     }
 
-    public void updateData(String table, String column,String newData, String parameter, int data){
+    public void updateData(String table, String column, String newData, String parameter, int data){
         try {
             System.out.println("UPDATE " + table + " SET " + column + " = '" + newData + "' WHERE " + parameter + " = " + data);
             dbHandler.execSQL("UPDATE " + table + " SET " + column + " = '" + newData + "' WHERE " + parameter + " = " + data);
+        } catch (SQLiteGdxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateScore(int newScore, int id, String level){
+        try {
+            System.out.println("UPDATE scores SET maxScore = " + newScore + "  WHERE idUser = " + id + " AND nameLevel = '" + level + "'");
+            dbHandler.execSQL("UPDATE scores SET maxScore = " + newScore + "  WHERE idUser = " + id + " AND nameLevel = '" + level + "'");
+            dbHandler.execSQL("UPDATE scores SET finished = 'true' WHERE idUser = " + id + " AND nameLevel = '" + level + "'");
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }

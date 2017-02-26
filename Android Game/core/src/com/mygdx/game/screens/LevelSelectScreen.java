@@ -240,15 +240,13 @@ public class LevelSelectScreen implements Screen {
         }else rightArrow.setVisible(true);
 
         //En fonction des Level débloqués
-        if(checkLevelLock.isEmpty() && levelAmount == 1){
+        if(checkLevelLock.isEmpty() || checkLevelLock.size() == 1 && levelAmount == 1){
             playButton.setVisible(true);
             locked.setVisible(false);
-        }else if(checkLevelLock.size() == 2 && levelAmount == 2){
-            System.out.println("Il y deux un enregistrement.");
+        }else if(checkLevelLock.size() == 1 && levelAmount == 2){
             playButton.setVisible(true);
             locked.setVisible(false);
-        }else  if(checkLevelLock.size() == 3 && levelAmount == 3){
-            System.out.println("Il y a trois enregistrement.");
+        }else  if(checkLevelLock.size() == 2 || checkLevelLock.size() == 3 && levelAmount == 3){
             playButton.setVisible(true);
             locked.setVisible(false);
         }else {

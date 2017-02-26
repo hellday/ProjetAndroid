@@ -191,7 +191,7 @@ public class Mario extends Sprite {
                 fireballs.removeValue(ball, true);
         }
 
-        if(TimeUtils.timeSinceNanos(bladeTime) > 2000000000)
+        if(TimeUtils.timeSinceNanos(bladeTime) > 250000000)
         {
             bladeOn(false);
         }

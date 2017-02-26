@@ -42,6 +42,11 @@ public class EndLevelScreen implements Screen {
     private Hud hud;
     private int level;
 
+    private int oldScore;
+    private int newScore;
+
+    private Label intScoreLabel;
+
     public EndLevelScreen(final GameTest game, String user, int lvl) {
         this.game = game;
         this.usernameSession = user;
@@ -49,22 +54,24 @@ public class EndLevelScreen implements Screen {
 
         DataBaseTest db = new DataBaseTest();
         db.createDatabase();
-        int id = db.getIdFromNameUser(usernameSession);
-
 
         atlas = new TextureAtlas("skin/uiskin.atlas");
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"), atlas);
-        //batch = new SpriteBatch();
 
         gamecam = new OrthographicCamera();
         viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, new OrthographicCamera());
-        //viewport.setCamera(gamecam);
         stage = new Stage(viewport, game.batch);
 
         //Stage should control input:
         Gdx.input.setInputProcessor(stage);
 
         hud = new Hud();
+
+        oldScore = db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level"+level);
+        System.out.println("Ancien score : " + oldScore);
+        newScore = hud.getScore();
+
+
 
         //Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 
@@ -74,7 +81,12 @@ public class EndLevelScreen implements Screen {
 
         Label endLabel = new Label("Fin du niveau " + level, skin);
         Label scoreLabel = new Label("Score : " + hud.getScore(), skin);
-        Label intScoreLabel = new Label("Meilleur score : " + db.returnLevelScore(1, "level"+level), skin);
+
+        if(newScore > oldScore) {
+           intScoreLabel = new Label("Meilleur score : " + hud.getScore(), skin);
+            //Update de la table score
+            db.updateScore(hud.getScore(), db.getIdFromNameUser(usernameSession), "level"+level);
+        }else intScoreLabel = new Label("Meilleur score : " + db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level" + level), skin);
 
         playButton = new TextButton("Rejouer", skin);
         playButton.setWidth(100);

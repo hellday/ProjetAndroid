@@ -54,6 +54,7 @@ public class MainMenuScreen implements Screen {
     private String newUsername;
     private ArrayList<String> allUser;
     private String usernameSession;
+    private Texture background;
 
     private DataBaseTest db;
 
@@ -113,8 +114,8 @@ public class MainMenuScreen implements Screen {
 
 
         //Labels
-        title = new Label("BILLY", skin);
-        title.setFontScale(2);
+       /*title = new Label("BILLY", skin);
+        title.setFontScale(2);*/
 
         //Add listeners to buttons
         playButton.addListener(new ClickListener() {
@@ -145,7 +146,7 @@ public class MainMenuScreen implements Screen {
         //Add buttons to table
         mainTable.add(title).expandX();
         mainTable.row();
-        mainTable.add(playButton).width(100).height(25).padTop(20);
+        mainTable.add(playButton).width(100).height(25).padTop(80);
         mainTable.row();
         mainTable.add(scoreButton).width(100).height(25).padTop(10);
         mainTable.row();
@@ -220,6 +221,8 @@ public class MainMenuScreen implements Screen {
             }.show(stage);
     }else mainTable.setVisible(true);
 
+        /// adding background image
+        background = new Texture("img/Crypte.png");
         //Add table to stage
         stage.addActor(mainTable);
     }
@@ -228,6 +231,12 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.getBatch().begin();
+        stage.getBatch().disableBlending();
+        stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
+        stage.getBatch().enableBlending();
+        stage.getBatch().end();
 
         stage.act();
         stage.draw();
