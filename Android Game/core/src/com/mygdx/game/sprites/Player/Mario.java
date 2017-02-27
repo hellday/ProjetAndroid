@@ -36,7 +36,9 @@ import static com.mygdx.game.scenes.Hud.heartcount;
  */
 
 public class Mario extends Sprite {
-    public enum State { FALLING, JUMPING, STANDING, RUNNING, GROWING, ATTACKING, DEAD};
+    public enum State { FALLING, JUMPING, STANDING, RUNNING, GROWING, ATTACKING, DEAD}
+    public enum Color {GRAY, RED, BLUE}
+    public Color buff;
     public State currentState;
     public State previousState;
     public World world;
@@ -84,6 +86,7 @@ public class Mario extends Sprite {
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
+        buff = Color.GRAY;
         runningRight = true;
         marioIsAttacking = false;
         marioCanAttack = true;
@@ -283,17 +286,31 @@ public class Mario extends Sprite {
 
         //left blade
         head.set(new Vector2(-20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(-20 / GameTest.PPM, 10 / GameTest.PPM));
+        PolygonShape blade = new PolygonShape();
         fdef.filter.categoryBits = GameTest.NOTHING_BIT;
-        fdef.shape = head;
+        Vector2[] vertice = new Vector2[5];
+        vertice[0] = new Vector2(-10, -12).scl(1 / GameTest.PPM);
+        vertice[1] = new Vector2(-35, -12).scl(1 / GameTest.PPM);
+        vertice[2] = new Vector2(-20, 20).scl(1 / GameTest.PPM);
+        vertice[3] = new Vector2(-10, 20).scl(1 / GameTest.PPM);
+        vertice[4] = new Vector2(-35, 0).scl(1 / GameTest.PPM);
+        blade.set(vertice);
+        fdef.shape = blade;
         fdef.friction = 0;
         fdef.isSensor = true;
         leftBlade = b2body.createFixture(fdef);
         leftBlade.setUserData(this);
 
+
         // right blade
-        head.set(new Vector2(20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(20 / GameTest.PPM, 10 / GameTest.PPM));
         fdef.filter.categoryBits = GameTest.NOTHING_BIT;
-        fdef.shape = head;
+        vertice[0] = new Vector2(10, -12).scl(1 / GameTest.PPM);
+        vertice[1] = new Vector2(35, -12).scl(1 / GameTest.PPM);
+        vertice[2] = new Vector2(20, 20).scl(1 / GameTest.PPM);
+        vertice[3] = new Vector2(10, 20).scl(1 / GameTest.PPM);
+        vertice[4] = new Vector2(35, 0).scl(1 / GameTest.PPM);
+        blade.set(vertice);
+        fdef.shape = blade;
         fdef.friction = 0;
         fdef.isSensor = true;
         rightBlade = b2body.createFixture(fdef);
@@ -595,10 +612,19 @@ public class Mario extends Sprite {
     }
 
     public void fire(){
-       // fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
+        fireballs.add(new FireBall(screen, b2body.getPosition().x, b2body.getPosition().y, runningRight));
+        GameTest.manager.get("audio/sounds/fireball.ogg", Sound.class).play();
+        screen.canFire = false;
 
+    }
+
+    public void attack(){
         bladeOn(true);
+        if(buff == Color.RED && screen.canFire == true)
+        {
+            fire();
 
+        }
 
     }
 

@@ -84,7 +84,7 @@ public class PlayScreen implements Screen{
 
     //Fireball
     long startTime = 0;
-    boolean canFire;
+    public boolean canFire;
 
     private final float radius = 6.8f / GameTest.PPM;
     private static boolean canPlay;
@@ -207,8 +207,8 @@ public class PlayScreen implements Screen{
                 }
 
                 if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                    player.fire();
-                    GameTest.manager.get("audio/sounds/fireball.ogg", Sound.class).play();
+                    player.attack();
+
                 }
 
                 //Controller
@@ -239,8 +239,7 @@ public class PlayScreen implements Screen{
 
                 if (controller.isDownPressed()) {
                     if (canFire) {
-                        player.fire();
-                        GameTest.manager.get("audio/sounds/fireball.ogg", Sound.class).play();
+                        player.attack();
                         canFire = false;
                     }
                 }
