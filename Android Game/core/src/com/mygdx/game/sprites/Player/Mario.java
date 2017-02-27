@@ -91,62 +91,10 @@ public class Mario extends Sprite {
         marioIsAttacking = false;
         marioCanAttack = true;
 
-        Array<TextureRegion> frames = new Array<TextureRegion>();
 
         atlas = new TextureAtlas("sprites/knight_grey.pack");
         atlasAttack = new TextureAtlas("sprites/knight_grey_attack.pack");
-
-        //Animation : COURIR
-
-        for(int i = 0; i < 2; i++){
-            frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234, 0, 234, 255));
-        }
-
-        marioRun = new Animation(0.08f, frames);
-        frames.clear();
-
-        //Animation ATTACK
-
-        for(int i = 1; i < 4; i++){
-            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 0, 156, 170));
-        }
-        for(int i = 0; i < 3; i++){
-            frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 170, 156, 170));
-        }
-        marioAttack = new Animation(0.08f, frames);
-        frames.clear();
-
-        //Animation BIG : COURIR
-        for(int i = 1; i < 4; i++){
-            frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), i * 16, 0, 16, 32));
-        }
-        bigMarioRun = new Animation(0.1f, frames);
-        frames.clear();
-
-        //Animation Mario qui grandi
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 240, 0, 16, 32));
-        frames.add(new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32));
-        growMario = new Animation(0.2f, frames);
-        frames.clear();
-
-        //Animation : SAUT (1 seule animation donc : TextureRegion et pas Animation)
-        marioJump = new TextureRegion(atlas.findRegion("knight_walk"), 234, 255, 234, 255);
-        bigMarioJump = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 80, 0, 16, 32);
-
-        //Création de l'animation pour Mario immobile
-        frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 0, 234, 255));
-        frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 255, 234, 255));
-        marioStand = new Animation(0.8f, frames);
-        frames.clear();
-
-
-        bigMarioStand = new TextureRegion(screen.getAtlas().findRegion("big_mario"), 0, 0, 16, 32);
-
-        //Création de la texture Mario mort
-        marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
-
+        applyBuff();
         defineMario();
         setBounds(0, 0, 48 / GameTest.PPM, 48 / GameTest.PPM);
         //setRegion(marioStand);
@@ -157,13 +105,9 @@ public class Mario extends Sprite {
 
     public void update(float dt){
         //Attache le Sprite au body
-        if(marioIsBig)
-            setPosition(b2body.getPosition().x - getWidth() / 2, b2body.getPosition().y - getHeight() / 2 - 6 / GameTest.PPM);
-        else {
-            if(runningRight) {
+           if(runningRight) {
                 setPosition(b2body.getPosition().x + 0.06f - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
             }else setPosition(b2body.getPosition().x - 0.06f - getWidth() / 2, b2body.getPosition().y - getHeight() / 2);
-        }
 
         setRegion(getFrame(dt));
 
@@ -317,7 +261,7 @@ public class Mario extends Sprite {
         rightBlade.setUserData(this);
 
 
-
+        blade.dispose();
         shape.dispose();
         head.dispose();
 
@@ -436,6 +380,76 @@ public class Mario extends Sprite {
 
         shape.dispose();
         head.dispose();
+    }
+
+    public void applyBuff(){
+        Array<TextureRegion> frames = new Array<TextureRegion>();
+        switch (buff)
+        {
+            case RED:
+                //Animation : COURIR
+                for(int i = 0; i < 2; i++){
+                    frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234, 0, 234, 255));
+                }
+
+                marioRun = new Animation(0.08f, frames);
+                frames.clear();
+
+                //Animation ATTACK
+                for(int i = 1; i < 4; i++){
+                    frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 0, 156, 170));
+                }
+                for(int i = 0; i < 3; i++){
+                    frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 170, 156, 170));
+                }
+                marioAttack = new Animation(0.08f, frames);
+                frames.clear();
+
+                marioJump = new TextureRegion(atlas.findRegion("knight_walk"), 234, 255, 234, 255);
+
+                //Création de l'animation pour Mario immobile
+                frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 0, 234, 255));
+                frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 255, 234, 255));
+                marioStand = new Animation(0.8f, frames);
+                frames.clear();
+
+                //Création de la texture Mario mort
+                marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
+                break;
+
+
+            case GRAY:
+            default:
+                //Animation : COURIR
+                for(int i = 0; i < 2; i++){
+                    frames.add(new TextureRegion(atlas.findRegion("knight_walk"), i * 234, 0, 234, 255));
+                }
+
+                marioRun = new Animation(0.08f, frames);
+                frames.clear();
+
+                //Animation ATTACK
+                for(int i = 1; i < 4; i++){
+                    frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 0, 156, 170));
+                }
+                for(int i = 0; i < 3; i++){
+                    frames.add(new TextureRegion(atlasAttack.findRegion("knight_attack"), i * 156, 170, 156, 170));
+                }
+                marioAttack = new Animation(0.08f, frames);
+                frames.clear();
+
+                marioJump = new TextureRegion(atlas.findRegion("knight_walk"), 234, 255, 234, 255);
+
+                //Création de l'animation pour Mario immobile
+                frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 0, 234, 255));
+                frames.add(new TextureRegion(atlas.findRegion("knight_walk"), 0, 255, 234, 255));
+                marioStand = new Animation(0.8f, frames);
+                frames.clear();
+
+                //Création de la texture Mario mort
+                marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
+                break;
+        }
     }
 
 
