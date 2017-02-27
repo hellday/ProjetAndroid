@@ -234,10 +234,10 @@ public class Mario extends Sprite {
         fdef.filter.categoryBits = GameTest.NOTHING_BIT;
         Vector2[] vertice = new Vector2[5];
         vertice[0] = new Vector2(-10, -12).scl(1 / GameTest.PPM);
-        vertice[1] = new Vector2(-35, -12).scl(1 / GameTest.PPM);
+        vertice[1] = new Vector2(-30, -12).scl(1 / GameTest.PPM);
         vertice[2] = new Vector2(-20, 20).scl(1 / GameTest.PPM);
         vertice[3] = new Vector2(-10, 20).scl(1 / GameTest.PPM);
-        vertice[4] = new Vector2(-35, 0).scl(1 / GameTest.PPM);
+        vertice[4] = new Vector2(-30, 0).scl(1 / GameTest.PPM);
         blade.set(vertice);
         fdef.shape = blade;
         fdef.friction = 0;
@@ -249,10 +249,10 @@ public class Mario extends Sprite {
         // right blade
         fdef.filter.categoryBits = GameTest.NOTHING_BIT;
         vertice[0] = new Vector2(10, -12).scl(1 / GameTest.PPM);
-        vertice[1] = new Vector2(35, -12).scl(1 / GameTest.PPM);
+        vertice[1] = new Vector2(30, -12).scl(1 / GameTest.PPM);
         vertice[2] = new Vector2(20, 20).scl(1 / GameTest.PPM);
         vertice[3] = new Vector2(10, 20).scl(1 / GameTest.PPM);
-        vertice[4] = new Vector2(35, 0).scl(1 / GameTest.PPM);
+        vertice[4] = new Vector2(30, 0).scl(1 / GameTest.PPM);
         blade.set(vertice);
         fdef.shape = blade;
         fdef.friction = 0;
