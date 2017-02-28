@@ -208,6 +208,7 @@ public class PlayScreen implements Screen{
 
                 if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     player.attack();
+                    player.setAttack(true);
 
                 }
 
@@ -240,6 +241,7 @@ public class PlayScreen implements Screen{
                 if (controller.isDownPressed()) {
                     if (canFire) {
                         player.attack();
+                        player.setAttack(true);
                         canFire = false;
                     }
                 }
@@ -439,6 +441,10 @@ public class PlayScreen implements Screen{
 
     public static Mario getPlayer(){
         return player;
+    }
+
+    public static Controller getController(){
+        return controller;
     }
 
     public static void setEndLevel() {

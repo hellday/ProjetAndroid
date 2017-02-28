@@ -22,6 +22,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
+import com.mygdx.game.Controller;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Enemies.Enemy;
@@ -71,6 +72,7 @@ public class Mario extends Sprite {
     private boolean marioIsAttacking;
     private boolean marioCanAttack;
     private long bladeTime;
+    private boolean attack;
 
     private TextureAtlas atlas, atlasAttack;
 
@@ -101,6 +103,7 @@ public class Mario extends Sprite {
 
         //Fireball
         fireballs = new Array<FireBall>();
+        attack = false;
     }
 
     public void update(float dt){
@@ -508,15 +511,16 @@ public class Mario extends Sprite {
     //La position de Mario
     public State getState(){
 
-
         //Si il meurt
         if(marioIsDead){
             return State.DEAD;
-        }else if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE) && marioCanAttack) {
+        }else if (attack && marioCanAttack) {
             marioIsAttacking = true;
             marioCanAttack = false;
             System.out.println("Attack");
-           return State.ATTACKING;
+            attack = false;
+            return State.ATTACKING;
+
         }
 
         //Si il grandi
@@ -647,6 +651,10 @@ public class Mario extends Sprite {
         super.draw(batch);
         for(FireBall ball : fireballs)
             ball.draw(batch);
+    }
+
+    public void setAttack(boolean att){
+        attack = att;
     }
 
 
