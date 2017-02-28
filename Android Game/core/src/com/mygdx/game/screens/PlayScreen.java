@@ -352,11 +352,6 @@ public class PlayScreen implements Screen{
         //HUD
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-        //Stage should control input:
-//        Gdx.input.setInputProcessor(endLevel.stage);
-//        endLevel.stage.draw();
-//        endLevel.stage.dispose();
-
 
         //Controller
         controller.draw();
@@ -444,23 +439,6 @@ public class PlayScreen implements Screen{
 
     public static Mario getPlayer(){
         return player;
-    }
-
-    public void movePlayer() {
-        player.b2body.setLinearVelocity(8, 0);
-        controller.dispose();
-        System.out.println("Marche en cours...");
-        canPlay = false;
-
-        float delay = 4; // seconds
-
-        Timer.schedule(new Timer.Task(){
-            @Override
-            public void run() {
-                game.setScreen(new GameOverScreen(game, usernameSession, level));
-                dispose();
-            }
-        }, delay);
     }
 
     public static void setEndLevel() {

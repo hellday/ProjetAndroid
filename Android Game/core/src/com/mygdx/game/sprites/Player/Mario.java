@@ -187,7 +187,7 @@ public class Mario extends Sprite {
 
     public void defineMario(){
         bdef = new BodyDef();
-        bdef.position.set(128 / GameTest.PPM, 32 / GameTest.PPM);
+        bdef.position.set(128 / GameTest.PPM, 256 / GameTest.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
@@ -195,7 +195,7 @@ public class Mario extends Sprite {
         //CircleShape shape = new CircleShape();
         //shape.setRadius(14 / GameTest.PPM); //Taille du personnage
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(9 / GameTest.PPM, 12 / GameTest.PPM);
+        shape.setAsBox(6 / GameTest.PPM, 12 / GameTest.PPM);
 
         fdef.filter.categoryBits = GameTest.MARIO_BIT;
         fdef.filter.maskBits = GameTest.GROUND_BIT |

@@ -204,6 +204,7 @@ public class MainMenuScreen implements Screen {
                                 db.newUserData(newUsername);
                                 usernameSession = newUsername;
                                 mainTable.setVisible(true);
+                                db.closeDatabase();
                             }
 
                         }.show(stage);

@@ -37,7 +37,7 @@ public class EndLevelScreen implements Screen {
 
     private TextureAtlas atlas;
     private Skin skin;
-    private TextButton playButton;
+    private TextButton playButton, nextButton;
 
     private Hud hud;
     private int level;
@@ -91,12 +91,23 @@ public class EndLevelScreen implements Screen {
         playButton = new TextButton("Rejouer", skin);
         playButton.setWidth(100);
         playButton.setHeight(25);
-        playButton.setPosition(150, 0);
+        playButton.setPosition(100, 0);
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                    System.out.println("Rejouer");
                 ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, level));
+
+            }
+        });
+
+        nextButton = new TextButton("Suivant", skin);
+        nextButton.setWidth(100);
+        nextButton.setHeight(25);
+        nextButton.setPosition(200, 0);
+        nextButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, level+1));
 
             }
         });
@@ -109,6 +120,7 @@ public class EndLevelScreen implements Screen {
 
         stage.addActor(table);
         stage.addActor(playButton);
+        stage.addActor(nextButton);
 
 
     }

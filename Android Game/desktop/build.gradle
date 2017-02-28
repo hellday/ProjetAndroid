@@ -38,7 +38,6 @@ task afterEclipseImport(description: "Post processing after project generation",
     }
 }
 dependencies {
-    compile files('D:/Android Game/core/src/libs/gdx-sqlite-desktop.jar')
-    compile files('C:/Users/Terry/ProjetAndroid/Android Game/core/src/libs/gdx-sqlite-desktop.jar')
-    compile files('D:/Users/mikal/AndroidStudioProjects/kraken/ProjetAndroid/Android Game/core/src/libs/gdx-sqlite-desktop.jar')
+    compile files('../core/src/libs/gdx-sqlite-desktop.jar')
+    compile files('../core/src/libs/sqlite-jdbc-3.7.2.jar')
 }

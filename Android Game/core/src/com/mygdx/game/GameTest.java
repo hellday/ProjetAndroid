@@ -67,8 +67,8 @@ public class GameTest extends com.badlogic.gdx.Game {
 		//db.insertData();
 		//db.selectData();
 
-		//setScreen(new MainMenuScreen(this, null));
-		setScreen(new PlayScreen(this, "Terry", 1));
+		setScreen(new MainMenuScreen(this, null));
+		//setScreen(new PlayScreen(this, "Terry", 2));
 	}
 
 	@Override

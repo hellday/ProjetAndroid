@@ -113,7 +113,7 @@ public class LevelSelectScreen implements Screen {
 
         //CheckLevel
         checkLevelLock = db.checkLevel(usernameSession);
-        System.out.println(checkLevelLock);
+        System.out.println(checkLevelLock + "avec une taille de " + checkLevelLock.size());
 
 
 
@@ -172,9 +172,7 @@ public class LevelSelectScreen implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(levelAmount == 1) {
                     ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, levelAmount));
-                }else System.out.println("En création");
             }
         });
 
@@ -240,7 +238,10 @@ public class LevelSelectScreen implements Screen {
         }else rightArrow.setVisible(true);
 
         //En fonction des Level débloqués
-        if(checkLevelLock.isEmpty() || checkLevelLock.size() == 1 && levelAmount == 1){
+        if(checkLevelLock.isEmpty() && levelAmount == 1){
+            playButton.setVisible(true);
+            locked.setVisible(false);
+        }else if(checkLevelLock.size() == 1 && levelAmount == 1) {
             playButton.setVisible(true);
             locked.setVisible(false);
         }else if(checkLevelLock.size() == 1 && levelAmount == 2){
@@ -254,10 +255,6 @@ public class LevelSelectScreen implements Screen {
             locked.setVisible(true);
         }
 
-
-
     }
-
-
 
 }

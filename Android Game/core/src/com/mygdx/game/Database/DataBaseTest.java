@@ -32,7 +32,7 @@ public class DataBaseTest {
     public static final String TABLE_USERS = "users";
     public static final String COLUMN_NAMEUSER = "nameUser";
 
-    private static final String DATABASE_NAME = "comments.db";
+    private static final String DATABASE_NAME = "database.db";
     private static final int DATABASE_VERSION = 1;
 
     private DatabaseCursor cursor;
@@ -58,6 +58,25 @@ public class DataBaseTest {
             + COLUMN_ID_USER + " integer primary key autoincrement, "
             + COLUMN_NAMEUSER + " varchar not null);";
 
+    private static final String DATABASE_CREATE_1 = "create table if not exists "
+            + TABLE_SETTINGS + "("
+            + COLUMN_ID + " integer primary key autoincrement, "
+            + COLUMN_ID_USER + " integer not null, "
+            + COLUMN_VOLUME + " integer not null, "
+            + COLUMN_VIBREUR + " varchar not null);";
+    private static final String DATABASE_CREATE_2 = "create table if not exists "
+            + TABLE_SCORES + "("
+            + COLUMN_IDLEVEL + " integer primary key autoincrement, "
+            + COLUMN_ID_USER + " integer not null, "
+            + COLUMN_NAMELEVEL + " varchar not null, "
+            + COLUMN_MAXSCORE + " integer not null, "
+            + COLUMN_FINISHED + " varchar not null);";
+    private static final String DATABASE_CREATE_3 = "create table if not exists "
+            + TABLE_USERS + "("
+            + COLUMN_ID_USER + " integer primary key autoincrement, "
+            + COLUMN_NAMEUSER + " varchar not null);";
+
+
     public DataBaseTest() {
 
     }
@@ -65,17 +84,18 @@ public class DataBaseTest {
     public void createDatabase(){
         Gdx.app.log("DatabaseTest", "creation started");
         dbHandler = DatabaseFactory.getNewDatabase(DATABASE_NAME,
-                DATABASE_VERSION, DATABASE_CREATE, null);
+                DATABASE_VERSION, DATABASE_CREATE_1 + DATABASE_CREATE_2 + DATABASE_CREATE_3, null);
 
         dbHandler.setupDatabase();
         try {
             dbHandler.openOrCreateDatabase();
-            dbHandler.execSQL(DATABASE_CREATE);
+            dbHandler.execSQL(DATABASE_CREATE_1);
+            dbHandler.execSQL(DATABASE_CREATE_2);
+            dbHandler.execSQL(DATABASE_CREATE_3);
+            Gdx.app.log("DatabaseTest", "created successfully");
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }
-
-        Gdx.app.log("DatabaseTest", "created successfully");
 
     }
 
