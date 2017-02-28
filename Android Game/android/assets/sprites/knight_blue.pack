@@ -1,0 +1,13 @@
+
+knight_blue.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+knight_walk
+  rotate: false
+  xy: 1, 1
+  size: 468, 510
+  orig: 468, 510
+  offset: 0, 0
+  index: -1
+

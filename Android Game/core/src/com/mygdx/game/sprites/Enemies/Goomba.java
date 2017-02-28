@@ -44,10 +44,6 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
         super(screen, x, y);
         frames = new Array<TextureRegion>();
 
-//        for(int i = 0; i < 2; i++){
-//            frames.add(new TextureRegion(screen.getAtlas().findRegion("goomba"), i * 16, 0, 16, 16));
-//        }
-
         atlas = new TextureAtlas("sprites/ghost.pack");
 
         for(int i = 1; i < 5; i++){
