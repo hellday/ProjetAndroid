@@ -40,23 +40,6 @@ public class DataBaseTest {
     private DataBaseTest db;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table if not exists "
-            + TABLE_SETTINGS + "("
-            + COLUMN_ID + " integer primary key autoincrement, "
-            + COLUMN_ID_USER + " integer not null, "
-            + COLUMN_VOLUME + " integer not null, "
-            + COLUMN_VIBREUR + " varchar not null); \n create table if not exists "
-
-            + TABLE_SCORES + "("
-            + COLUMN_IDLEVEL + " integer primary key autoincrement, "
-            + COLUMN_ID_USER + " integer not null, "
-            + COLUMN_NAMELEVEL + " varchar not null, "
-            + COLUMN_MAXSCORE + " integer not null, "
-            + COLUMN_FINISHED + " varchar not null); \n create table if not exists "
-
-            + TABLE_USERS + "("
-            + COLUMN_ID_USER + " integer primary key autoincrement, "
-            + COLUMN_NAMEUSER + " varchar not null);";
 
     private static final String DATABASE_CREATE_1 = "create table if not exists "
             + TABLE_SETTINGS + "("
@@ -338,8 +321,6 @@ public class DataBaseTest {
             e.printStackTrace();
         }
     }
-
-
 
     public void closeDatabase(){
 

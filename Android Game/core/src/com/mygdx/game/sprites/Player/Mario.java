@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.Controller;
+import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Enemies.Enemy;
@@ -77,14 +78,16 @@ public class Mario extends Sprite {
     private TextureAtlas atlas_grey, atlas_red, atlas_blue ,atlasAttack_grey, atlasAttack_red, atlasAttack_blue;
 
     private PlayScreen screen;
-
-    private final float radius = 6.8f / GameTest.PPM;
+    private DataBaseTest db;
+    private String usernameSession;
 
     private Array<FireBall> fireballs;
 
-    public Mario(PlayScreen screen){
+    public Mario(PlayScreen screen, String user){
         this.screen = screen;
         this.world = screen.getWorld();
+        this.usernameSession = user;
+
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
@@ -107,11 +110,14 @@ public class Mario extends Sprite {
         applyBuff();
         defineMario();
         setBounds(0, 0, 48 / GameTest.PPM, 48 / GameTest.PPM);
-        //setRegion(marioStand);
 
         //Fireball
         fireballs = new Array<FireBall>();
         attack = false;
+
+        //Database
+        db = new DataBaseTest();
+        db.createDatabase();
     }
 
     public void update(float dt){
@@ -608,6 +614,9 @@ public class Mario extends Sprite {
             {
                 damage(1);
                 knockBack(enemy);
+                if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si le vibreur est activé dans les paramètres
+                    Gdx.input.vibrate(200);
+                }
 
                 if (heartcount>0){
                     /// on fait un bruit de dégat
@@ -680,7 +689,6 @@ public class Mario extends Sprite {
         if(buff == Color.RED && screen.canFire == true)
         {
             fire();
-
         }
 
     }

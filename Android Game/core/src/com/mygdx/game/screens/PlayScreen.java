@@ -135,7 +135,7 @@ public class PlayScreen implements Screen{
         creator = new B2WorldCreator(this);
 
         //Création de Mario dans notre monde
-        player = new Mario(this);
+        player = new Mario(this, usernameSession);
 
         wcl = new WorldContactListener();
         world.setContactListener(wcl);
@@ -209,7 +209,6 @@ public class PlayScreen implements Screen{
                 if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
                     player.attack();
                     player.setAttack(true);
-
                 }
 
                 //Controller
@@ -441,10 +440,6 @@ public class PlayScreen implements Screen{
 
     public static Mario getPlayer(){
         return player;
-    }
-
-    public static Controller getController(){
-        return controller;
     }
 
     public static void setEndLevel() {
