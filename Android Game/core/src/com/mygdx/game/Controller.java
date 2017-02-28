@@ -73,7 +73,7 @@ public class Controller {
         table.left().bottom();
 
         Image upImg = new Image(new Texture("controller/a_controller.png"));
-        upImg.setSize(50, 50);
+        upImg.setSize(75, 75);
         upImg.addListener(new InputListener() {
 
             @Override
@@ -89,7 +89,7 @@ public class Controller {
         });
 
         Image downImg = new Image(new Texture("controller/b_controller.png"));
-        downImg.setSize(50, 50);
+        downImg.setSize(75, 75);
         downImg.addListener(new InputListener() {
 
             @Override
@@ -105,7 +105,7 @@ public class Controller {
         });
 
         Image rightImg = new Image(new Texture("controller/right_controller.png"));
-        rightImg.setSize(50, 50);
+        rightImg.setSize(75, 75);
         rightImg.addListener(new InputListener() {
 
             @Override
@@ -121,7 +121,7 @@ public class Controller {
         });
 
         Image leftImg = new Image(new Texture("controller/left_controller.png"));
-        leftImg.setSize(50, 50);
+        leftImg.setSize(75, 75);
         leftImg.addListener(new InputListener() {
 
             @Override
@@ -142,8 +142,6 @@ public class Controller {
         table.add(leftImg).size(leftImg.getWidth(), leftImg.getHeight());
         table.add();
         table.add(rightImg).size(rightImg.getWidth(), rightImg.getHeight());
-        table.add();table.add();table.add();table.add();table.add();table.add();
-        table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();

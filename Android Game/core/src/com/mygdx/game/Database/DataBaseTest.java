@@ -66,8 +66,7 @@ public class DataBaseTest {
 
     public void createDatabase(){
         Gdx.app.log("DatabaseTest", "creation started");
-        dbHandler = DatabaseFactory.getNewDatabase(DATABASE_NAME,
-                DATABASE_VERSION, DATABASE_CREATE_1 + DATABASE_CREATE_2 + DATABASE_CREATE_3, null);
+        dbHandler = DatabaseFactory.getNewDatabase(DATABASE_NAME, DATABASE_VERSION, DATABASE_CREATE_1 + DATABASE_CREATE_2 + DATABASE_CREATE_3, null);
 
         dbHandler.setupDatabase();
         try {
