@@ -127,16 +127,6 @@
    eJzt2b1PFEEcxvFfAcFEkYJodeztbSNq4Uun/4sKCYkmBgskgUTUKHTaa7QUExM1sVIbAr0EtcCXFguttIPWZ3O72WEZfAGWvYHvJ3myMzdbbPPczO2ZAW1xVKTluSZR3U8IYDNjUTt5X9Pxdec6Tn+Bjsf+C4SrvP/SXyAcbl9j+gsEg/dXQLh876/oLxAO+guEq/ybl/+PgHCMlTrL/gv8v8uJ2ZVk49g33wnLjXY+KZ+VL8rXBv0FfP7WwRtam0o2jn3znXBsoJ1B5bhyQjk5wPkZ8Kmig/8q8eynE+rqpLLSMvum3M7m7L/Y63bjfFuFtJP5s45m/VxVd9eUj+puw1mnv9irduN8W4X0TJw/a97faY1nkqK/+Tr9BTrfA3X1Ydbfa9n75wnNJwP4PsLWHNF562ir7qfAVvyMzX7Fxf77Uj195ey/aX/vaX6f/gId54l6Oeucn59r/MLpb75evgL7wfcusx9d1d2/XW/UxbdOH/P+Xm2ajTSL9fIVYXvab/asv+6n6Hznus3Od1d3/3a9UxcXnT7Oa7ygzKm7r5vFevkKoB4LB4rxwdjskNKrHFb6srnvcwD1etQye+y8a7wQm11ULilDynA2930OoD5TPWY3lVs9m99zKjI7rZyJ1o/P8v8vUJt0311Sb98rH/7Q3zvq6V1lOlo/nqG/AAAAAAAAAADsC78B7LaICA==
   </data>
  </layer>
- <layer name="Calque 3" width="240" height="30">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAdwNwgAAB
-  </data>
- </layer>
- <layer name="Calque 4" width="240" height="30">
-  <data encoding="base64" compression="zlib">
-   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAdwNwgAAB
-  </data>
- </layer>
  <objectgroup name="Ground">
   <object id="198" x="1312" y="320" width="480" height="32"/>
   <object id="227" x="0" y="224" width="112" height="96"/>
@@ -174,7 +164,7 @@
   <object id="305" x="1792" y="320" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Wall"/>
- <objectgroup name="Coins"/>
+ <objectgroup name="Coins" offsetx="-1554" offsety="2"/>
  <objectgroup name="Bricks"/>
  <objectgroup name="Goombas">
   <object id="264" x="1702" y="185" width="21" height="21"/>
@@ -199,4 +189,14 @@
    </properties>
   </object>
  </objectgroup>
+ <layer name="Calque 3" width="240" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAdwNwgAAB
+  </data>
+ </layer>
+ <layer name="Calque 4" width="240" height="30" offsetx="-1410" offsety="-1">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAdwNwgAAB
+  </data>
+ </layer>
 </map>
