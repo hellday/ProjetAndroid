@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<<<<<<< HEAD
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="307">
-=======
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="306">
->>>>>>> master
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="309">
  <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924" columns="33">
   <image source="tileset_gutter.png" width="594" height="504"/>
   <tile id="0">
@@ -132,7 +128,6 @@
   </data>
  </layer>
  <objectgroup name="Ground">
-  <object id="198" x="1312" y="320" width="480" height="32"/>
   <object id="227" x="0" y="224" width="112" height="96"/>
   <object id="233" x="112" y="240" width="16" height="80"/>
   <object id="236" x="128" y="256" width="16" height="64"/>
@@ -163,13 +158,8 @@
   <object id="298" x="1888" y="384" width="112" height="16"/>
   <object id="299" x="1872" y="368" width="16" height="32"/>
   <object id="300" x="1824" y="352" width="48" height="16"/>
-  <object id="301" x="1792" y="336" width="64" height="16"/>
-<<<<<<< HEAD
-  <object id="306" x="1792" y="320" width="48" height="16"/>
-=======
-  <object id="302" x="1808" y="320" width="32" height="16"/>
-  <object id="305" x="1792" y="320" width="16" height="16"/>
->>>>>>> master
+  <object id="307" x="1312" y="320" width="528" height="32"/>
+  <object id="308" x="1840" y="336" width="16" height="16"/>
  </objectgroup>
  <objectgroup name="Wall"/>
  <objectgroup name="Coins" offsetx="-1554" offsety="2"/>
