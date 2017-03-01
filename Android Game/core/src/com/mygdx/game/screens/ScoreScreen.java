@@ -48,6 +48,7 @@ public class ScoreScreen implements Screen {
     private Texture arrow;
     private Image arr;
     private String usernameSession;
+    private Texture background;
 
     public DataBaseTest db;
 
@@ -139,6 +140,8 @@ public class ScoreScreen implements Screen {
         scrollpane2 = new ScrollPane(list2);
         scrollpane2.setPosition(240, 0);
 
+        /// adding background image
+        background = new Texture("img/background.png");
 
         //Add table to stage
         //stage.addActor(mainTable);
@@ -155,6 +158,12 @@ public class ScoreScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.getBatch().begin();
+        stage.getBatch().disableBlending();
+        stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
+        stage.getBatch().enableBlending();
+        stage.getBatch().end();
 
         stage.act();
         stage.draw();

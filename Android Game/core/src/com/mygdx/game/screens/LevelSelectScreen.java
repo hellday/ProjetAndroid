@@ -65,6 +65,7 @@ public class LevelSelectScreen implements Screen {
 
     private int levelAmount;
     private ArrayList<String> checkLevelLock;
+    private Texture background;
 
 
     public LevelSelectScreen(GameTest pgame, String user) {
@@ -98,6 +99,12 @@ public class LevelSelectScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.getBatch().begin();
+        stage.getBatch().disableBlending();
+        stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
+        stage.getBatch().enableBlending();
+        stage.getBatch().end();
 
         stage.act();
         stage.draw();
@@ -188,6 +195,9 @@ public class LevelSelectScreen implements Screen {
         //Add buttons to table
         mainTable.add(returnButton).width(100).height(25);
         mainTable.add(title).expandX();
+
+        /// adding background image
+        background = new Texture("img/background.png");
 
         //Add table to stage
         //stage.addActor(mainTable);

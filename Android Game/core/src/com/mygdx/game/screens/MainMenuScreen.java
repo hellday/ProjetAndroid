@@ -223,7 +223,7 @@ public class MainMenuScreen implements Screen {
     }else mainTable.setVisible(true);
 
         /// adding background image
-        background = new Texture("img/Crypte.png");
+        background = new Texture("img/mainmenu.png");
         //Add table to stage
         stage.addActor(mainTable);
     }

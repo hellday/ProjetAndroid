@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -39,6 +40,7 @@ public class SettingsScreen implements Screen {
     private boolean vibreurIsOn;
     private TextButton onOffButton;
     private String usernameSession;
+    private Texture background;
 
     public DataBaseTest db;
 
@@ -139,6 +141,9 @@ public class SettingsScreen implements Screen {
         mainTable.add(vibreur).expandX().padTop(25);
         mainTable.add(onOffButton).width(100).height(25).padTop(25);
 
+        /// adding background image
+        background = new Texture("img/background.png");
+
         //Add table to stage
         stage.addActor(mainTable);
     }
@@ -147,6 +152,12 @@ public class SettingsScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.getBatch().begin();
+        stage.getBatch().disableBlending();
+        stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
+        stage.getBatch().enableBlending();
+        stage.getBatch().end();
 
         stage.act();
         stage.draw();

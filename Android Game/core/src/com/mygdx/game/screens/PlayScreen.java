@@ -252,15 +252,7 @@ public class PlayScreen implements Screen{
                     player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
                     GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
 
-                    //Si le joueur est BLEU il peut sauter 2 fois
-                    if(player.getBuff()== Mario.Color.BLUE) {
-                        canDoubleJump = true;
-                    }
-                }
-                if (controller.isUpPressed() && canDoubleJump && !wcl.isPlayerIsOnGround()) { //SAUT 2
-                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
-                    GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
-                    canDoubleJump = false;
+
                 }
 
                 if (controller.isDownPressed()) {
