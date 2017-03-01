@@ -93,6 +93,9 @@ public class PlayScreen implements Screen{
     private String usernameSession;
     private int level;
 
+    //Blue Knight : Double jump
+    private boolean canDoubleJump;
+
 
     /** Constructeur de l'écran */
     public PlayScreen(GameTest game, String user, int lvl){
@@ -159,6 +162,9 @@ public class PlayScreen implements Screen{
         canPlay = true;
         movePlayerEnd = false;
 
+        //Double Jump
+        canDoubleJump = false;
+
     }
 
     public void spawnItem(ItemDef idef){
@@ -196,6 +202,16 @@ public class PlayScreen implements Screen{
                 if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) { //SAUT
                     player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
                     GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+
+                    //Si le joueur est BLEU il peut sauter 2 fois
+                    if(player.getBuff()== Mario.Color.BLUE) {
+                        canDoubleJump = true;
+                    }
+                }
+                if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && canDoubleJump && !wcl.isPlayerIsOnGround()) { //SAUT 2
+                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                    GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+                    canDoubleJump = false;
                 }
 
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) {
@@ -235,6 +251,16 @@ public class PlayScreen implements Screen{
                 if (controller.isUpPressed() && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) {
                     player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
                     GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+
+                    //Si le joueur est BLEU il peut sauter 2 fois
+                    if(player.getBuff()== Mario.Color.BLUE) {
+                        canDoubleJump = true;
+                    }
+                }
+                if (controller.isUpPressed() && canDoubleJump && !wcl.isPlayerIsOnGround()) { //SAUT 2
+                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                    GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+                    canDoubleJump = false;
                 }
 
                 if (controller.isDownPressed()) {

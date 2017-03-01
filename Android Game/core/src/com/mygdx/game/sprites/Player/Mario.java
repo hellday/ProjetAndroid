@@ -704,6 +704,10 @@ public class Mario extends Sprite {
         attack = att;
     }
 
+    public Color getBuff(){
+        return buff;
+    }
+
 
 
 }
