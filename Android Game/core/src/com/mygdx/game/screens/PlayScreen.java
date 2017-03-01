@@ -227,7 +227,28 @@ public class PlayScreen implements Screen{
                     player.setAttack(true);
                 }
 
+                if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                    if(player.getBuff()== Mario.Color.GREY) {
+                        player.setBuff("red");
+                    }else if(player.getBuff()== Mario.Color.RED) {
+                        player.setBuff("blue");
+                    }else if(player.getBuff()== Mario.Color.BLUE) {
+                        player.setBuff("grey");
+                    }
+
+                }
+
                 //Controller
+                if(controller.isRightPressed() && controller.isLeftPressed()){
+                    if(player.getBuff()== Mario.Color.GREY) {
+                        player.setBuff("red");
+                    }else if(player.getBuff()== Mario.Color.RED) {
+                        player.setBuff("blue");
+                    }else if(player.getBuff()== Mario.Color.BLUE) {
+                        player.setBuff("grey");
+                    }
+                }
+
                 if (controller.isRightPressed())
                     player.b2body.setLinearVelocity(new Vector2(1, player.b2body.getLinearVelocity().y));
 
@@ -352,7 +373,7 @@ public class PlayScreen implements Screen{
         renderer.render();
 
         //Affichage des DEBUG (Bodies et collision..)
-        b2dr.render(world, gamecam.combined);
+        //b2dr.render(world, gamecam.combined);
 
         game.batch.setProjectionMatrix(gamecam.combined);
         game.batch.begin();

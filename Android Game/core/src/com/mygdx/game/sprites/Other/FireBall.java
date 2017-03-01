@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTest;
+import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Enemies.Goomba;
@@ -117,6 +118,7 @@ public class FireBall extends Sprite {
 
             killed(body);
             System.out.println("Fireball : Goomba");
+            Hud.addScore(200);
         }
 
     }

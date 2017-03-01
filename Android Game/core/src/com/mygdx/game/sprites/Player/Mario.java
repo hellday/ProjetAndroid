@@ -93,7 +93,7 @@ public class Mario extends Sprite {
         currentState = State.STANDING;
         previousState = State.STANDING;
         stateTimer = 0;
-        buff = Color.BLUE;
+        buff = Color.GREY;
         runningRight = true;
         marioIsAttacking = false;
         marioCanAttack = true;
@@ -239,7 +239,7 @@ public class Mario extends Sprite {
         b2body.createFixture(fdef).setUserData(this);
 
         // Mario's feet
-        head.set(new Vector2(-(6 / GameTest.PPM), -(12 / GameTest.PPM)), new Vector2(6 / GameTest.PPM, -(12 / GameTest.PPM)));
+        head.set(new Vector2(-(3 / GameTest.PPM), -(12 / GameTest.PPM)), new Vector2(3 / GameTest.PPM, -(12 / GameTest.PPM)));
         fdef.filter.categoryBits = GameTest.MARIO_FOOT_BIT;
         fdef.shape = head;
         fdef.isSensor = true;
@@ -316,7 +316,7 @@ public class Mario extends Sprite {
                 frames.clear();
 
                 //Création de la texture Mario mort
-                marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
+                marioDead = new TextureRegion(atlas_red.findRegion("knight_walk"), 0, 0, 234, 255);
                 break;
 
             case BLUE:
@@ -347,7 +347,7 @@ public class Mario extends Sprite {
                 frames.clear();
 
                 //Création de la texture Mario mort
-                marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
+                marioDead = new TextureRegion(atlas_blue.findRegion("knight_walk"), 0, 0, 234, 255);
                 break;
 
 
@@ -380,7 +380,7 @@ public class Mario extends Sprite {
                 frames.clear();
 
                 //Création de la texture Mario mort
-                marioDead = new TextureRegion(screen.getAtlas().findRegion("little_mario"), 96, 0, 16, 16);
+                marioDead = new TextureRegion(atlas_grey.findRegion("knight_walk"), 0, 0, 234, 255);
                 break;
         }
     }
@@ -510,9 +510,9 @@ public class Mario extends Sprite {
 
                 damage(1);
 
-               /* if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si le vibreur est activé dans les paramètres
+                if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si le vibreur est activé dans les paramètres
                     Gdx.input.vibrate(200);
-                } */
+                }
 
                 if (heartcount>0){
                     /// on fait un bruit de dégat
@@ -586,6 +586,19 @@ public class Mario extends Sprite {
 
     public Color getBuff(){
         return buff;
+    }
+
+    public void setBuff(String color){
+        if(color.equalsIgnoreCase("blue")){
+            buff = Color.BLUE;
+        }
+        if(color.equalsIgnoreCase("grey")){
+            buff = Color.GREY;
+        }
+        if(color.equalsIgnoreCase("red")){
+            buff = Color.RED;
+        }
+        applyBuff();
     }
 
 

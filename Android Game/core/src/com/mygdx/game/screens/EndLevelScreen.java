@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -46,6 +47,7 @@ public class EndLevelScreen implements Screen {
     private int newScore;
 
     private Label intScoreLabel;
+    private Texture background;
 
     public EndLevelScreen(final GameTest game, String user, int lvl) {
         this.game = game;
@@ -80,13 +82,19 @@ public class EndLevelScreen implements Screen {
         table.setFillParent(true);
 
         Label endLabel = new Label("Fin du niveau " + level, skin);
+        endLabel.setColor(Color.BLACK);
         Label scoreLabel = new Label("Score : " + hud.getScore(), skin);
+        scoreLabel.setColor(Color.BLACK);
 
         if(newScore > oldScore) {
            intScoreLabel = new Label("Meilleur score : " + hud.getScore(), skin);
+            intScoreLabel.setColor(Color.BLACK);
             //Update de la table score
             db.updateScore(hud.getScore(), db.getIdFromNameUser(usernameSession), "level"+level);
-        }else intScoreLabel = new Label("Meilleur score : " + db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level" + level), skin);
+        }else {
+            intScoreLabel = new Label("Meilleur score : " + db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level" + level), skin);
+            intScoreLabel.setColor(Color.BLACK);
+        }
 
         playButton = new TextButton("Rejouer", skin);
         playButton.setWidth(100);
@@ -118,6 +126,9 @@ public class EndLevelScreen implements Screen {
         table.row();
         table.add(intScoreLabel).expandX().padTop(10f);
 
+        /// adding background image
+        background = new Texture("img/mainmenu.png");
+
         stage.addActor(table);
         stage.addActor(playButton);
         stage.addActor(nextButton);
@@ -138,6 +149,14 @@ public class EndLevelScreen implements Screen {
 //        }
         Gdx.gl.glClearColor(0, 0 ,0 ,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stage.getBatch().begin();
+        stage.getBatch().disableBlending();
+        stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
+        stage.getBatch().enableBlending();
+        stage.getBatch().end();
+
+        stage.act();
         stage.draw();
     }
 

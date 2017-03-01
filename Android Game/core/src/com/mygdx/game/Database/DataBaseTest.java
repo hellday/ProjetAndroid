@@ -211,7 +211,6 @@ public class DataBaseTest {
         int val = 0;
 
         try {
-            System.out.println("SELECT * FROM scores WHERE idUser = " + data + " AND nameLevel = '" + data2 + "'");
             cursor = dbHandler.rawQuery("SELECT * FROM scores WHERE idUser = " + data + " AND nameLevel = '" + data2 + "'");
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
@@ -220,7 +219,6 @@ public class DataBaseTest {
         if(cursor != null) {
 
                 while (cursor.next()) {
-                    Gdx.app.log("returnData", String.valueOf(cursor.getInt(3)));
                     val = cursor.getInt(3);
                 }
 
