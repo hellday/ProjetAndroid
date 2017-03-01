@@ -48,6 +48,7 @@ public class Mario extends Sprite {
     public BodyDef bdef;
     public Fixture leftBlade;
     public Fixture rightBlade;
+    public Fixture mainFixture;
 
     private Animation marioStand;
     private Animation marioRun;
@@ -73,6 +74,7 @@ public class Mario extends Sprite {
     private boolean marioIsAttacking;
     private boolean marioCanAttack;
     private long bladeTime;
+    private long invincibleTime;
     private boolean attack;
 
     private TextureAtlas atlas_grey, atlas_red, atlas_blue ,atlasAttack_grey, atlasAttack_red, atlasAttack_blue;
@@ -128,13 +130,6 @@ public class Mario extends Sprite {
 
         setRegion(getFrame(dt));
 
-        if(timeToDefineBigMario){
-            defineBigMario();
-        }
-
-        if(timeToRedefineMario){
-            redefineMario();
-        }
 
         if(marioIsAttacking)
         {
@@ -158,7 +153,19 @@ public class Mario extends Sprite {
         if(TimeUtils.timeSinceNanos(bladeTime) > 250000000)
         {
             bladeOn(false);
+
         }
+
+            if(!marioIsDead)
+            {
+                if(TimeUtils.timeSinceNanos(invincibleTime) > 1250000000)
+                {
+                    invincible(false);
+                }
+            }
+
+
+
 
     }
 
@@ -187,14 +194,6 @@ public class Mario extends Sprite {
         }
     }
 
-    //Mario grandi
-    public void grow(){
-        runGrowAnimation = true;
-        marioIsBig = true;
-        timeToDefineBigMario = true;
-        setBounds(getX(), getY(), getWidth(), getHeight() * 2);
-        GameTest.manager.get("audio/sounds/powerup.wav", Sound.class).play();
-    }
 
     public boolean isBig(){
         return marioIsBig;
@@ -227,7 +226,8 @@ public class Mario extends Sprite {
 
         fdef.shape = shape;
         fdef.friction = 0;
-        b2body.createFixture(fdef).setUserData(this);
+        mainFixture = b2body.createFixture(fdef);
+        mainFixture.setUserData(this);
 
         // Mario's head
         EdgeShape head = new EdgeShape();
@@ -282,121 +282,6 @@ public class Mario extends Sprite {
         shape.dispose();
         head.dispose();
 
-    }
-
-    public void defineBigMario(){
-        Vector2 currentPosition = b2body.getPosition(); //Récupère le body du petit Mario
-        world.destroyBody(b2body); //et le détruit
-
-        bdef = new BodyDef();
-        bdef.position.set(currentPosition.add(0, 10 / GameTest.PPM));
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(6 / GameTest.PPM); //Taille du personnage
-        fdef.filter.categoryBits = GameTest.MARIO_BIT;
-        fdef.filter.maskBits = GameTest.GROUND_BIT |
-                GameTest.COIN_BIT |
-                GameTest.BRICK_BIT |
-                GameTest.ENEMY_BIT |
-                GameTest.OBJECT_BIT |
-                GameTest.ENEMY_HEAD_BIT |
-                GameTest.ITEM_BIT |
-                GameTest.DEAD_ZONE_BIT |
-                GameTest.AREA_BIT;
-
-        fdef.shape = shape;
-        fdef.friction = 0;
-        b2body.createFixture(fdef).setUserData(this);
-
-        shape.setPosition(new Vector2(0, -14 / GameTest.PPM));
-        fdef.shape = shape;
-        b2body.createFixture(fdef).setUserData(this);
-
-
-        // Mario's head
-        EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / GameTest.PPM, 6 / GameTest.PPM), new Vector2(2 / GameTest.PPM, 6 / GameTest.PPM));
-        fdef.filter.categoryBits = GameTest.MARIO_HEAD_BIT;
-        fdef.shape = head;
-        fdef.friction = 0;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this);
-
-        // Mario's feet
-
-        head.set(new Vector2(-(6 / GameTest.PPM), -(20 / GameTest.PPM)), new Vector2(6 / GameTest.PPM, -(20 / GameTest.PPM)));
-        fdef.filter.categoryBits = GameTest.MARIO_FOOT_BIT;
-        fdef.shape = head;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this);
-
-        //Mario's blade sides
-       /* EdgeShape blade = new EdgeShape();
-        head.set(new Vector2(-20 / GameTest.PPM, -10 / GameTest.PPM), new Vector2(-20 / GameTest.PPM, 10 / GameTest.PPM));
-        fdef.filter.categoryBits = GameTest.NOTHING_BIT;
-        fdef.shape = head;
-        fdef.friction = 0;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this); */
-
-        timeToDefineBigMario = false;
-
-        shape.dispose();
-        head.dispose();
-
-    }
-
-    public void redefineMario(){
-        Vector2 position = b2body.getPosition();
-        world.destroyBody(b2body);
-
-
-        bdef = new BodyDef();
-        bdef.position.set(position);
-        bdef.type = BodyDef.BodyType.DynamicBody;
-        b2body = world.createBody(bdef);
-
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(6 / GameTest.PPM); //Taille du personnage
-        fdef.filter.categoryBits = GameTest.MARIO_BIT;
-        fdef.filter.maskBits = GameTest.GROUND_BIT |
-                GameTest.COIN_BIT |
-                GameTest.BRICK_BIT |
-                GameTest.ENEMY_BIT |
-                GameTest.OBJECT_BIT |
-                GameTest.ENEMY_HEAD_BIT |
-                GameTest.ITEM_BIT |
-                GameTest.DEAD_ZONE_BIT |
-                GameTest.AREA_BIT;
-
-        fdef.shape = shape;
-        fdef.friction = 0;
-        b2body.createFixture(fdef).setUserData(this);
-
-        //Mario's head
-        EdgeShape head = new EdgeShape();
-        head.set(new Vector2(-2 / GameTest.PPM, 6 / GameTest.PPM), new Vector2(2 / GameTest.PPM, 6 / GameTest.PPM));
-        fdef.filter.categoryBits = GameTest.MARIO_HEAD_BIT;
-        fdef.shape = head;
-        fdef.friction = 0;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this);
-
-        // Mario's feet
-        head.set(new Vector2(-(6 / GameTest.PPM), -(6 / GameTest.PPM)), new Vector2(6 / GameTest.PPM, -(6 / GameTest.PPM)));
-        fdef.filter.categoryBits = GameTest.MARIO_FOOT_BIT;
-        fdef.shape = head;
-        fdef.isSensor = true;
-        b2body.createFixture(fdef).setUserData(this);
-
-        timeToRedefineMario = false;
-
-        shape.dispose();
-        head.dispose();
     }
 
     public void applyBuff(){
@@ -597,49 +482,49 @@ public class Mario extends Sprite {
         }
     }
 
+    public void invincible(boolean invincible)
+    {
+
+        if(invincible)
+        {
+            invincibleTime = TimeUtils.nanoTime();
+           setCategoryFilter(GameTest.DESTROYED_BIT);
+
+        }
+        else
+        {
+            setCategoryFilter(GameTest.MARIO_BIT);
+        }
+
+
+    }
+
+    public void setCategoryFilter(short filterBit){
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        mainFixture.setFilterData(filter);
+    }
+
     public void hit(Enemy enemy){ //Si Mario se fait toucher par un ennemi
 
-        if(enemy instanceof Turtle && ((Turtle) enemy).getCurrentState() == Turtle.State.STANDING_SHELL){
-            ((Turtle) enemy).kick(this.getX() <= enemy.getX() ? Turtle.KICK_RIGHT_SPEED : Turtle.KICK_LEFT_SPEED);
-        }else {
 
-            if (marioIsBig) {
-                marioIsBig = false;
-                timeToRedefineMario = true;
-                setBounds(getX(), getY(), getWidth(), getHeight() / 2);
-                GameTest.manager.get("audio/sounds/powerdown.wav", Sound.class).play();
-
-            }
-            else
-            {
                 damage(1);
-                knockBack(enemy);
-                if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si le vibreur est activé dans les paramètres
+
+               /* if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si le vibreur est activé dans les paramètres
                     Gdx.input.vibrate(200);
-                }
+                } */
 
                 if (heartcount>0){
                     /// on fait un bruit de dégat
+                    knockBack(enemy);
+                    invincible(true);
                 }
                 else {
-                    //On stop la musique
-                    GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
-                    //On lance le son de la mort de Mario
-                    GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
-                    marioIsDead = true;
-
-                    //On applique un filtre pour enlever les collisions
-                    Filter filter = new Filter();
-                    filter.maskBits = GameTest.NOTHING_BIT;
-                    for (Fixture fixture : b2body.getFixtureList()) {
-                        fixture.setFilterData(filter);
-                    }
-                    //Saut de la mort
-                    b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
+                    die();
                 }
         }
-    }
-    }
+
+
 
     //Si Mario se fait toucher par un ennemi
     public void die(){
@@ -658,11 +543,6 @@ public class Mario extends Sprite {
                 }
                 //Saut de la mort
                 b2body.applyLinearImpulse(new Vector2(0, 4f), b2body.getWorldCenter(), true);
-
-        if (marioIsBig) {
-            marioIsBig = false;
-            setBounds(getX(), getY(), getWidth(), getHeight() / 2);
-        }
     }
 
     public void onGround() {
