@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -20,6 +21,9 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.Timer;
@@ -32,6 +36,7 @@ import com.mygdx.game.Items.ItemDef;
 import com.mygdx.game.Items.Mushroom;
 import com.mygdx.game.scenes.EndLevel;
 import com.mygdx.game.scenes.Hud;
+import com.mygdx.game.scenes.Pause;
 import com.mygdx.game.sprites.CollisionWall.Area;
 import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Player.Mario;
@@ -47,11 +52,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class PlayScreen implements Screen{
 
     private GameTest game;
-    private TextureAtlas atlas;
+    private TextureAtlas atlas, atlasStage;
 
     private OrthographicCamera gamecam;
     public Viewport gamePort;
     private Hud hud;
+    private Pause pause;
     private EndLevel endLevel;
 
     //WorldContactListener
@@ -96,6 +102,10 @@ public class PlayScreen implements Screen{
     //Blue Knight : Double jump
     private boolean canDoubleJump;
 
+    private boolean paused;
+
+    private Stage stage;
+    private Skin skin;
 
     /** Constructeur de l'écran */
     public PlayScreen(GameTest game, String user, int lvl){
@@ -112,8 +122,20 @@ public class PlayScreen implements Screen{
         gamePort = new FitViewport(GameTest.V_WIDTH / GameTest.PPM, GameTest.V_HEIGHT / GameTest.PPM, gamecam);
         gamePort.setCamera(gamecam);
 
+
+        //test
+        stage = new Stage(gamePort, game.batch);
+        atlasStage = new TextureAtlas("skin/uiskin.atlas");
+        skin = new Skin(Gdx.files.internal("skin/uiskin.json"), atlasStage);
+        Label endLabel = new Label("Fin du niveau ", skin);
+        endLabel.setColor(Color.WHITE);
+        stage.addActor(endLabel);
+
         //Création du HUD (scores,timers...)
         hud = new Hud(game.batch);
+
+        //Création de l'écran de Pause
+        pause = new Pause(game.batch);
 
         //Création de l'écran de fin de niveau
         endLevel = new EndLevel(game.batch);
@@ -164,6 +186,8 @@ public class PlayScreen implements Screen{
 
         //Double Jump
         canDoubleJump = false;
+
+        paused = false;
 
     }
 
@@ -235,7 +259,10 @@ public class PlayScreen implements Screen{
                     }else if(player.getBuff()== Mario.Color.BLUE) {
                         player.setBuff("grey");
                     }
+                }
 
+                if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
+                    paused = true;
                 }
 
                 //Controller
@@ -361,45 +388,64 @@ public class PlayScreen implements Screen{
 
     }
 
+    public void updatePause(float dt){
+        Gdx.input.setInputProcessor(pause.stage);
+
+        if(pause.isResume()){
+            System.out.println("Continuer activé");
+            paused = false;
+            pause.stage.dispose();
+            handleInput(dt);
+        }
+    }
+
     @Override
     /** Affiche/dessine les informations à l'écran */
     public void render(float delta) {
-        update(delta);
-
-        //Nettoie l'écran de jeu avec du Noir
-        Gdx.gl.glClearColor(0, 0 , 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        renderer.render();
-
-        //Affichage des DEBUG (Bodies et collision..)
-        //b2dr.render(world, gamecam.combined);
-
-        game.batch.setProjectionMatrix(gamecam.combined);
-        game.batch.begin();
-
-        player.draw(game.batch); //Dessine le joueur
-
-        for (Enemy enemy : creator.getEnemies()) //Dessine les ennemies
-            enemy.draw(game.batch);
-
-        for(Item item : items){ //Dessine les objets
-            item.draw(game.batch);
+        if(paused){
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            updatePause(delta);
+            pause.stage.draw();
         }
 
-        game.batch.end();
+        if(!paused) {
+            update(delta);
+            //Nettoie l'écran de jeu avec du Noir
+            Gdx.gl.glClearColor(0, 0, 0, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //HUD
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
+            renderer.render();
 
-        //Controller
-        controller.draw();
+            //Affichage des DEBUG (Bodies et collision..)
+            //b2dr.render(world, gamecam.combined);
 
-        //Si il y a GameOver, on affiche l'écran de fin
-        if(gameOver()){
-            game.setScreen(new GameOverScreen(game, usernameSession, level));
-            dispose();
+            game.batch.setProjectionMatrix(gamecam.combined);
+            game.batch.begin();
+
+            player.draw(game.batch); //Dessine le joueur
+
+            for (Enemy enemy : creator.getEnemies()) //Dessine les ennemies
+                enemy.draw(game.batch);
+
+            for (Item item : items) { //Dessine les objets
+                item.draw(game.batch);
+            }
+
+            game.batch.end();
+
+            //HUD
+            game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+            hud.stage.draw();
+
+            //Controller
+            controller.draw();
+
+            //Si il y a GameOver, on affiche l'écran de fin
+            if (gameOver()) {
+                game.setScreen(new GameOverScreen(game, usernameSession, level));
+                dispose();
+            }
         }
 
     }
