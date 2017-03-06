@@ -135,7 +135,7 @@ public class PlayScreen implements Screen{
         hud = new Hud(game.batch);
 
         //Création de l'écran de Pause
-        pause = new Pause(game.batch);
+        pause = new Pause();
 
         //Création de l'écran de fin de niveau
         endLevel = new EndLevel(game.batch);
@@ -187,6 +187,7 @@ public class PlayScreen implements Screen{
         //Double Jump
         canDoubleJump = false;
 
+        //Menu de pause
         paused = false;
 
     }
@@ -220,99 +221,113 @@ public class PlayScreen implements Screen{
 //            gamecam.position.x += 100 * dt;
 //        }
 
-        //Si mario n'est pas mort, sinon on n'active pas les touches
-        if(canPlay) {
-            if (player.currentState != Mario.State.DEAD) {
-                if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) { //SAUT
-                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
-                    GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+        if(!paused) {
+            //Si mario n'est pas mort, sinon on n'active pas les touches
+            if (canPlay) {
+                if (player.currentState != Mario.State.DEAD) {
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) { //SAUT
+                        player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                        GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
 
-                    //Si le joueur est BLEU il peut sauter 2 fois
-                    if(player.getBuff()== Mario.Color.BLUE) {
-                        canDoubleJump = true;
+                        //Si le joueur est BLEU il peut sauter 2 fois
+                        if (player.getBuff() == Mario.Color.BLUE) {
+                            canDoubleJump = true;
+                        }
+                        controller.setUpPressed(false);
                     }
-                }
-                if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && canDoubleJump && !wcl.isPlayerIsOnGround()) { //SAUT 2
-                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
-                    GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
-                    canDoubleJump = false;
-                }
-
-                if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) {
-                    player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
-                }
-
-                if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2) {
-                    player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
-                }
-
-                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                    player.attack();
-                    player.setAttack(true);
-                }
-
-                if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                    if(player.getBuff()== Mario.Color.GREY) {
-                        player.setBuff("red");
-                    }else if(player.getBuff()== Mario.Color.RED) {
-                        player.setBuff("blue");
-                    }else if(player.getBuff()== Mario.Color.BLUE) {
-                        player.setBuff("grey");
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && canDoubleJump && !wcl.isPlayerIsOnGround()) { //SAUT 2
+                        player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                        GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+                        canDoubleJump = false;
                     }
-                }
 
-                if(Gdx.input.isKeyJustPressed(Input.Keys.P)){
-                    paused = true;
-                }
-
-                //Controller
-                if(controller.isRightPressed() && controller.isLeftPressed()){
-                    if(player.getBuff()== Mario.Color.GREY) {
-                        player.setBuff("red");
-                    }else if(player.getBuff()== Mario.Color.RED) {
-                        player.setBuff("blue");
-                    }else if(player.getBuff()== Mario.Color.BLUE) {
-                        player.setBuff("grey");
+                    if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) && player.b2body.getLinearVelocity().x <= 2) {
+                        player.b2body.applyLinearImpulse(new Vector2(0.1f, 0), player.b2body.getWorldCenter(), true);
                     }
-                }
 
-                if (controller.isRightPressed())
-                    player.b2body.setLinearVelocity(new Vector2(1, player.b2body.getLinearVelocity().y));
-
-                else if (controller.isLeftPressed())
-                    player.b2body.setLinearVelocity(new Vector2(-1, player.b2body.getLinearVelocity().y));
-
-                else
-                    if (player.b2body.getLinearVelocity().x>2)
-                    {
-                        player.b2body.setLinearVelocity(new Vector2(player.b2body.getLinearVelocity().x-0.1f, player.b2body.getLinearVelocity().y));
+                    if (Gdx.input.isKeyPressed(Input.Keys.LEFT) && player.b2body.getLinearVelocity().x >= -2) {
+                        player.b2body.applyLinearImpulse(new Vector2(-0.1f, 0), player.b2body.getWorldCenter(), true);
                     }
-                    else if (player.b2body.getLinearVelocity().x<-2)
-                    {
-                        player.b2body.setLinearVelocity(new Vector2(player.b2body.getLinearVelocity().x+0.1f, player.b2body.getLinearVelocity().y));
+
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                        player.attack();
+                        player.setAttack(true);
                     }
-                    else
-                    {
+
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+                        if (player.getBuff() == Mario.Color.GREY) {
+                            player.setBuff("red");
+                        } else if (player.getBuff() == Mario.Color.RED) {
+                            player.setBuff("blue");
+                        } else if (player.getBuff() == Mario.Color.BLUE) {
+                            player.setBuff("grey");
+                        }
+                    }
+
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
+                        paused = true;
+                    }
+
+                    //Controller
+                    if (controller.isUpPressed() && controller.isDownPressed()) {
+                        if (player.getBuff() == Mario.Color.GREY) {
+                            player.setBuff("red");
+                        } else if (player.getBuff() == Mario.Color.RED) {
+                            player.setBuff("blue");
+                        } else if (player.getBuff() == Mario.Color.BLUE) {
+                            player.setBuff("grey");
+                        }
+                    }
+
+                    if (controller.isRightPressed())
+                        player.b2body.setLinearVelocity(new Vector2(1, player.b2body.getLinearVelocity().y));
+
+                    else if (controller.isLeftPressed())
+                        player.b2body.setLinearVelocity(new Vector2(-1, player.b2body.getLinearVelocity().y));
+
+                    else if (player.b2body.getLinearVelocity().x > 2) {
+                        player.b2body.setLinearVelocity(new Vector2(player.b2body.getLinearVelocity().x - 0.1f, player.b2body.getLinearVelocity().y));
+                    } else if (player.b2body.getLinearVelocity().x < -2) {
+                        player.b2body.setLinearVelocity(new Vector2(player.b2body.getLinearVelocity().x + 0.1f, player.b2body.getLinearVelocity().y));
+                    } else {
                         player.b2body.setLinearVelocity(new Vector2(0, player.b2body.getLinearVelocity().y));
                     }
 
-                if (controller.isUpPressed() && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) {
-                    player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
-                    GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+                    if (controller.isUpPressed() && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) {
+                        player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                        GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
 
+                        //Si le joueur est BLEU il peut sauter 2 fois
+                        if (player.getBuff() == Mario.Color.BLUE) {
+                            canDoubleJump = true;
+                        }
+                        controller.setUpPressed(false);
+                    }
 
-                }
+                    if (controller.isUpPressed() && canDoubleJump && !wcl.isPlayerIsOnGround()) { //SAUT 2
+                        player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
+                        System.out.println("Test test");
 
-                if (controller.isDownPressed()) {
-                    if (canFire) {
-                        player.attack();
-                        player.setAttack(true);
-                        canFire = false;
+                        GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
+                        canDoubleJump = false;
+                    }
+
+                    if (controller.isDownPressed()) {
+                        if (canFire) {
+                            player.attack();
+                            player.setAttack(true);
+                            canFire = false;
+                        }
+                    }
+
+                    if (controller.isPausePressed()) {
+                        paused = true;
+                        controller.setPausePressed(false);
                     }
                 }
             }
-        }
 
+        }
     }
 
     /** Actualise les informations à l'écran */
@@ -392,10 +407,15 @@ public class PlayScreen implements Screen{
         Gdx.input.setInputProcessor(pause.stage);
 
         if(pause.isResume()){
-            System.out.println("Continuer activé");
+            Gdx.input.setInputProcessor(controller.stage);
+            player.b2body.setLinearVelocity(new Vector2(0, player.b2body.getLinearVelocity().y));
             paused = false;
-            pause.stage.dispose();
-            handleInput(dt);
+            pause.setResume(false);
+        }
+
+        if(pause.isQuit()){
+            game.setScreen(new LevelSelectScreen(game, usernameSession));
+            pause.setQuit(false);
         }
     }
 
@@ -403,17 +423,17 @@ public class PlayScreen implements Screen{
     /** Affiche/dessine les informations à l'écran */
     public void render(float delta) {
         if(paused){
-            Gdx.gl.glClearColor(0, 0, 0, 1);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//            Gdx.gl.glClearColor(0, 0, 0, 1);
+//            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
             updatePause(delta);
-            pause.stage.draw();
+            pause.draw();
         }
 
         if(!paused) {
-            update(delta);
             //Nettoie l'écran de jeu avec du Noir
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            update(delta);
 
             renderer.render();
 

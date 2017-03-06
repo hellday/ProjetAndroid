@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -17,8 +18,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
  */
 public class Controller {
     Viewport viewport;
-    Stage stage;
-    boolean upPressed, downPressed, leftPressed, rightPressed;
+    public Stage stage;
+    boolean upPressed, downPressed, leftPressed, rightPressed, pausePressed;
     OrthographicCamera cam;
 
     public Controller(){
@@ -43,6 +44,9 @@ public class Controller {
                     case Input.Keys.RIGHT:
                         rightPressed = true;
                         break;
+//                    case Input.Keys.P:
+//                        pausePressed = true;
+//                        break;
                 }
                 return true;
             }
@@ -62,6 +66,9 @@ public class Controller {
                     case Input.Keys.RIGHT:
                         rightPressed = false;
                         break;
+//                    case Input.Keys.P:
+//                        pausePressed = false;
+//                        break;
                 }
                 return true;
             }
@@ -104,6 +111,18 @@ public class Controller {
             }
         });
 
+        Image pauseImg = new Image(new Texture("controller/start_controller.png"));
+        pauseImg.setSize(80, 40);
+        pauseImg.setPosition(360, 10);
+
+        pauseImg.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                pausePressed = true;
+            }
+        });
+
+
         Image rightImg = new Image(new Texture("controller/right_controller.png"));
         rightImg.setSize(75, 75);
         rightImg.addListener(new InputListener() {
@@ -145,10 +164,11 @@ public class Controller {
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
+        //table.add(pauseImg).size(pauseImg.getWidth(), pauseImg.getHeight());
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
-        table.add();table.add();table.add();table.add();table.add();table.add();
+        table.add();table.add();table.add();table.add();table.add();table.add();table.add();table.add();
         table.add(downImg).size(downImg.getWidth(), downImg.getHeight());
         table.add();
         table.add(upImg).size(upImg.getWidth(), upImg.getHeight());
@@ -157,6 +177,7 @@ public class Controller {
         table.add();
 
         stage.addActor(table);
+        stage.addActor(pauseImg);
     }
 
     public void draw(){
@@ -179,11 +200,23 @@ public class Controller {
         return rightPressed;
     }
 
+    public boolean isPausePressed() {
+        return pausePressed;
+    }
+
     public void resize(int width, int height){
         viewport.update(width, height);
     }
 
     public void dispose () {
         stage.dispose();
+    }
+
+    public void setPausePressed(boolean pausePressed) {
+        this.pausePressed = pausePressed;
+    }
+
+    public void setUpPressed(boolean upPressed) {
+        this.upPressed = upPressed;
     }
 }

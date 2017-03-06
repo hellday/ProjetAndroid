@@ -8,11 +8,13 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -66,6 +68,16 @@ public class Hud  implements Disposable{
         levelLabel = new Label("1-1", skin);
         worldLabel = new Label("WORLD", skin);
         marioLabel = new Label("SCORE", skin);
+
+//        Image upImg = new Image(new Texture("controller/a_controller.png"));
+//        //upImg.setSize(75, 75);
+//        upImg.setPosition(200,200);
+//        upImg.addListener(new ClickListener(){
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                System.out.println("Bouton Pause");
+//            }
+//        });
 
         table.add().expandX().padTop(10);
         table.add(marioLabel).expandX().padTop(10);
