@@ -57,6 +57,10 @@ public class GameTest extends com.badlogic.gdx.Game {
 		manager.load("audio/sounds/kick.ogg", Sound.class);
 		manager.load("audio/sounds/jump_small.wav", Sound.class);
 		manager.load("audio/sounds/jump_super.wav", Sound.class);
+		manager.load("audio/sounds/attack.mp3", Sound.class);
+		manager.load("audio/sounds/dead_spectre.wav", Sound.class);
+		manager.load("audio/sounds/dead_hero.wav", Sound.class);
+		manager.load("audio/sounds/hit.wav", Sound.class);
 		manager.finishLoading();
 
 		DataBaseTest db = new DataBaseTest();

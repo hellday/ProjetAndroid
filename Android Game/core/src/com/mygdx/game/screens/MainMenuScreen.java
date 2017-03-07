@@ -253,6 +253,7 @@ public class MainMenuScreen implements Screen {
         stage.getBatch().enableBlending();
         stage.getBatch().end();
 
+
         stage.act();
         stage.draw();
     }

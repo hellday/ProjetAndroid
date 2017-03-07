@@ -314,6 +314,7 @@ public class PlayScreen implements Screen{
 
                     if (controller.isDownPressed()) {
                         if (canFire) {
+                            GameTest.manager.get("audio/sounds/attack.mp3", Sound.class).play();
                             player.attack();
                             player.setAttack(true);
                             canFire = false;
@@ -382,8 +383,8 @@ public class PlayScreen implements Screen{
             controller.dispose();
             hud.dispose();
 
-            GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
-            GameTest.manager.get("audio/music/stage_clear.ogg", Music.class).play();
+            //GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
+            //GameTest.manager.get("audio/music/stage_clear.ogg", Music.class).play();
 
             float delay = 4; // seconds
 

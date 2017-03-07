@@ -1,6 +1,7 @@
 package com.mygdx.game.scenes;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -69,16 +70,6 @@ public class Hud  implements Disposable{
         worldLabel = new Label("WORLD", skin);
         marioLabel = new Label("SCORE", skin);
 
-//        Image upImg = new Image(new Texture("controller/a_controller.png"));
-//        //upImg.setSize(75, 75);
-//        upImg.setPosition(200,200);
-//        upImg.addListener(new ClickListener(){
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                System.out.println("Bouton Pause");
-//            }
-//        });
-
         table.add().expandX().padTop(10);
         table.add(marioLabel).expandX().padTop(10);
         table.add(timeLabel).expandX().padTop(10);
@@ -135,6 +126,7 @@ public class Hud  implements Disposable{
         {
             hearts[i].setVisible(false);
         }
+        GameTest.manager.get("audio/sounds/hit.wav", Sound.class).play();
     }
 
     public static  void heal(int value){

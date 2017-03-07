@@ -179,7 +179,7 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
 
     public void onBladeHit(){
         setToDestroy = true;
-        GameTest.manager.get("audio/sounds/stomp.wav", Sound.class).play();
+        GameTest.manager.get("audio/sounds/dead_spectre.wav", Sound.class).play(0.2f);
         Hud.addScore(200);
     }
 

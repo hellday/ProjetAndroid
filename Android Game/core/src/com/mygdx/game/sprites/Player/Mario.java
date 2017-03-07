@@ -203,15 +203,13 @@ public class Mario extends Sprite {
 
     public void defineMario(){
         bdef = new BodyDef();
-        bdef.position.set(128 / GameTest.PPM, 256 / GameTest.PPM);
+        bdef.position.set(100 / GameTest.PPM, 280 / GameTest.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
         b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
-        //CircleShape shape = new CircleShape();
-        //shape.setRadius(14 / GameTest.PPM); //Taille du personnage
         PolygonShape shape = new PolygonShape();
-        shape.setAsBox(6 / GameTest.PPM, 12 / GameTest.PPM);
+        shape.setAsBox(6 / GameTest.PPM, 12 / GameTest.PPM); //Taille du personnage
 
         fdef.filter.categoryBits = GameTest.MARIO_BIT;
         fdef.filter.maskBits = GameTest.GROUND_BIT |
@@ -226,8 +224,10 @@ public class Mario extends Sprite {
 
         fdef.shape = shape;
         fdef.friction = 0;
+
         mainFixture = b2body.createFixture(fdef);
         mainFixture.setUserData(this);
+        //b2body.createFixture(fdef).setUserData(this);
 
         // Mario's head
         EdgeShape head = new EdgeShape();
@@ -494,6 +494,7 @@ public class Mario extends Sprite {
         else
         {
             setCategoryFilter(GameTest.MARIO_BIT);
+
         }
 
 
@@ -501,8 +502,19 @@ public class Mario extends Sprite {
 
     public void setCategoryFilter(short filterBit){
         Filter filter = new Filter();
+        filter.maskBits = GameTest.GROUND_BIT |
+                GameTest.COIN_BIT |
+                GameTest.BRICK_BIT |
+                GameTest.ENEMY_BIT |
+                GameTest.OBJECT_BIT |
+                GameTest.ENEMY_HEAD_BIT |
+                GameTest.ITEM_BIT |
+                GameTest.DEAD_ZONE_BIT |
+                GameTest.AREA_BIT;
+
         filter.categoryBits = filterBit;
         mainFixture.setFilterData(filter);
+
     }
 
     public void hit(Enemy enemy){ //Si Mario se fait toucher par un ennemi
@@ -531,8 +543,8 @@ public class Mario extends Sprite {
 
                 //On stop la musique
                 GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
-                //On lance le son de la mort de Mario
-                GameTest.manager.get("audio/sounds/mariodie.wav", Sound.class).play();
+                //On lance le son de la mort du Hero
+                GameTest.manager.get("audio/sounds/dead_hero.wav", Sound.class).play(0.2f);
                 marioIsDead = true;
 
                 //On applique un filtre pour enlever les collisions
