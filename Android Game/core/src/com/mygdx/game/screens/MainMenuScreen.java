@@ -25,12 +25,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.GameTest;
 
 import java.util.ArrayList;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
 /**
  * Created by Terry on 11/01/2017.
@@ -70,7 +74,8 @@ public class MainMenuScreen implements Screen {
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, camera);
+        //viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, camera);
+        viewport = new ScalingViewport(Scaling.stretch, GameTest.V_WIDTH, GameTest.V_HEIGHT);
         viewport.apply();
 
         camera.position.set(camera.viewportWidth / 2, camera.viewportHeight / 2, 0);
@@ -90,6 +95,10 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void show() {
+        //Fade In
+        stage.getRoot().getColor().a = 0;
+        stage.getRoot().addAction(fadeIn(1f));
+        
         //Database
         db.createDatabase();
 
@@ -226,12 +235,17 @@ public class MainMenuScreen implements Screen {
         background = new Texture("img/mainmenu.png");
         //Add table to stage
         stage.addActor(mainTable);
+
+
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+
+
 
         stage.getBatch().begin();
         stage.getBatch().disableBlending();
