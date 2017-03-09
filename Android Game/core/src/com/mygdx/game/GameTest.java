@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.Database.DataBaseTest;
+import com.mygdx.game.Effects.Particles;
 import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.screens.PlayScreen;
 
@@ -72,7 +73,9 @@ public class GameTest extends com.badlogic.gdx.Game {
 		//db.selectData();
 
 		setScreen(new MainMenuScreen(this, null));
-		//setScreen(new PlayScreen(this, "test", 2));
+		//setScreen(new PlayScreen(this, "test", 3));
+
+		//setScreen(new Particles());
 	}
 
 	@Override

@@ -41,4 +41,7 @@ public abstract class Enemy extends Sprite {
     public abstract void onEnemyHit(Enemy enemy);
     public abstract void onBladeHit();
 
+    public abstract boolean isSetToDestroy();
+    public abstract void setToDestroy(boolean value);
+
 }

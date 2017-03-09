@@ -1,8 +1,11 @@
 package com.mygdx.game.sprites.Enemies;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -31,7 +34,7 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
     private float stateTime;
     private Animation walkAnimation;
     private Array<TextureRegion> frames;
-    private boolean setToDestroy;
+    public boolean setToDestroy;
     private boolean destroyed;
     private boolean canBeRemoved;
 
@@ -40,17 +43,18 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
     public State previousState;
     private float deadRotationDegrees;
 
+
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
         frames = new Array<TextureRegion>();
 
         atlas = new TextureAtlas("sprites/ghost.pack");
 
-        for(int i = 1; i < 5; i++){
+        for(int i = 1; i < 4; i++){
             frames.add(new TextureRegion(atlas.findRegion("ghost"), i * 96, 0, 96, 128));
         }
 
-        walkAnimation = new Animation(0.2f, frames);
+        walkAnimation = new Animation(0.5f, frames);
         setBounds(getX(), getY(), 24 / GameTest.PPM, 24 / GameTest.PPM);
         setToDestroy = false;
         destroyed = false;
@@ -58,6 +62,7 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
 
         currentState = previousState = State.WALKING;
         deadRotationDegrees = 0;
+
     }
 
     public TextureRegion getFrame(float dt){
@@ -208,4 +213,12 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
 
     }
 
+    public boolean isSetToDestroy() {
+        return setToDestroy;
+    }
+
+    @Override
+    public void setToDestroy(boolean value) {
+        setToDestroy = value;
+    }
 }

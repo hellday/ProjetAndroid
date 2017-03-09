@@ -98,7 +98,7 @@ public class MainMenuScreen implements Screen {
         //Fade In
         stage.getRoot().getColor().a = 0;
         stage.getRoot().addAction(fadeIn(1f));
-        
+
         //Database
         db.createDatabase();
 

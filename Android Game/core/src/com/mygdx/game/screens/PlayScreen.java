@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,6 +23,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -30,6 +33,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Controller;
+import com.mygdx.game.Effects.Particles;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.ItemDef;
@@ -64,7 +68,6 @@ public class PlayScreen implements Screen{
     private WorldContactListener wcl;
 
     //Variables de la map
-    private TmxMapLoader mapLoader;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     private int levelWidth;
@@ -107,6 +110,10 @@ public class PlayScreen implements Screen{
     private Stage stage;
     private Skin skin;
 
+    private ParticleEffect pe;
+    private ParticleEffectPool pool;
+    private Array<ParticleEffectPool.PooledEffect> effects;
+
     /** Constructeur de l'écran */
     public PlayScreen(GameTest game, String user, int lvl){
 
@@ -141,8 +148,7 @@ public class PlayScreen implements Screen{
         endLevel = new EndLevel(game.batch);
 
         //Chargement de la map
-        mapLoader = new TmxMapLoader();
-        map = mapLoader.load("level" + level + ".tmx");
+        map = new TmxMapLoader().load("level" + level + ".tmx");
         MapProperties props = map.getProperties();
         levelWidth = props.get("width", Integer.class);
         levelHeight = props.get("height", Integer.class);
@@ -189,6 +195,16 @@ public class PlayScreen implements Screen{
 
         //Menu de pause
         paused = false;
+
+        //Effects
+        pe = new ParticleEffect();
+        pe.load(Gdx.files.internal("effects/spectre_dead.p"), Gdx.files.internal("effects"));
+        pe.setPosition(Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() /2);
+        pe.scaleEffect(0.003f);
+        pe.start();
+
+        pool = new ParticleEffectPool(pe, 0 , 10000);
+        effects = new Array<ParticleEffectPool.PooledEffect>();
 
     }
 
@@ -340,10 +356,12 @@ public class PlayScreen implements Screen{
 
         player.update(dt);
 
-        for(Enemy enemy : creator.getEnemies()) { //Ennemies
+        //Distance d'apparition des ennemies
+        for(Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
-            if (enemy.getX() < player.getX() + 224 / GameTest.PPM)
+            if (enemy.getX() < player.getX() + 260 / GameTest.PPM) {
                 enemy.b2body.setActive(true);
+            }
         }
 
         for(Item item : items){
@@ -360,7 +378,7 @@ public class PlayScreen implements Screen{
         if(player.currentState != Mario.State.DEAD) {
             gamecam.position.x = player.b2body.getPosition().x;
             gamecam.position.y = player.b2body.getPosition().y;
-            boundary(gamecam, startX, startY, levelWidth * GameTest.PPM - startX * 2, levelHeight * GameTest.PPM - startY * 2);
+            boundary(gamecam, startX, startY, levelWidth /6.25f - startX * 2, levelHeight /6.25f - startY * 2);
         }
 
 
@@ -391,9 +409,6 @@ public class PlayScreen implements Screen{
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
-                   //game.setScreen(new GameOverScreen(game, usernameSession));
-//                    game.batch.setProjectionMatrix(endLevel.stage.getCamera().combined);
-//                    endLevel.stage.draw();
                     String score = hud.getScore().toString();
                     game.setScreen(new EndLevelScreen(game, usernameSession, level));
                 }
@@ -418,6 +433,9 @@ public class PlayScreen implements Screen{
             game.setScreen(new LevelSelectScreen(game, usernameSession));
             pause.setQuit(false);
         }
+
+
+
     }
 
     @Override
@@ -434,6 +452,7 @@ public class PlayScreen implements Screen{
             //Nettoie l'écran de jeu avec du Noir
             Gdx.gl.glClearColor(0, 0, 0, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+            pe.update(Gdx.graphics.getDeltaTime());
             update(delta);
 
             renderer.render();
@@ -444,10 +463,29 @@ public class PlayScreen implements Screen{
             game.batch.setProjectionMatrix(gamecam.combined);
             game.batch.begin();
 
+            //Effects
+            for(ParticleEffectPool.PooledEffect effect : effects){
+                effect.draw(game.batch, delta);
+                if(effect.isComplete()){
+                    effects.removeValue(effect, true);
+                    effect.free();
+                }
+            }
+
+
             player.draw(game.batch); //Dessine le joueur
 
-            for (Enemy enemy : creator.getEnemies()) //Dessine les ennemies
+            for (Enemy enemy : creator.getEnemies()) {//Dessine les ennemies
                 enemy.draw(game.batch);
+                if(enemy.isSetToDestroy()){
+                    System.out.println("setToDestroy Effect");
+                    ParticleEffectPool.PooledEffect effect = pool.obtain();
+                    effect.setPosition(enemy.b2body.getPosition().x, enemy.b2body.getPosition().y - 0.1f);
+                    effects.add(effect);
+                    enemy.setToDestroy(false);
+                }
+            }
+
 
             for (Item item : items) { //Dessine les objets
                 item.draw(game.batch);
