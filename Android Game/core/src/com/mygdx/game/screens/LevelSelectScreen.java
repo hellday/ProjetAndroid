@@ -69,6 +69,9 @@ public class LevelSelectScreen implements Screen {
     private ArrayList<String> checkLevelLock;
     private Texture background;
 
+    private Texture textLevel1, textLevel2, textLevel3;
+    private Image imgLevel1, imgLevel2, imgLevel3;
+
 
     public LevelSelectScreen(GameTest pgame, String user) {
 
@@ -125,13 +128,31 @@ public class LevelSelectScreen implements Screen {
         checkLevelLock = db.checkLevel(usernameSession);
         System.out.println(checkLevelLock + "avec une taille de " + checkLevelLock.size());
 
+        //ImageLevel
+        textLevel1 = new Texture(Gdx.files.internal("img/level1log.png"));
+        textLevel2 = new Texture(Gdx.files.internal("img/level2log.png"));
+        textLevel3 = new Texture(Gdx.files.internal("img/level3log.png"));
+
+        imgLevel1 = new Image(textLevel1);
+        imgLevel1.setScale(0.5f, 0.5f);
+        imgLevel1.setPosition(140, 40);
+
+        imgLevel2 = new Image(textLevel2);
+        imgLevel2.setScale(0.5f, 0.5f);
+        imgLevel2.setPosition(140, 40);
+        imgLevel2.setVisible(false);
+
+        imgLevel3 = new Image(textLevel3);
+        imgLevel3.setScale(0.5f, 0.5f);
+        imgLevel3.setPosition(140, 40);
+        imgLevel3.setVisible(false);
 
 
         //ImageButton
         TextureLeft = new Texture(Gdx.files.internal("controller/left_controller.png"));
         leftArrow = new Image(TextureLeft); //Set the button up
         leftArrow.setPosition(20, 10);
-        leftArrow.setScale(0.75f, 0.75f);
+        leftArrow.setScale(0.5f, 0.5f);
         leftArrow.setVisible(false);
 
         leftArrow.addListener(new ClickListener(){
@@ -144,8 +165,8 @@ public class LevelSelectScreen implements Screen {
 
         TextureRight = new Texture(Gdx.files.internal("controller/right_controller.png"));
         rightArrow = new Image(TextureRight); //Set the button up
-        rightArrow.setPosition(320, 10);
-        rightArrow.setScale(0.75f, 0.75f);
+        rightArrow.setPosition(340, 10);
+        rightArrow.setScale(0.5f, 0.5f);
 
         rightArrow.addListener(new ClickListener(){
             @Override
@@ -210,6 +231,9 @@ public class LevelSelectScreen implements Screen {
         stage.addActor(locked);
         stage.addActor(leftArrow);
         stage.addActor(rightArrow);
+        stage.addActor(imgLevel1);
+        stage.addActor(imgLevel2);
+        stage.addActor(imgLevel3);
     }
 
     @Override
@@ -244,10 +268,22 @@ public class LevelSelectScreen implements Screen {
         //Gestion des touches Gauche et Droite de Sélection
         if(levelAmount == 1){
             leftArrow.setVisible(false);
+            imgLevel1.setVisible(true);
+            imgLevel2.setVisible(false);
+            imgLevel3.setVisible(false);
         }else leftArrow.setVisible(true);
+
+        if(levelAmount == 2){
+            imgLevel1.setVisible(false);
+            imgLevel2.setVisible(true);
+            imgLevel3.setVisible(false);
+        }
 
         if(levelAmount == 3){
             rightArrow.setVisible(false);
+            imgLevel1.setVisible(false);
+            imgLevel2.setVisible(false);
+            imgLevel3.setVisible(true);
         }else rightArrow.setVisible(true);
 
         //En fonction des Level débloqués
