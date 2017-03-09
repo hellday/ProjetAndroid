@@ -220,7 +220,8 @@ public class Mario extends Sprite {
                 GameTest.ENEMY_HEAD_BIT |
                 GameTest.ITEM_BIT |
                 GameTest.DEAD_ZONE_BIT |
-                GameTest.AREA_BIT;
+                GameTest.AREA_BIT |
+                GameTest.FIREBALL_BIT;
 
         fdef.shape = shape;
         fdef.friction = 0;
@@ -510,7 +511,8 @@ public class Mario extends Sprite {
                 GameTest.ENEMY_HEAD_BIT |
                 GameTest.ITEM_BIT |
                 GameTest.DEAD_ZONE_BIT |
-                GameTest.AREA_BIT;
+                GameTest.AREA_BIT|
+                GameTest.FIREBALL_BIT;
 
         filter.categoryBits = filterBit;
         mainFixture.setFilterData(filter);
@@ -535,6 +537,21 @@ public class Mario extends Sprite {
                     die();
                 }
         }
+
+    public void hitBoss(){
+        damage(1);
+
+        if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si le vibreur est activé dans les paramètres
+            Gdx.input.vibrate(200);
+        }
+        if (heartcount>0){
+            /// on fait un bruit de dégat
+            invincible(true);
+        }
+        else {
+            die();
+        }
+    }
 
 
 

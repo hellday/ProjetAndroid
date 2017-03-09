@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.sprites.Enemies.Boss;
 import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Enemies.Goomba;
 import com.mygdx.game.sprites.Enemies.Turtle;
@@ -32,11 +33,8 @@ public class FireBall extends Sprite {
     boolean destroyed;
     boolean setToDestroy;
     boolean fireRight;
-
-    private Goomba goomba;
-
-
     Body b2body;
+
     public FireBall(PlayScreen screen, float x, float y, boolean fireRight){
         this.fireRight = fireRight;
         this.screen = screen;
@@ -56,7 +54,7 @@ public class FireBall extends Sprite {
         bdef.position.set(fireRight ? getX() + 12 /GameTest.PPM : getX() - 12 /GameTest.PPM, getY());
         bdef.type = BodyDef.BodyType.DynamicBody;
         if(!world.isLocked())
-             b2body = world.createBody(bdef);
+            b2body = world.createBody(bdef);
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
@@ -119,6 +117,13 @@ public class FireBall extends Sprite {
             killed(body);
             System.out.println("Fireball : Goomba");
             Hud.addScore(200);
+        }
+
+        if(enemy instanceof Boss){
+
+            enemy.onBladeHit();
+            System.out.println("Fireball : Boss");
+            Hud.addScore(1000);
         }
 
     }

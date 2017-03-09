@@ -9,6 +9,7 @@ import com.mygdx.game.GameTest;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Objects.InteractiveTileObject;
+import com.mygdx.game.sprites.Other.FireBoss;
 import com.mygdx.game.sprites.Player.Mario;
 import com.mygdx.game.sprites.Other.FireBall;
 
@@ -98,6 +99,12 @@ public class WorldContactListener implements ContactListener {
                     ((FireBall)fixA.getUserData()).onFireBallHit((Enemy) fixB.getUserData(), fixB.getBody());
                 else
                     ((FireBall)fixB.getUserData()).onFireBallHit((Enemy) fixA.getUserData(), fixA.getBody());
+                break;
+            case GameTest.FIREBALL_BIT | GameTest.MARIO_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.FIREBALL_BIT)
+                    ((FireBoss)fixA.getUserData()).onFireBossHit((Mario) fixB.getUserData(), fixB.getBody());
+                else
+                    ((FireBoss)fixB.getUserData()).onFireBossHit((Mario) fixA.getUserData(), fixA.getBody());
                 break;
             case GameTest.MARIO_BIT | GameTest.DEAD_ZONE_BIT:
                 if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)

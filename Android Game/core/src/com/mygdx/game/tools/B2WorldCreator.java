@@ -15,6 +15,7 @@ import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.CollisionWall.Area;
 import com.mygdx.game.sprites.CollisionWall.DeadZone;
+import com.mygdx.game.sprites.Enemies.Boss;
 import com.mygdx.game.sprites.Objects.Brick;
 import com.mygdx.game.sprites.Objects.Coin;
 import com.mygdx.game.sprites.Enemies.Enemy;
@@ -29,6 +30,7 @@ import com.mygdx.game.sprites.CollisionWall.EnemyInvisibleWall;
 public class B2WorldCreator {
     private static Array<Goomba> goombas;
     private static Array<Turtle> turtles;
+    private static Array<Boss> boss;
 
     private Vector2 startPosition;
 
@@ -114,6 +116,14 @@ public class B2WorldCreator {
             new Area(screen, object);
         }
 
+        //Création du Boss
+        boss = new Array<Boss>();
+
+        for(MapObject object : map.getLayers().get(11).getObjects().getByType(RectangleMapObject.class)){
+            Rectangle rect = ((RectangleMapObject) object).getRectangle();
+            boss.add(new Boss(screen, rect.getX() / GameTest.PPM, rect.getY() / GameTest.PPM));
+        }
+
 
         startPosition = new Vector2(64.0f, 64.0f);
 
@@ -131,6 +141,7 @@ public class B2WorldCreator {
         Array<Enemy> enemies = new Array<Enemy>();
         enemies.addAll(goombas);
         enemies.addAll(turtles);
+        enemies.addAll(boss);
         return enemies;
     }
 
@@ -139,6 +150,9 @@ public class B2WorldCreator {
     }
     public static void removeGoomba(Goomba goomba){
         goombas.removeValue(goomba, true);
+    }
+    public static void removeBoss(Boss bosse){
+        boss.removeValue(bosse, true);
     }
 
     public Vector2 getStartPosition() {

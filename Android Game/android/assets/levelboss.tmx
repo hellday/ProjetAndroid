@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="206">
+ <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924" columns="33">
+  <image source="tileset_gutter.png" width="594" height="504"/>
+  <tile id="0">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="1">
+   <properties>
+    <property name="blocked" value=""/>
+    <property name="smashable" value=""/>
+   </properties>
+  </tile>
+  <tile id="2">
+   <properties>
+    <property name="blocked" value=""/>
+    <property name="smashable" value=""/>
+   </properties>
+  </tile>
+  <tile id="24">
+   <properties>
+    <property name="blocked" value=""/>
+    <property name="coinblock" value=""/>
+   </properties>
+  </tile>
+  <tile id="25">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="26">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="33">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="264">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="265">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="266">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="267">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="268">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="297">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="298">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="299">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="300">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="301">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="330">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="331">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="363">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+  <tile id="364">
+   <properties>
+    <property name="blocked" value=""/>
+   </properties>
+  </tile>
+ </tileset>
+ <tileset firstgid="925" name="Tileset" tilewidth="16" tileheight="16" tilecount="7708" columns="82">
+  <image source="tileset.png" width="1312" height="1504"/>
+ </tileset>
+ <tileset firstgid="8633" name="cave" tilewidth="16" tileheight="16" tilecount="280" columns="20">
+  <image source="cave_tileset.png" width="320" height="224"/>
+ </tileset>
+ <layer name="Background Color" width="240" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt2GWPlnfex+FZpHgpzgyjuLu7ForVBS1QwV2Lu0OR4lIXnLoCbXFa3N21eHFo2YOkd+5XsLmu7J6f5Hg2D77J/P6ZMxOTNSIiljjiSSA7OchJLnKTh7zkIz8FKEghClOEohSjOCUoSSlKU4aylKM8FahIJSpThapUozo1qElMmO8LCgplnd1gF7rSje70oCe96E0f3qIv/ejPAAYyiMEMYSjDGM4IRjKK0YxhLOMYzwQm8jaTmMwUpvIO05ieNfz3BQWFsl/c4K+sZg1rWcd6NrCRTfzG72xmC1vZxnZ2sJNd7GYPe9nHfg5wkEMc5ghHOcZxTnCSU5zmDGc5lzX89wUFhbIMkRERGclEZrKQlUiiyEY0McQSRzwJZCcHOclFbvKQl3zkpwAFKURhilCUYhSnBCUpRWnKUJZylI8M/31BQaHsDTf4Jq1pQ1va0Z4OdKQTnelCV7rRnR70pBe96cNb9KUf/RnAQAYxmCEMZRjDGcFIRjGaMYxlHOMjw39fUFAo+9YNfsf3/MCP/MQKVrKKn/mFX1nNGtayjvVsYCOb+I3f2cwWtrKN7exgJ7vYzR72so/9HOAghzjMkcjw3xcUFMpSREVEpCQVqUnD46TlCdKRngxkJBOZyUJWIokiG9HEEEsc8SSQnRzkJBe5yUNe8pGfAhSkEIUpQtGo8N8XFBTKmrjBpjSjOa/Sgpa04jVe5w3epDVtaEs72tOBjnSiM13oSje604Oe9KI3fXiLvvSjPwMYyCAGM4ShUeG/LygolC1xg0tZxnI+5wu+5Cu+5hu+5Tu+5wd+5CdWsJJV/Mwv/Mpq1rCWdaxnAxvZxG/8zma2sJVtbGcHO9kVFf77goJC2cNHN5gtIuJfJCIxSUjKYyQjOSlISSpSk4bHScsTpCM9GchIJjKThaxEEkU2ookhljjiSSA7OchJLnJnC/99QUGh7Fk3+BzP8wIv8hIv8wqNaEwTmtKM5rxKC1rSitd4nTd4k9a0oS3taE8HOtKJznShK93oTg960ove9MkW/vuCgkLZh27wIz7mEz7lMxawkEUsZglLWcZyPucLvuQrvuYbvuU7vucHfuQnVrCSVfzML/zKatawlnWsZwMb2ZQt/PcFBYWym27wFre5w13ucZ8H/MXfPHx0q9G+Y0lEYpKQlMdIRnJSkJJUpCYNj5OWJ0hHejKQkUxkJgtZiSSKbERHh/++oKBQVtsN1uEp6lKP+jSgIU/zDM/yHM/zAi/yEi/zCo1oTBOa0ozmvEoLWtKK13idN3iT1rShLe1oTwc60ik6/PcFBYWyWW5wNnOYyzzm8y7v8T4f8CEf8TGf8CmfsYCFLGIxS1jKMpbzOV/wJV/xNd/wLd/xPT/wIz+xgpWs4ufo8N8XFBTK/nCDF7nEZa5wlWtc509ucJNb3OYOd7nHfR7wF3/z8NFNx/iOJRGJSUJSHiMZyUlBSlKRmjQ8TlqeIB3pY8J/X1BQKKvkBitThapUozo1qEktnqQ2dXiKutSjPg1oyNM8w7M8x/O8wIu8xMu8QiMa04SmNKM5r9KClrTiNV6PCf99QUGh7G03OInJTGEq7zCN6cxgJrOYzRzmMo/5vMt7vM8HfMhHfMwnfMpnLGAhi1jMEpayjOV8zhd8yVd8zTcx4b8vKCiUHXeDJzjJKU5zhrOc4zwX+IOLXOIyV7jKNa7zJze4yS1uc4e73OM+D/iLv3n46PZjfceSiMQkISmPkYzkseG/LygolJVwgyUpRWnKUJZylKcCFalEZapQlWpUpwY1qcWT1KYOT1GXetSnAQ15mmd4lud4nhd4kZd4mVdoROPY8N8XFBTKRrjBkYxiNGMYyzjGM4GJvM0kJjOFqbzDNKYzg5nMYjZzmMs85vMu7/E+H/AhH/Exn/Apn7GAhSxicWz47wsKCmV73eA+9nOAgxziMEc4yjGOc4KTnOI0ZzjLOc5zgT+4yCUuc4WrXOM6f3KDm9ziNne4yz3u84C/+Ds2/PfVyu7vOrWpw1PUpR71aUDD7KH+LQf9t5YvLiIiPwUoSCEKU4SiFKM4JShJKUpThrKUozwVqEglKlOFqlSjOjWoSS2epDZ1eIq61KM+DWjI0zwTF/77GnmbjWlCU5rRnFdpQUtaBe836D/UosQREf3d4QAGMojBDGEowxjOCEYyitGMYSzjGM8EJvI2k5jMFKbyDtOYzgxmMovZzGEu85jPu7zH+3xAv7jw3tfR2+xEZ7rQlW50pwc96cXmhIiILWxlG9vZwU52sZs97GUf+znAQQ5xmCMc5VhCqK8mKFx69H63uMOtbGM7O9jJLnazh73sYz8HOMghDnOEoxzjOCc4ySlOc4aznOM8F/iDi1ziMle4yjWu8yc32BwX3vuGeJtDGcZwRjCSUYxmDGM57s2d4CSnOM0ZznKO81zgDy5yictc4SrXuM6f3Ajeb9A/PXq/8fEREQlkJwc5yUVu8pCXfOSnAAUpRGGKUJRiFKcEJSlFacpQlnKUpwIVqURlqlCValSnBjWpxZPExYf3vmne5nRmMJNZzGYOc5nHfG56c7e4zR3uco/7POAv/ubho7fp5/9FIhKThKQ8RjKSB9/jQf/06P12i/e9Rw960ove9OEt+tKP/gxgIIMYzBCGMozhjGAkoxjNGMYyjvFMYCJvM4nJTGEq7zCN6cxgJl3jw3vfAm9pIYtYzBKWsozlfM4XpCAlqUhNGh4nLU+QjvRkICOZyEwWshJJFNmIDt5v0D89er9r4iMi1rKO9WxgI5v4jd/ZzBa2so3t7GAnu9jNHvayj/0c4CCHOMwRjnKM45zgJKc4zRnOco7zXGB1fHjvW+EtrWQVP/MLv7KaNaxlHTHEEkc8CWQnBznJRW7ykJd85KcABSlEYYpQNPv//9876H+7TL7XMpOFrEQSRTaiiSGWOOJJIDs5yEkucpOHvOQjPwUoSCEKU4SiFKM4JShJKUpThrKUozwVqJgQ/vtC1f/93zvof7vWbrANbWlHezrQkU50pgtd6UZ3etCTXvSmD2/Rl370ZwADGcRghjCUYQxnBCMZxWjGMJZxjGcCExPCf19QUCj7N6DNCuo=
+  </data>
+ </layer>
+ <layer name="Graphic Layer" width="240" height="30">
+  <data encoding="base64" compression="zlib">
+   eJzt07sNwjAYhVGvQetdeG7As4UNQIINYAfYAWpaGIu/TBkpBBPlHOnKkuXCzZcSAAAAAAAAAAAAAAAAAAAAAAAAAAAA/+g5+M4bfmufUzrk0r+gNP2Wt40OdzVarL47x3nRb+/pt7xjdHiq0WL13TXOm357T7/ddI92H/rtPf02M4yGRrFxbBKbxma5/ftX7K1faGQeDS1iy9gqto5tcvv3AHTbB7qeL6Q=
+  </data>
+ </layer>
+ <objectgroup name="Ground">
+  <object id="179" x="0" y="448" width="1280" height="32"/>
+  <object id="180" x="240" y="432" width="384" height="16"/>
+  <object id="181" x="256" y="416" width="352" height="16"/>
+  <object id="182" x="880" y="432" width="384" height="16"/>
+  <object id="183" x="896" y="416" width="352" height="16"/>
+  <object id="187" x="0" y="224" width="96" height="32"/>
+  <object id="189" x="160" y="160" width="128" height="16"/>
+  <object id="192" x="288" y="64" width="288" height="16"/>
+  <object id="198" x="1280" y="448" width="480" height="32"/>
+ </objectgroup>
+ <objectgroup name="Wall">
+  <object id="185" x="64" y="416" width="32" height="32"/>
+  <object id="186" x="128" y="320" width="32" height="32"/>
+  <object id="188" x="160" y="176" width="64" height="176"/>
+  <object id="190" x="288" y="80" width="96" height="96"/>
+  <object id="191" x="256" y="128" width="32" height="32"/>
+  <object id="200" x="1760" y="400" width="32" height="80"/>
+ </objectgroup>
+ <objectgroup name="Coins"/>
+ <objectgroup name="Bricks"/>
+ <objectgroup name="Goombas">
+  <object id="199" x="1552" y="432" width="16" height="16"/>
+ </objectgroup>
+ <objectgroup name="Turtles"/>
+ <objectgroup name="InvisibleWalls"/>
+ <objectgroup name="DeadZone"/>
+ <objectgroup name="Area"/>
+ <objectgroup name="Boss">
+  <object id="204" x="657" y="415" width="16" height="16"/>
+ </objectgroup>
+</map>

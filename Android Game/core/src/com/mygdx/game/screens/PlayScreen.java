@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -42,7 +43,9 @@ import com.mygdx.game.scenes.EndLevel;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.scenes.Pause;
 import com.mygdx.game.sprites.CollisionWall.Area;
+import com.mygdx.game.sprites.Enemies.Boss;
 import com.mygdx.game.sprites.Enemies.Enemy;
+import com.mygdx.game.sprites.Other.FireBoss;
 import com.mygdx.game.sprites.Player.Mario;
 import com.mygdx.game.tools.B2WorldCreator;
 import com.mygdx.game.tools.WorldContactListener;
@@ -113,6 +116,11 @@ public class PlayScreen implements Screen{
     private ParticleEffect pe;
     private ParticleEffectPool pool;
     private Array<ParticleEffectPool.PooledEffect> effects;
+
+    private Array<FireBoss> fireboss;
+    private boolean canFireBoss;
+
+
 
     /** Constructeur de l'écran */
     public PlayScreen(GameTest game, String user, int lvl){
@@ -205,6 +213,10 @@ public class PlayScreen implements Screen{
 
         pool = new ParticleEffectPool(pe, 0 , 10000);
         effects = new Array<ParticleEffectPool.PooledEffect>();
+
+        //Fireball
+        fireboss = new Array<FireBoss>();
+        canFireBoss = true;
 
     }
 
@@ -322,8 +334,6 @@ public class PlayScreen implements Screen{
 
                     if (controller.isUpPressed() && canDoubleJump && !wcl.isPlayerIsOnGround()) { //SAUT 2
                         player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
-                        System.out.println("Test test");
-
                         GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
                         canDoubleJump = false;
                     }
@@ -356,11 +366,32 @@ public class PlayScreen implements Screen{
 
         player.update(dt);
 
+        //Fireball
+        for(FireBoss  ball : fireboss) {
+            ball.update(dt);
+            if(ball.isDestroyed())
+                fireboss.removeValue(ball, true);
+        }
+
         //Distance d'apparition des ennemies
         for(Enemy enemy : creator.getEnemies()) {
             enemy.update(dt);
             if (enemy.getX() < player.getX() + 260 / GameTest.PPM) {
                 enemy.b2body.setActive(true);
+            }
+
+            //IA déplacements du Boss
+            if(enemy instanceof Boss){
+                if ((enemy.getX() - player.getX()) < 0.1f && (enemy.getX() - player.getX()) > 0){
+                    enemy.velocity.x = 0;
+
+                }else if (player.getX() > enemy.getX()){
+                    enemy.velocity.x = 0.6f;
+                    fireBoss(enemy, true);
+                }else  if (player.getX() < enemy.getX()){
+                    enemy.velocity.x = -0.6f;
+                    fireBoss(enemy, false);
+                }
             }
         }
 
@@ -458,7 +489,7 @@ public class PlayScreen implements Screen{
             renderer.render();
 
             //Affichage des DEBUG (Bodies et collision..)
-            //b2dr.render(world, gamecam.combined);
+            b2dr.render(world, gamecam.combined);
 
             game.batch.setProjectionMatrix(gamecam.combined);
             game.batch.begin();
@@ -471,6 +502,10 @@ public class PlayScreen implements Screen{
                     effect.free();
                 }
             }
+
+            //Fireboss
+            for(FireBoss ball : fireboss)
+                ball.draw(game.batch);
 
 
             player.draw(game.batch); //Dessine le joueur
@@ -591,9 +626,20 @@ public class PlayScreen implements Screen{
         movePlayerEnd = true;
     }
 
+    public void fireBoss(Enemy enemy, boolean right){
+        if(canFireBoss) {
+            fireboss.add(new FireBoss(this, enemy.b2body.getPosition().x, enemy.b2body.getPosition().y, right));
+            GameTest.manager.get("audio/sounds/fireball.ogg", Sound.class).play();
+            canFireBoss = false;
 
-
-
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    canFireBoss = true;
+                }
+            }, 3);
+        }
+    }
 
 
 }
