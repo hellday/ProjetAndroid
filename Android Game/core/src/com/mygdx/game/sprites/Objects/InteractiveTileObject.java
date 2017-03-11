@@ -28,7 +28,7 @@ public abstract class InteractiveTileObject {
     protected Body body;
     protected Fixture fixture;
     protected PlayScreen screen;
-    protected  MapObject object;
+    protected MapObject object;
 
     /** Gère les objets dur (non-item) de la map */
     public InteractiveTileObject(PlayScreen screen, MapObject object){
@@ -62,6 +62,12 @@ public abstract class InteractiveTileObject {
         Filter filter = new Filter();
         filter.categoryBits = filterBit;
         fixture.setFilterData(filter);
+    }
+
+    public void setCategoryFilter2(short filterBit, Fixture fix){
+        Filter filter = new Filter();
+        filter.categoryBits = filterBit;
+        fix.setFilterData(filter);
     }
 
     public TiledMapTileLayer.Cell getCell(){

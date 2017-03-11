@@ -118,7 +118,13 @@ public class PlayScreen implements Screen{
     private Array<ParticleEffectPool.PooledEffect> effects;
 
     private Array<FireBoss> fireboss;
-    private boolean canFireBoss;
+    private boolean canFireBoss, canPlayBoss;
+
+    //Camera
+    private static boolean cameraChange, startEffect, moveCamera;
+    private float startX, startY;
+
+    private static Fixture test;
 
 
 
@@ -217,6 +223,12 @@ public class PlayScreen implements Screen{
         //Fireball
         fireboss = new Array<FireBoss>();
         canFireBoss = true;
+        canPlayBoss = false;
+
+        //Camera
+        cameraChange = false;
+        startEffect = false;
+        moveCamera = true;
 
     }
 
@@ -382,16 +394,18 @@ public class PlayScreen implements Screen{
 
             //IA déplacements du Boss
             if(enemy instanceof Boss){
-                if ((enemy.getX() - player.getX()) < 0.1f && (enemy.getX() - player.getX()) > 0){
-                    enemy.velocity.x = 0;
+                if(canPlayBoss) {
+                    if ((enemy.getX() - player.getX()) < 0.1f && (enemy.getX() - player.getX()) > 0) {
+                        enemy.velocity.x = 0;
 
-                }else if (player.getX() > enemy.getX()){
-                    enemy.velocity.x = 0.6f;
-                    fireBoss(enemy, true);
-                }else  if (player.getX() < enemy.getX()){
-                    enemy.velocity.x = -0.6f;
-                    fireBoss(enemy, false);
-                }
+                    } else if (player.getX() > enemy.getX()) {
+                        enemy.velocity.x = 0.6f;
+                        fireBoss(enemy, true);
+                    } else if (player.getX() < enemy.getX()) {
+                        enemy.velocity.x = -0.6f;
+                        fireBoss(enemy, false);
+                    }
+                }else enemy.velocity.x = 0;
             }
         }
 
@@ -402,14 +416,28 @@ public class PlayScreen implements Screen{
         hud.update(dt);
         endLevel.update(dt);
 
-        //Controle de la caméra
-        float startX = gamecam.viewportWidth / 2;
-        float startY = gamecam.viewportHeight / 2;
 
+        startX = gamecam.viewportWidth / 2;
+        startY = gamecam.viewportHeight / 2;
+
+        //Controle de la caméra
         if(player.currentState != Mario.State.DEAD) {
-            gamecam.position.x = player.b2body.getPosition().x;
-            gamecam.position.y = player.b2body.getPosition().y;
-            boundary(gamecam, startX, startY, levelWidth /6.25f - startX * 2, levelHeight /6.25f - startY * 2);
+
+            //Si la caméra n'a pas été changé pour un évènement
+            if(!cameraChange) {
+                gamecam.position.x = player.b2body.getPosition().x;
+                gamecam.position.y = player.b2body.getPosition().y;
+                boundary(gamecam, startX, startY, levelWidth / 6.25f - startX * 2, levelHeight / 6.25f - startY * 2);
+            }else {
+                if (moveCamera) { //On bouge la caméra en transition jusqu'au joueur
+                    gamecam.position.x += 0.015;
+                }else {
+                    gamecam.position.x = player.b2body.getPosition().x;
+                    gamecam.position.y = player.b2body.getPosition().y;
+                    boundary(gamecam, startX + 2.55f, startY, levelWidth / 6.25f - startX * 2, levelHeight / 6.25f - startY * 2);
+                }
+
+            }
         }
 
 
@@ -526,6 +554,15 @@ public class PlayScreen implements Screen{
                 item.draw(game.batch);
             }
 
+            if(cameraChange){
+                if(startEffect) {
+                    ParticleEffectPool.PooledEffect effect = pool.obtain();
+                    effect.setPosition(player.b2body.getPosition().x -0.4f, player.b2body.getPosition().y - 0.1f);
+                    effects.add(effect);
+                }
+                startEffect = false;
+            }
+
             game.batch.end();
 
             //HUD
@@ -626,6 +663,7 @@ public class PlayScreen implements Screen{
         movePlayerEnd = true;
     }
 
+    //Boss
     public void fireBoss(Enemy enemy, boolean right){
         if(canFireBoss) {
             fireboss.add(new FireBoss(this, enemy.b2body.getPosition().x, enemy.b2body.getPosition().y, right));
@@ -640,6 +678,35 @@ public class PlayScreen implements Screen{
             }, 3);
         }
     }
+
+    public static void startBossFight() {
+        canPlay = false;
+    }
+
+    public static void cameraChangeBoss(boolean bool){
+        cameraChange = bool;
+        startEffect = bool;
+
+        Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    moveCamera = false;
+                }
+            }, 1.55f);
+
+    }
+
+    //Récupère les Fixture d'une aire de collision dans Area
+    public static void setFixture(Fixture fix){
+        test = fix;
+    }
+
+    public static Fixture getFixture(){
+        return test;
+    }
+
+
+
 
 
 }
