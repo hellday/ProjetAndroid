@@ -26,18 +26,18 @@ import com.mygdx.game.tools.B2WorldCreator;
 public class Boss extends Enemy {
     private TextureAtlas atlas;
     private float stateTime;
-    private Animation walkAnimation;
+    private Animation walkAnimation, hitAnimation, deadAnimation;
     private Array<TextureRegion> frames;
     public boolean setToDestroy;
     private boolean destroyed;
     private boolean canBeRemoved;
 
-    private enum State {IDLE, WALKING, DEAD}
+    private enum State {IDLE, WALKING, DEAD, HIT}
     private State currentState;
     private State previousState;
     private float deadRotationDegrees;
 
-    private TextureRegion idle;
+    private TextureRegion idle, dead;
 
     private int health;
 
@@ -53,11 +53,28 @@ public class Boss extends Enemy {
         for(int i = 1; i < 4; i++){
             frames.add(new TextureRegion(atlas.findRegion("ghost"), i * 96, 0, 96, 128));
         }
+        walkAnimation = new Animation(0.5f, frames);
+        frames.clear();
+
+        //Hit Animation
+        for(int i = 0; i < 2; i++){
+            frames.add(new TextureRegion(atlas.findRegion("ghost"), i * 96, 0, 96, 128));
+        }
+        hitAnimation = new Animation(0.1f, frames);
+        frames.clear();
+
+        // Death Animation
+        for(int i = 0; i < 2; i++){
+            frames.add(new TextureRegion(atlas.findRegion("ghost"), i * 96, 0, 96, 128));
+        }
+        dead = new TextureRegion(atlas.findRegion("ghost"), 96, 0, 96, 128);
+        dead.flip(true, false);
+        frames.add(dead);
+        deadAnimation = new Animation(0.1f, frames);
+        frames.clear();
 
         // Idle Animation
         idle = new TextureRegion(atlas.findRegion("ghost"), 0, 0, 96, 128);
-
-        walkAnimation = new Animation(0.5f, frames);
 
         setBounds(getX(), getY(), 48 / GameTest.PPM, 48 / GameTest.PPM);
         setToDestroy = false;
@@ -67,7 +84,7 @@ public class Boss extends Enemy {
         currentState = previousState = State.IDLE;
         deadRotationDegrees = 0;
 
-        health = 10;
+        health = 2;
 
     }
 
@@ -81,6 +98,12 @@ public class Boss extends Enemy {
             case IDLE:
             default:
                 region = idle;
+                break;
+            case HIT:
+                region = hitAnimation.getKeyFrame(stateTime, true);
+                break;
+            case DEAD:
+                region = deadAnimation.getKeyFrame(stateTime, true);
                 break;
         }
 
@@ -115,17 +138,35 @@ public class Boss extends Enemy {
         }
 
         //Si touché par une Tortue ou une Fireball
-        if(currentState == State.DEAD){
-            deadRotationDegrees =+ 3;
-            rotate(deadRotationDegrees);
-
-
-        }else
+//        if(currentState == State.DEAD){
+//            deadRotationDegrees =+ 3;
+//            rotate(deadRotationDegrees);
+//        }else
             b2body.setLinearVelocity(velocity);
 
         if(canBeRemoved){
             B2WorldCreator.removeBoss(this);
             System.out.println("Boss détruit !");
+        }
+
+        if(currentState == State.HIT){
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+                    currentState = State.IDLE;
+                }
+            }, 0.4f);
+        }
+
+        if(currentState == State.DEAD){
+            velocity.x = 0;
+            Timer.schedule(new Timer.Task(){
+                @Override
+                public void run() {
+
+                    currentState = State.IDLE;
+                }
+            }, 2f);
         }
     }
 
@@ -178,11 +219,13 @@ public class Boss extends Enemy {
     public void onBladeHit(){
         health--;
         System.out.println("Vie restante : " + health);
+
         if(health == 0) {
             setToDestroy = true;
+            currentState = State.DEAD;
             GameTest.manager.get("audio/sounds/dead_spectre.wav", Sound.class).play(0.2f);
             Hud.addScore(1000);
-        }
+        }else currentState = State.HIT;
     }
 
 
@@ -217,6 +260,14 @@ public class Boss extends Enemy {
     @Override
     public void setToDestroy(boolean value) {
         setToDestroy = value;
+    }
+
+    public boolean isDead(){
+        if(currentState == State.DEAD){
+            return true;
+        }else {
+            return false;
+        }
     }
 
 

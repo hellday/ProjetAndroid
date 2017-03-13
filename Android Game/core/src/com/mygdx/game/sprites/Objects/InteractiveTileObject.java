@@ -64,7 +64,7 @@ public abstract class InteractiveTileObject {
         fixture.setFilterData(filter);
     }
 
-    public void setCategoryFilter2(short filterBit, Fixture fix){
+    public void setCategoryFilterFixture(short filterBit, Fixture fix){
         Filter filter = new Filter();
         filter.categoryBits = filterBit;
         fix.setFilterData(filter);

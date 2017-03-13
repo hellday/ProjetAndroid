@@ -13,7 +13,9 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -118,13 +120,14 @@ public class PlayScreen implements Screen{
     private Array<ParticleEffectPool.PooledEffect> effects;
 
     private Array<FireBoss> fireboss;
-    private boolean canFireBoss, canPlayBoss;
+    private static boolean canFireBoss, canPlayBoss;
 
     //Camera
     private static boolean cameraChange, startEffect, moveCamera;
     private float startX, startY;
 
-    private static Fixture test;
+    private static Fixture fixtureStartBoss, fixtureEndBoss;
+    private Area endBossWall;
 
 
 
@@ -230,6 +233,8 @@ public class PlayScreen implements Screen{
         startEffect = false;
         moveCamera = true;
 
+        //End Boss Wall
+        endBossWall = new Area(this, new RectangleMapObject());
     }
 
     public void spawnItem(ItemDef idef){
@@ -378,7 +383,7 @@ public class PlayScreen implements Screen{
 
         player.update(dt);
 
-        //Fireball
+        //Projectiles du Boss
         for(FireBoss  ball : fireboss) {
             ball.update(dt);
             if(ball.isDestroyed())
@@ -398,16 +403,18 @@ public class PlayScreen implements Screen{
                     if ((enemy.getX() - player.getX()) < 0.1f && (enemy.getX() - player.getX()) > 0) {
                         enemy.velocity.x = 0;
 
-                    } else if (player.getX() > enemy.getX()) {
+                    } else if (player.getX() > enemy.getX() && !((Boss) enemy).isDead()) {
                         enemy.velocity.x = 0.6f;
                         fireBoss(enemy, true);
-                    } else if (player.getX() < enemy.getX()) {
+                    } else if (player.getX() < enemy.getX() && !((Boss) enemy).isDead()) {
                         enemy.velocity.x = -0.6f;
                         fireBoss(enemy, false);
                     }
                 }else enemy.velocity.x = 0;
             }
         }
+
+
 
         for(Item item : items){
             item.update(dt);
@@ -517,7 +524,7 @@ public class PlayScreen implements Screen{
             renderer.render();
 
             //Affichage des DEBUG (Bodies et collision..)
-            b2dr.render(world, gamecam.combined);
+            //b2dr.render(world, gamecam.combined);
 
             game.batch.setProjectionMatrix(gamecam.combined);
             game.batch.begin();
@@ -532,21 +539,34 @@ public class PlayScreen implements Screen{
             }
 
             //Fireboss
-            for(FireBoss ball : fireboss)
+            for(FireBoss ball : fireboss) {
                 ball.draw(game.batch);
+            }
 
 
             player.draw(game.batch); //Dessine le joueur
 
             for (Enemy enemy : creator.getEnemies()) {//Dessine les ennemies
                 enemy.draw(game.batch);
-                if(enemy.isSetToDestroy()){
+                if(enemy.isSetToDestroy() && enemy instanceof Boss){
+                    System.out.println("Boss mort");
+                    ParticleEffectPool.PooledEffect effect = pool.obtain();
+                    effect.setPosition(enemy.b2body.getPosition().x, enemy.b2body.getPosition().y - 0.1f);
+                    effects.add(effect);
+                    enemy.setToDestroy(false);
+
+                    //Actions à la mort du boss
+                    endBossWall.setCategoryFilterFixture(GameTest.DESTROYED_BIT, fixtureEndBoss);
+                    endBossWall.drawEndBossWall();
+
+                }else if(enemy.isSetToDestroy()){
                     System.out.println("setToDestroy Effect");
                     ParticleEffectPool.PooledEffect effect = pool.obtain();
                     effect.setPosition(enemy.b2body.getPosition().x, enemy.b2body.getPosition().y - 0.1f);
                     effects.add(effect);
                     enemy.setToDestroy(false);
                 }
+
             }
 
 
@@ -670,22 +690,20 @@ public class PlayScreen implements Screen{
             GameTest.manager.get("audio/sounds/fireball.ogg", Sound.class).play();
             canFireBoss = false;
 
-            Timer.schedule(new Timer.Task(){
-                @Override
-                public void run() {
-                    canFireBoss = true;
-                }
-            }, 3);
-        }
-    }
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        canFireBoss = true;
+                    }
+                }, 3);
 
-    public static void startBossFight() {
-        canPlay = false;
+        }
     }
 
     public static void cameraChangeBoss(boolean bool){
         cameraChange = bool;
         startEffect = bool;
+        canPlay = false;
 
         Timer.schedule(new Timer.Task(){
                 @Override
@@ -694,19 +712,32 @@ public class PlayScreen implements Screen{
                 }
             }, 1.55f);
 
+        Timer.schedule(new Timer.Task(){
+            @Override
+            public void run() {
+                canPlayBoss = true;
+                canPlay = true;
+            }
+        }, 2f);
+
     }
 
     //Récupère les Fixture d'une aire de collision dans Area
-    public static void setFixture(Fixture fix){
-        test = fix;
+    public static void setFixtureStartBoss(Fixture fix){
+        fixtureStartBoss = fix;
     }
 
-    public static Fixture getFixture(){
-        return test;
+    public static Fixture getFixtureStartBoss(){
+        return fixtureStartBoss;
     }
 
+    public static void setFixtureEndBoss(Fixture fix){
+        fixtureEndBoss = fix;
+    }
 
-
+    public static Fixture getFixtureEndBoss(){
+        return fixtureEndBoss;
+    }
 
 
 }

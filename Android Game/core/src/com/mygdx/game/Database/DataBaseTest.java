@@ -179,9 +179,7 @@ public class DataBaseTest {
         String test = null;
 
         try {
-            //cursor = dbHandler.rawQuery("SELECT " + column + " FROM " + table + " WHERE " + parameter + " = " + data);
             cursor = dbHandler.rawQuery("SELECT * FROM " + table + " WHERE " + parameter + " = " + data);
-            System.out.println("SELECT " + column + " FROM " + table + " WHERE " + parameter + " = " + data);
         } catch (SQLiteGdxException e) {
             e.printStackTrace();
         }
@@ -189,14 +187,12 @@ public class DataBaseTest {
         if(cursor != null) {
             if(table.equalsIgnoreCase("settings")) {
                 while (cursor.next()) {
-                    Gdx.app.log("returnData", String.valueOf(cursor.getString(3)));
                     test = String.valueOf(cursor.getString(3));
                 }
             }
 
             if(table.equalsIgnoreCase("scores")) {
                 while (cursor.next()) {
-                    Gdx.app.log("returnData", String.valueOf(cursor.getInt(3)));
                     test = String.valueOf(cursor.getInt(3));
                 }
             }

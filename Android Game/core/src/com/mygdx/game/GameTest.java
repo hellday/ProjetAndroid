@@ -73,7 +73,7 @@ public class GameTest extends com.badlogic.gdx.Game {
 		//db.selectData();
 
 		//setScreen(new MainMenuScreen(this, null));
-		setScreen(new PlayScreen(this, "test", 4));
+		setScreen(new PlayScreen(this, "test", 3));
 
 		//setScreen(new Particles());
 	}

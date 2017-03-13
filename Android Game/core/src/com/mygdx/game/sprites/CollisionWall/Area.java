@@ -19,9 +19,7 @@ import com.mygdx.game.sprites.Player.Mario;
 public class Area extends InteractiveTileObject{
     private static TiledMapTileSet tileSet;
     private TiledMapTileLayer layer;
-    private MapObject test;
-    private boolean can;
-    private Fixture fixt;
+    private Fixture fixtureStartBoss, fixtureEndBoss;
 
     public Area(PlayScreen screen, MapObject object){
         super(screen, object);
@@ -29,39 +27,21 @@ public class Area extends InteractiveTileObject{
         tileSet = map.getTileSets().getTileSet("Tileset");
         fixture.setUserData(this);
 
-        can = false;
-
         if(object.getProperties().containsKey("blockBoss")) {
             setCategoryFilter(GameTest.DESTROYED_BIT);
-            fixt = fixture;
-            PlayScreen.setFixture(fixt);
-
-//            Timer.schedule(new Timer.Task(){
-//                               @Override
-//                               public void run() {
-//                                   setTest();
-//                               }
-//                           }
-//                    , 1        //    (delay)
-//                    , 1     //    (seconds)
-//            );
-
-//            Timer.schedule(new Timer.Task(){
-//                @Override
-//                public void run() {
-//                    setCategoryFilter(GameTest.GROUND_BIT);
-//                    System.out.println("FIXED");
-//
-//                }
-//            }, 5);
-
-
+            fixtureStartBoss = fixture;
+            PlayScreen.setFixtureStartBoss(fixtureStartBoss);
+        }else if(object.getProperties().containsKey("endBlockBoss")) {
+            setCategoryFilter(GameTest.GROUND_BIT);
+            fixtureEndBoss = fixture;
+            PlayScreen.setFixtureEndBoss(fixtureEndBoss);
         }else setCategoryFilter(GameTest.AREA_BIT);
 
 
 
 
     }
+
 
     @Override
     public void onHeadHit(com.mygdx.game.sprites.Player.Mario mario) {
@@ -79,7 +59,7 @@ public class Area extends InteractiveTileObject{
 
         if(object.getProperties().containsKey("startBossFight")) {
 
-            System.out.println("Start Boss Fight : " + fixture + fixt);
+            System.out.println("Start Boss Fight");
             setCategoryFilter(GameTest.DESTROYED_BIT);
             //getCell().setTile(tileSet.getTile(303));
 
@@ -103,16 +83,32 @@ public class Area extends InteractiveTileObject{
             layer.setCell(17, 10, cell);
 
             PlayScreen.cameraChangeBoss(true);
-            setCategoryFilter2(GameTest.GROUND_BIT, PlayScreen.getFixture());
+            setCategoryFilterFixture(GameTest.GROUND_BIT, PlayScreen.getFixtureStartBoss());
 
-        }
-
-        if(object.getProperties().containsKey("blockBoss")) {
-            //can = true;
         }
 
     }
 
+    public void drawEndBossWall(){
+        TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
+        cell.setTile(null);
+        layer.setCell(47, 7, cell);
+        cell.setTile(null);
+        layer.setCell(47, 8, cell);
+        cell.setTile(null);
+        layer.setCell(47, 9, cell);
+        cell.setTile(null);
+        layer.setCell(47, 10, cell);
+
+        cell.setTile(null);
+        layer.setCell(48, 7, cell);
+        cell.setTile(null);
+        layer.setCell(48, 8, cell);
+        cell.setTile(null);
+        layer.setCell(48, 9, cell);
+        cell.setTile(null);
+        layer.setCell(48, 10, cell);
+    }
 }
 
 

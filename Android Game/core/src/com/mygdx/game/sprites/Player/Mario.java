@@ -138,7 +138,6 @@ public class Mario extends Sprite {
                 @Override
                 public void run() {
                     marioCanAttack = true;
-                    System.out.println("Stop");
                 }
             }, 0.56f);
         }
@@ -448,7 +447,6 @@ public class Mario extends Sprite {
         }else if (attack && marioCanAttack) {
             marioIsAttacking = true;
             marioCanAttack = false;
-            System.out.println("Attack");
             attack = false;
             return State.ATTACKING;
 
