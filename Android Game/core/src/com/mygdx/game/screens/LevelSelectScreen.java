@@ -290,10 +290,10 @@ public class LevelSelectScreen implements Screen {
         if(checkLevelLock.isEmpty() && levelAmount == 1){
             playButton.setVisible(true);
             locked.setVisible(false);
-        }else if(checkLevelLock.size() == 1 && levelAmount == 1) {
+        }else if(checkLevelLock.size() == 1 || checkLevelLock.size() == 2 || checkLevelLock.size() == 3 && levelAmount == 1) {
             playButton.setVisible(true);
             locked.setVisible(false);
-        }else if(checkLevelLock.size() == 1 && levelAmount == 2){
+        }else if(checkLevelLock.size() == 1 || checkLevelLock.size() == 2 || checkLevelLock.size() == 3 && levelAmount == 2){
             playButton.setVisible(true);
             locked.setVisible(false);
         }else  if(checkLevelLock.size() == 2 || checkLevelLock.size() == 3 && levelAmount == 3){

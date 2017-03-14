@@ -111,17 +111,19 @@ public class EndLevelScreen implements Screen {
             }
         });
 
-        nextButton = new TextButton("Suivant", skin);
-        nextButton.setWidth(100);
-        nextButton.setHeight(25);
-        nextButton.setPosition(200, 0);
-        nextButton.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, level+1));
+        if(level != 3) {
+            nextButton = new TextButton("Suivant", skin);
+            nextButton.setWidth(100);
+            nextButton.setHeight(25);
+            nextButton.setPosition(200, 0);
+            nextButton.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, level + 1));
 
-            }
-        });
+                }
+            });
+        }
 
         table.add(endLabel).expandX();
         table.row();
@@ -134,7 +136,9 @@ public class EndLevelScreen implements Screen {
 
         stage.addActor(table);
         stage.addActor(playButton);
-        stage.addActor(nextButton);
+        if(level != 3) {
+            stage.addActor(nextButton);
+        }
 
 
     }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="188" height="30" tilewidth="16" tileheight="16" nextobjectid="312">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="188" height="30" tilewidth="16" tileheight="16" nextobjectid="314">
  <tileset firstgid="1" name="Tileset" tilewidth="16" tileheight="16" tilecount="7708" columns="82">
   <image source="tileset.png" width="1312" height="1504"/>
  </tileset>
@@ -201,6 +201,8 @@
   <object id="271" x="784" y="320" width="16" height="32"/>
   <object id="309" x="352" y="224" width="16" height="32"/>
   <object id="310" x="272" y="224" width="16" height="32"/>
+  <object id="312" x="848" y="416" width="16" height="48"/>
+  <object id="313" x="976" y="416" width="16" height="48"/>
  </objectgroup>
  <objectgroup name="DeadZone">
   <object id="281" x="352" y="352" width="304" height="96"/>
