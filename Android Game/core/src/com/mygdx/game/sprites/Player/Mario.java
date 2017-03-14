@@ -29,6 +29,7 @@ import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Enemies.Turtle;
 import com.mygdx.game.sprites.Other.FireBall;
+import com.mygdx.game.sprites.Other.FireBoss;
 
 import static com.mygdx.game.scenes.Hud.damage;
 import static com.mygdx.game.scenes.Hud.heartcount;
@@ -481,6 +482,18 @@ public class Mario extends Sprite {
         }
     }
 
+    public void knockBackFireBoss (FireBoss fireball)
+    {
+        if(fireball.b2body.getLinearVelocity().x>0)
+        {
+            b2body.applyLinearImpulse(new Vector2(3f, 3f), b2body.getWorldCenter(), true);
+        }
+        else
+        {
+            b2body.applyLinearImpulse(new Vector2(-3f, 3f), b2body.getWorldCenter(), true);
+        }
+    }
+
     public void invincible(boolean invincible)
     {
 
@@ -536,7 +549,7 @@ public class Mario extends Sprite {
                 }
         }
 
-    public void hitBoss(){
+    public void hitBoss(FireBoss fireboss){
         damage(1);
 
         if(db.returnData("settings", "vibreur", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si le vibreur est activé dans les paramètres
@@ -544,6 +557,7 @@ public class Mario extends Sprite {
         }
         if (heartcount>0){
             /// on fait un bruit de dégat
+            knockBackFireBoss (fireboss);
             invincible(true);
         }
         else {

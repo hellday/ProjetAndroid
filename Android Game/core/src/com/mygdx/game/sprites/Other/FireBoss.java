@@ -36,9 +36,8 @@ public class FireBoss extends Sprite {
     boolean setToDestroy;
     boolean fireRight;
 
-    private Goomba goomba;
 
-    Body b2body;
+    public Body b2body;
 
     public FireBoss(PlayScreen screen, float x, float y, boolean fireRight){
         this.fireRight = fireRight;
@@ -113,7 +112,7 @@ public class FireBoss extends Sprite {
         System.out.println("HitBoss : Player");
 
         if(player instanceof Mario){
-            player.hitBoss();
+            player.hitBoss(this);
             System.out.println("HitBoss : Player");
         }
 
