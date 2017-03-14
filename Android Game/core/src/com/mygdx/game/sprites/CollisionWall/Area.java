@@ -54,7 +54,6 @@ public class Area extends InteractiveTileObject{
             System.out.println("Fin du level");
             setCategoryFilter(GameTest.DESTROYED_BIT);
             PlayScreen.setEndLevel();
-
         }
 
         if(object.getProperties().containsKey("startBossFight")) {
@@ -64,27 +63,48 @@ public class Area extends InteractiveTileObject{
             //getCell().setTile(tileSet.getTile(303));
 
             TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-            cell.setTile(tileSet.getTile(1073));
-            layer.setCell(16, 7, cell);
-            cell.setTile(tileSet.getTile(990));
-            layer.setCell(16, 8, cell);
-            cell.setTile(tileSet.getTile(1073));
-            layer.setCell(16, 9, cell);
-            cell.setTile(tileSet.getTile(991));
-            layer.setCell(16, 10, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(99, 6, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(99, 7, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(99, 8, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(99, 9, cell);
 
-            cell.setTile(tileSet.getTile(1074));
-            layer.setCell(17, 7, cell);
-            cell.setTile(tileSet.getTile(990));
-            layer.setCell(17, 8, cell);
-            cell.setTile(tileSet.getTile(1074));
-            layer.setCell(17, 9, cell);
-            cell.setTile(tileSet.getTile(825));
-            layer.setCell(17, 10, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(100, 6, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(100, 7, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(100, 8, cell);
+            cell.setTile(tileSet.getTile(910));
+            layer.setCell(100, 9, cell);
 
             PlayScreen.cameraChangeBoss(true);
             setCategoryFilterFixture(GameTest.GROUND_BIT, PlayScreen.getFixtureStartBoss());
 
+        }
+
+        if(object.getProperties().containsKey("blueKnight")) {
+            System.out.println("Changement en bleu");
+            setCategoryFilter(GameTest.DESTROYED_BIT);
+            getCell().setTile(null);
+            PlayScreen.setColorKnight("blue");
+        }
+
+        if(object.getProperties().containsKey("greyKnight")) {
+            System.out.println("Changement en gris");
+            setCategoryFilter(GameTest.DESTROYED_BIT);
+            getCell().setTile(null);
+            PlayScreen.setColorKnight("grey");
+        }
+
+        if(object.getProperties().containsKey("redKnight")) {
+            System.out.println("Changement en rouge");
+            setCategoryFilter(GameTest.DESTROYED_BIT);
+            getCell().setTile(null);
+            PlayScreen.setColorKnight("red");
         }
 
     }

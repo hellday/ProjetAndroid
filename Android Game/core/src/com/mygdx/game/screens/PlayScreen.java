@@ -65,7 +65,7 @@ public class PlayScreen implements Screen{
 
     private OrthographicCamera gamecam;
     public Viewport gamePort;
-    private Hud hud;
+    private static Hud hud;
     private Pause pause;
     private EndLevel endLevel;
 
@@ -115,15 +115,15 @@ public class PlayScreen implements Screen{
     private Stage stage;
     private Skin skin;
 
-    private ParticleEffect pe;
-    private ParticleEffectPool pool;
-    private Array<ParticleEffectPool.PooledEffect> effects;
+    private ParticleEffect pe, peBoss;
+    private ParticleEffectPool pool, poolBoss;
+    private Array<ParticleEffectPool.PooledEffect> effects, effectsBoss;
 
     private Array<FireBoss> fireboss;
     private static boolean canFireBoss, canPlayBoss;
 
     //Camera
-    private static boolean cameraChange, startEffect, moveCamera;
+    private static boolean cameraChange, startEffect, moveCamera, cameraEndBoss;
     private float startX, startY;
 
     private static Fixture fixtureStartBoss, fixtureEndBoss;
@@ -220,8 +220,15 @@ public class PlayScreen implements Screen{
         pe.scaleEffect(0.003f);
         pe.start();
 
+        peBoss = new ParticleEffect();
+        peBoss.load(Gdx.files.internal("effects/boss_dead.p"), Gdx.files.internal("effects"));
+        peBoss.scaleEffect(0.003f);
+        peBoss.start();
+
         pool = new ParticleEffectPool(pe, 0 , 10000);
         effects = new Array<ParticleEffectPool.PooledEffect>();
+        poolBoss = new ParticleEffectPool(peBoss, 0 , 10000);
+        effectsBoss = new Array<ParticleEffectPool.PooledEffect>();
 
         //Fireball
         fireboss = new Array<FireBoss>();
@@ -232,6 +239,7 @@ public class PlayScreen implements Screen{
         cameraChange = false;
         startEffect = false;
         moveCamera = true;
+        cameraEndBoss = false;
 
         //End Boss Wall
         endBossWall = new Area(this, new RectangleMapObject());
@@ -411,6 +419,11 @@ public class PlayScreen implements Screen{
                         fireBoss(enemy, false);
                     }
                 }else enemy.velocity.x = 0;
+
+                if(((Boss) enemy).isDead()){
+                    cameraEndBoss = true;
+                    cameraChange = false;
+                }
             }
         }
 
@@ -437,11 +450,15 @@ public class PlayScreen implements Screen{
                 boundary(gamecam, startX, startY, levelWidth / 6.25f - startX * 2, levelHeight / 6.25f - startY * 2);
             }else {
                 if (moveCamera) { //On bouge la caméra en transition jusqu'au joueur
-                    gamecam.position.x += 0.015;
+                    gamecam.position.x += 0.018;
+                }else if(!cameraEndBoss) {
+                    gamecam.position.x = player.b2body.getPosition().x;
+                    gamecam.position.y = player.b2body.getPosition().y;
+                    boundary(gamecam, startX + 16.15f, startY, levelWidth / 6.25f - startX * 2 - 25.5f, levelHeight / 6.25f - startY * 2);
                 }else {
                     gamecam.position.x = player.b2body.getPosition().x;
                     gamecam.position.y = player.b2body.getPosition().y;
-                    boundary(gamecam, startX + 2.55f, startY, levelWidth / 6.25f - startX * 2, levelHeight / 6.25f - startY * 2);
+                    boundary(gamecam, startX + 16.15f, startY, levelWidth / 6.25f - startX * 2, levelHeight / 6.25f - startY * 2);
                 }
 
             }
@@ -524,7 +541,7 @@ public class PlayScreen implements Screen{
             renderer.render();
 
             //Affichage des DEBUG (Bodies et collision..)
-            //b2dr.render(world, gamecam.combined);
+            b2dr.render(world, gamecam.combined);
 
             game.batch.setProjectionMatrix(gamecam.combined);
             game.batch.begin();
@@ -538,21 +555,31 @@ public class PlayScreen implements Screen{
                 }
             }
 
+            for(ParticleEffectPool.PooledEffect effect : effectsBoss){
+                effect.draw(game.batch, delta);
+                if(effect.isComplete()){
+                    effectsBoss.removeValue(effect, true);
+                    effect.free();
+                }
+            }
+
+
             //Fireboss
             for(FireBoss ball : fireboss) {
                 ball.draw(game.batch);
             }
 
-
+            //Joueur
             player.draw(game.batch); //Dessine le joueur
 
             for (Enemy enemy : creator.getEnemies()) {//Dessine les ennemies
                 enemy.draw(game.batch);
                 if(enemy.isSetToDestroy() && enemy instanceof Boss){
                     System.out.println("Boss mort");
-                    ParticleEffectPool.PooledEffect effect = pool.obtain();
-                    effect.setPosition(enemy.b2body.getPosition().x, enemy.b2body.getPosition().y - 0.1f);
-                    effects.add(effect);
+                    ParticleEffectPool.PooledEffect effect = poolBoss.obtain();
+                    effect.setPosition(enemy.b2body.getPosition().x, enemy.b2body.getPosition().y - 0.25f);
+                    effectsBoss.add(effect);
+
                     enemy.setToDestroy(false);
 
                     //Actions à la mort du boss
@@ -737,6 +764,11 @@ public class PlayScreen implements Screen{
 
     public static Fixture getFixtureEndBoss(){
         return fixtureEndBoss;
+    }
+
+    public static void setColorKnight(String color){
+        player.setBuff(color);
+        hud.addScore(300);
     }
 
 

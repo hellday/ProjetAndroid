@@ -36,7 +36,6 @@ public class FireBoss extends Sprite {
     boolean setToDestroy;
     boolean fireRight;
 
-
     public Body b2body;
 
     public FireBoss(PlayScreen screen, float x, float y, boolean fireRight){

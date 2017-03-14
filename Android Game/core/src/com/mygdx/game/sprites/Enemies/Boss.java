@@ -84,7 +84,7 @@ public class Boss extends Enemy {
         currentState = previousState = State.IDLE;
         deadRotationDegrees = 0;
 
-        health = 3;
+        health = 10;
 
     }
 
