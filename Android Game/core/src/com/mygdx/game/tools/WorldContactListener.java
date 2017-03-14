@@ -112,6 +112,12 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Mario) fixB.getUserData()).die();
                 break;
+            case GameTest.DESTROYED_BIT | GameTest.DEAD_ZONE_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)
+                    ((Mario) fixA.getUserData()).die();
+                else
+                    ((Mario) fixB.getUserData()).die();
+                break;
             case GameTest.MARIO_BIT | GameTest.AREA_BIT:
                 if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)
                     ((InteractiveTileObject) fixB.getUserData()).areaEffect((Mario) fixA.getUserData());
