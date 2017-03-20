@@ -46,7 +46,7 @@ public class ScoreScreen implements Screen {
     protected ScrollPane scrollpane, scrollpane2;
     protected List list, list2;
 
-    private Label title, nomLabel, pointsLabel, bonusLabel, scoreLabel;
+    private Label title;
     private Texture arrow;
     private Image arr;
     private String usernameSession;
@@ -104,7 +104,9 @@ public class ScoreScreen implements Screen {
 
         //Create buttons
         TextButton returnButton = new TextButton("Retour", skin);
-        returnButton.setPosition(30, 180);
+        returnButton.setPosition(30, 170);
+        returnButton.setWidth(100);
+        returnButton.setHeight(25);
 
         //Add listeners to buttons
         returnButton.addListener(new ClickListener(){
@@ -118,7 +120,7 @@ public class ScoreScreen implements Screen {
         //Label
         title = new Label("Score", skin);
         title.setFontScale(2);
-        title.setPosition(150, 180);
+        title.setPosition(180, 170);
 
 
         //Add buttons to table
@@ -133,16 +135,16 @@ public class ScoreScreen implements Screen {
         //List
         list = new List<String>(skin);
         list.setColor(Color.BLACK);
-        list2 = new List<String>(skin);
+        list2 = new List<Object>(skin);
         list.setItems(new String[] {"Level 1", "Level 2", "Level 3"});
-        list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
+        list2.setItems(new Object[] {db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
         list2.setTouchable(Touchable.disabled); //Rendu intouchable
 
         //Scrollpane
         scrollpane = new ScrollPane(list);
         scrollpane.setPosition(15, 0);
         scrollpane2 = new ScrollPane(list2);
-        scrollpane2.setPosition(240, 0);
+        scrollpane2.setPosition(240, -30);
 
         /// adding background image
         background = new Texture("img/background.png");
@@ -182,15 +184,15 @@ public class ScoreScreen implements Screen {
 
         //Mise à jour des Scores selon le niveau choisi
         if(list.getSelected().toString().equalsIgnoreCase("Level 1")){
-            list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
+            list2.setItems(new Object[] {db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1")});
         }
 
         if(list.getSelected().toString().equalsIgnoreCase("Level 2")){
-            list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level2")});
+            list2.setItems(new Object[] {db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level2")});
         }
 
         if(list.getSelected().toString().equalsIgnoreCase("Level 3")){
-            list2.setItems(new Object[] {"Bonus", "...", "Total", db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level3")});
+            list2.setItems(new Object[] {db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level3")});
         }
     }
 

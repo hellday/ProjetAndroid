@@ -161,9 +161,6 @@ public class MainMenuScreen implements Screen {
         mainTable.row();
         mainTable.add(settingsButton).width(100).height(25).padTop(10);
         mainTable.row();
-//        mainTable.add(exitButton).width(100).height(25).padTop(10);
-//        mainTable.row();
-//        mainTable.add(testImageButton).padTop(10);
         mainTable.setVisible(false);
 
         //POP-UP : Choix/Création > Utilisateur
@@ -201,19 +198,24 @@ public class MainMenuScreen implements Screen {
                                 username = new TextField("", skin);
                                 username.setMessageText("");
                                 this.getButtonTable().add(username);
-                                button("Nouveau");
+                                button("Nouveau", "create");
+                                button("Retour", "back");
                             }
 
                             @Override
                             protected void result(final Object object) {
-                                //Création du nouvel utilisateur
-                                this.setMovable(false);
-                                newUsername = username.getText();
-                                db.insertUser(newUsername);
-                                db.newUserData(newUsername);
-                                usernameSession = newUsername;
-                                mainTable.setVisible(true);
-                                db.closeDatabase();
+                                if (object.equals("create")) {
+                                    //Création du nouvel utilisateur
+                                    this.setMovable(false);
+                                    newUsername = username.getText();
+                                    db.insertUser(newUsername);
+                                    db.newUserData(newUsername);
+                                    usernameSession = newUsername;
+                                    mainTable.setVisible(true);
+                                    db.closeDatabase();
+                                }else{
+                                    ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(game, null));
+                                }
                             }
 
                         }.show(stage);

@@ -98,10 +98,19 @@ public class SettingsScreen implements Screen {
         //Create buttons
         TextButton returnButton = new TextButton("Retour", skin);
 
+        TextButton logoutButton = new TextButton("Deconnexion", skin);
+        logoutButton.setPosition(150, 10);
+        logoutButton.setColor(Color.BLACK);
+
+
 
         if(vibreurIsOn) {
             onOffButton = new TextButton("On", skin);
-        }else onOffButton = new TextButton("Off", skin);
+            //onOffButton.setColor(Color.GREEN);
+        }else {
+            onOffButton = new TextButton("Off", skin);
+            //onOffButton.setColor(Color.RED);
+        }
 
         //Add listeners to buttons
         returnButton.addListener(new ClickListener(){
@@ -111,17 +120,26 @@ public class SettingsScreen implements Screen {
             }
         });
 
+        logoutButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game)Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(game, null));
+            }
+        });
+
         onOffButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(vibreurIsOn){
                     //Vibreur désactivé
                     onOffButton.setText("Off");
+                    onOffButton.setColor(Color.RED);
                     vibreurIsOn = false;
                     db.updateData("settings", "vibreur", "off", "idUser", db.getIdFromNameUser(usernameSession));
                 }else {
                     //Vibreur activé
                     onOffButton.setText("On");
+                    onOffButton.setColor(Color.GREEN);
                     vibreurIsOn = true;
                     db.updateData("settings", "vibreur", "on", "idUser", db.getIdFromNameUser(usernameSession));
                 }
@@ -143,11 +161,14 @@ public class SettingsScreen implements Screen {
         mainTable.row();
         mainTable.add(vibreur).expandX().padTop(25);
         mainTable.add(onOffButton).width(100).height(25).padTop(25);
+        mainTable.row();
+
 
         /// adding background image
         background = new Texture("img/background.png");
 
         //Add table to stage
+        stage.addActor(logoutButton);
         stage.addActor(mainTable);
     }
 
@@ -157,9 +178,7 @@ public class SettingsScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.getBatch().begin();
-        stage.getBatch().disableBlending();
         stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
-        stage.getBatch().enableBlending();
         stage.getBatch().end();
 
         stage.act();
