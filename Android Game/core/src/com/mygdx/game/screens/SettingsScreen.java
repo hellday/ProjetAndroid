@@ -24,6 +24,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.GameTest;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+
 
 /**
  * Created by Terry on 11/01/2017.
@@ -80,6 +82,10 @@ public class SettingsScreen implements Screen {
 
     @Override
     public void show() {
+        //Fade In
+        stage.getRoot().getColor().a = 0;
+        stage.getRoot().addAction(fadeIn(0.5f));
+
         //Vibreur
         db.createDatabase();
         db.selectData();
@@ -183,6 +189,8 @@ public class SettingsScreen implements Screen {
 
         stage.act();
         stage.draw();
+
+        update(delta);
     }
 
     /** Actualise les informations à l'écran */

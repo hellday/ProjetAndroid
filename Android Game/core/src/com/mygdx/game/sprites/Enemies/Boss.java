@@ -14,6 +14,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.GameTest;
+import com.mygdx.game.scenes.HealthBarBoss;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Player.Mario;
@@ -35,7 +36,6 @@ public class Boss extends Enemy {
     private enum State {IDLE, WALKING, DEAD, HIT}
     private State currentState;
     private State previousState;
-    private float deadRotationDegrees;
 
     private TextureRegion idle, dead;
 
@@ -82,9 +82,8 @@ public class Boss extends Enemy {
         canBeRemoved = false;
 
         currentState = previousState = State.IDLE;
-        deadRotationDegrees = 0;
 
-        health = 10;
+        health = 5;
 
     }
 
@@ -220,11 +219,16 @@ public class Boss extends Enemy {
         health--;
         System.out.println("Vie restante : " + health);
 
+        //On retire de la vie sur la HealthBar
+        HealthBarBoss.setHealth();
+
+
         if(health == 0) {
             setToDestroy = true;
             currentState = State.DEAD;
             GameTest.manager.get("audio/sounds/dead_spectre.wav", Sound.class).play(0.2f);
             Hud.addScore(1000);
+            HealthBarBoss.delete();
         }else currentState = State.HIT;
     }
 
@@ -268,6 +272,10 @@ public class Boss extends Enemy {
         }else {
             return false;
         }
+    }
+
+    public int getHealth(){
+        return health;
     }
 
 

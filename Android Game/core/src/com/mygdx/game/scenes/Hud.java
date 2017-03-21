@@ -64,15 +64,14 @@ public class Hud  implements Disposable{
 
         countdownLabel = new Label(String.format("%03d", worldTimer), skin);
         scoreLabel = new Label(String.format("%06d", score), skin);
-        //timeLabel = new Label("TIME", new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         timeLabel = new Label("TIME", skin);
         levelLabel = new Label("1-1", skin);
         worldLabel = new Label("WORLD", skin);
         marioLabel = new Label("SCORE", skin);
 
-        table.add().expandX().padTop(10);
-        table.add(marioLabel).expandX().padTop(10);
-        table.add(timeLabel).expandX().padTop(10);
+        table.add().expandX().padTop(5);
+        table.add(marioLabel).expandX().padTop(5);
+        table.add(timeLabel).expandX().padTop(5);
         table.row();
         table.add().expandX();
         table.add(scoreLabel).expandX();

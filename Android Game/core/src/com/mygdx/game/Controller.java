@@ -44,9 +44,6 @@ public class Controller {
                     case Input.Keys.RIGHT:
                         rightPressed = true;
                         break;
-//                    case Input.Keys.P:
-//                        pausePressed = true;
-//                        break;
                 }
                 return true;
             }
@@ -66,9 +63,6 @@ public class Controller {
                     case Input.Keys.RIGHT:
                         rightPressed = false;
                         break;
-//                    case Input.Keys.P:
-//                        pausePressed = false;
-//                        break;
                 }
                 return true;
             }
@@ -164,7 +158,6 @@ public class Controller {
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
-        //table.add(pauseImg).size(pauseImg.getWidth(), pauseImg.getHeight());
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();
         table.add();table.add();table.add();table.add();table.add();table.add();

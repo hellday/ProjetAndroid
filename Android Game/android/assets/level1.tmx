@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="395">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="396">
  <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924" columns="33">
   <image source="tileset_gutter.png" width="594" height="504"/>
   <tile id="0">
@@ -227,6 +227,7 @@
  <objectgroup name="DeadZone">
   <object id="226" x="1260" y="429" width="64" height="48"/>
   <object id="371" x="3136" y="464" width="48" height="16"/>
+  <object id="395" x="2448" y="432" width="192" height="48"/>
  </objectgroup>
  <objectgroup name="Area">
   <object id="202" x="3775" y="293" width="16" height="122">
@@ -234,7 +235,6 @@
     <property name="endLevel" value=""/>
    </properties>
   </object>
-  <object id="319" x="2448" y="432" width="192" height="48"/>
   <object id="388" x="448" y="304" width="16" height="16">
    <properties>
     <property name="blueKnight" value=""/>

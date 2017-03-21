@@ -106,24 +106,16 @@ public class FireBall extends Sprite {
         setToDestroy();
         GameTest.manager.get("audio/sounds/kick.ogg", Sound.class).play();
 
-        if(enemy instanceof Turtle){
-
-            killed(body);
-            System.out.println("Fireball : Tortue");
-        }
-
         if(enemy instanceof Goomba){
 
-            killed(body);
+            enemy.onBladeHit();
             System.out.println("Fireball : Goomba");
-            Hud.addScore(200);
         }
 
         if(enemy instanceof Boss){
 
             enemy.onBladeHit();
             System.out.println("Fireball : Boss");
-            Hud.addScore(1000);
         }
 
     }

@@ -42,6 +42,7 @@ import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.ItemDef;
 import com.mygdx.game.Items.Mushroom;
 import com.mygdx.game.scenes.EndLevel;
+import com.mygdx.game.scenes.HealthBarBoss;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.scenes.Pause;
 import com.mygdx.game.sprites.CollisionWall.Area;
@@ -53,6 +54,8 @@ import com.mygdx.game.tools.B2WorldCreator;
 import com.mygdx.game.tools.WorldContactListener;
 
 import java.util.concurrent.LinkedBlockingQueue;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
 /**
  * Created by Terry on 09/11/2016.
@@ -66,6 +69,7 @@ public class PlayScreen implements Screen{
     private OrthographicCamera gamecam;
     public Viewport gamePort;
     private static Hud hud;
+    private HealthBarBoss hbb;
     private Pause pause;
     private EndLevel endLevel;
 
@@ -123,7 +127,7 @@ public class PlayScreen implements Screen{
     private static boolean canFireBoss, canPlayBoss;
 
     //Camera
-    private static boolean cameraChange, startEffect, moveCamera, cameraEndBoss;
+    private static boolean cameraChange, startEffect, moveCamera, cameraEndBoss, drawHealthBarBoss;
     private float startX, startY;
 
     private static Fixture fixtureStartBoss, fixtureEndBoss;
@@ -157,6 +161,9 @@ public class PlayScreen implements Screen{
 
         //Création du HUD (scores,timers...)
         hud = new Hud(game.batch);
+
+        //Création healthbar du boss
+        hbb = new HealthBarBoss(game.batch);
 
         //Création de l'écran de Pause
         pause = new Pause();
@@ -243,6 +250,8 @@ public class PlayScreen implements Screen{
 
         //End Boss Wall
         endBossWall = new Area(this, new RectangleMapObject());
+        drawHealthBarBoss = false;
+
     }
 
     public void spawnItem(ItemDef idef){
@@ -421,8 +430,18 @@ public class PlayScreen implements Screen{
                 }else enemy.velocity.x = 0;
 
                 if(((Boss) enemy).isDead()){
-                    cameraEndBoss = true;
-                    cameraChange = false;
+                    canPlay = false;
+                    Timer.schedule(new Timer.Task(){
+                        @Override
+                        public void run() {
+                            cameraEndBoss = true;
+                            cameraChange = false;
+                            canPlay = true;
+                        }
+                    }, 4);
+
+
+
                 }
             }
         }
@@ -524,6 +543,7 @@ public class PlayScreen implements Screen{
     @Override
     /** Affiche/dessine les informations à l'écran */
     public void render(float delta) {
+
         if(paused){
 //            Gdx.gl.glClearColor(0, 0, 0, 1);
 //            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -586,6 +606,9 @@ public class PlayScreen implements Screen{
                     endBossWall.setCategoryFilterFixture(GameTest.DESTROYED_BIT, fixtureEndBoss);
                     endBossWall.drawEndBossWall();
 
+                    //On autorise la suppression de la barre de vie
+                    drawHealthBarBoss = false;
+
                 }else if(enemy.isSetToDestroy()){
                     System.out.println("setToDestroy Effect");
                     ParticleEffectPool.PooledEffect effect = pool.obtain();
@@ -616,6 +639,12 @@ public class PlayScreen implements Screen{
             game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
             hud.stage.draw();
 
+            //HealthBarBoss
+            if(drawHealthBarBoss) {
+                //game.batch.setProjectionMatrix(gamecam.combined);
+                hbb.draw();
+            }
+
             //Controller
             controller.draw();
 
@@ -624,6 +653,8 @@ public class PlayScreen implements Screen{
                 game.setScreen(new GameOverScreen(game, usernameSession, level));
                 dispose();
             }
+
+
         }
 
     }
@@ -736,6 +767,7 @@ public class PlayScreen implements Screen{
                 @Override
                 public void run() {
                     moveCamera = false;
+                    drawHealthBarBoss = true;
                 }
             }, 1.55f);
 

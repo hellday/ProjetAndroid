@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -25,6 +26,8 @@ import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.scenes.Hud;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+
 /**
  * Created by Terry on 23/02/2017.
  */
@@ -33,7 +36,7 @@ public class EndLevelScreen implements Screen {
     private Viewport viewport;
     private Stage stage;
     private OrthographicCamera gamecam;
-    //private SpriteBatch batch;
+    private ShapeRenderer shapeRenderer;
 
     protected GameTest game;
     private String usernameSession;
@@ -58,6 +61,8 @@ public class EndLevelScreen implements Screen {
 
         DataBaseTest db = new DataBaseTest();
         db.createDatabase();
+        shapeRenderer = new ShapeRenderer();
+
 
         atlas = new TextureAtlas("skin/uiskin.atlas");
         skin = new Skin(Gdx.files.internal("skin/uiskin.json"), atlas);
@@ -75,6 +80,8 @@ public class EndLevelScreen implements Screen {
         oldScore = db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level"+level);
         System.out.println("Ancien score : " + oldScore);
         newScore = hud.getScore();
+
+        shapeRenderer.setProjectionMatrix(gamecam.combined);
 
 
 
@@ -102,7 +109,7 @@ public class EndLevelScreen implements Screen {
         playButton = new TextButton("Rejouer", skin);
         playButton.setWidth(100);
         playButton.setHeight(25);
-        playButton.setPosition(100, 0);
+        playButton.setPosition(100, 10);
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -115,7 +122,7 @@ public class EndLevelScreen implements Screen {
             nextButton = new TextButton("Suivant", skin);
             nextButton.setWidth(100);
             nextButton.setHeight(25);
-            nextButton.setPosition(200, 0);
+            nextButton.setPosition(200, 10);
             nextButton.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
@@ -124,8 +131,7 @@ public class EndLevelScreen implements Screen {
                 }
             });
         }
-
-        table.add(endLabel).expandX();
+        table.add(endLabel).expandX().padTop(25f);
         table.row();
         table.add(scoreLabel).expandX().padTop(10f);
         table.row();
@@ -145,23 +151,25 @@ public class EndLevelScreen implements Screen {
 
     @Override
     public void show() {
+        //Fade In
+        stage.getRoot().getColor().a = 0;
+        stage.getRoot().addAction(fadeIn(0.5f));
 
     }
 
     @Override
     public void render(float delta) {
-//        if(Gdx.input.justTouched()){
-//            game.setScreen(new PlayScreen(game, usernameSession));
-//            dispose();
-//        }
         Gdx.gl.glClearColor(0, 0 ,0 ,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.getBatch().begin();
-        stage.getBatch().disableBlending();
         stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
-        stage.getBatch().enableBlending();
         stage.getBatch().end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.WHITE);
+        shapeRenderer.rect(125, 100, 400, 225);
+        shapeRenderer.end();
 
         stage.act();
         stage.draw();

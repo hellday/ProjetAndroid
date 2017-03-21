@@ -122,10 +122,6 @@ public class MainMenuScreen implements Screen {
         testImageButton.getStyle().imageDown = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("switch_on.png"))));
 
 
-        //Labels
-       /*title = new Label("BILLY", skin);
-        title.setFontScale(2);*/
-
         //Add listeners to buttons
         playButton.addListener(new ClickListener() {
             @Override
@@ -245,9 +241,6 @@ public class MainMenuScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-
-
 
         stage.getBatch().begin();
         stage.getBatch().disableBlending();

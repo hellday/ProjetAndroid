@@ -11,12 +11,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
+import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -28,6 +30,8 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.GameTest;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
 
 /**
@@ -54,6 +58,8 @@ public class ScoreScreen implements Screen {
 
     public DataBaseTest db;
 
+    private ShapeRenderer shapeRenderer;
+
     public ScoreScreen(GameTest pgame, String user)
     {
         this.game = pgame;
@@ -75,6 +81,8 @@ public class ScoreScreen implements Screen {
         //Database
         db = new DataBaseTest();
 
+        shapeRenderer = new ShapeRenderer();
+
         //Stage should control input:
         Gdx.input.setInputProcessor(stage);
 
@@ -83,12 +91,15 @@ public class ScoreScreen implements Screen {
 
     @Override
     public void show() {
+        //Fade In
+        stage.getRoot().getColor().a = 0;
+        stage.getRoot().addAction(fadeIn(0.5f));
 
         //Image
         arrow = new Texture(Gdx.files.internal("img/arrow.png"));
         arr = new Image(arrow);
         arr.setScale(0.15f, 0.15f);
-        arr.setPosition(180, 85);
+        arr.setPosition(180, 60);
 
 
         db.createDatabase();
@@ -127,10 +138,7 @@ public class ScoreScreen implements Screen {
         mainTable.add(returnButton).width(100).height(25);
         mainTable.add(title).expandX();
 
-
         testTable.add(arr).width(50).height(50);
-
-        int test = db.returnLevelScore(db.getIdFromNameUser(usernameSession), "level1");
 
         //List
         list = new List<String>(skin);
@@ -142,9 +150,9 @@ public class ScoreScreen implements Screen {
 
         //Scrollpane
         scrollpane = new ScrollPane(list);
-        scrollpane.setPosition(15, 0);
+        scrollpane.setPosition(15, -25);
         scrollpane2 = new ScrollPane(list2);
-        scrollpane2.setPosition(240, -30);
+        scrollpane2.setPosition(240, -55);
 
         /// adding background image
         background = new Texture("img/background.png");
@@ -157,7 +165,6 @@ public class ScoreScreen implements Screen {
         stage.addActor(scrollpane2);
         stage.addActor(arr);
 
-
     }
 
     @Override
@@ -166,10 +173,16 @@ public class ScoreScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.getBatch().begin();
-        stage.getBatch().disableBlending();
         stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
-        stage.getBatch().enableBlending();
         stage.getBatch().end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.BLACK);
+        shapeRenderer.rect(0, 0, 250, 50);
+        shapeRenderer.setColor(Color.RED);
+        shapeRenderer.rect(5, 5, 240, 40);
+        shapeRenderer.end();
+
 
         stage.act();
         stage.draw();

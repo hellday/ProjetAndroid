@@ -41,6 +41,8 @@ import com.mygdx.game.GameTest;
 
 import java.util.ArrayList;
 
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
+
 /**
  * Created by Terry on 28/01/2017.
  */
@@ -107,9 +109,7 @@ public class LevelSelectScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stage.getBatch().begin();
-        stage.getBatch().disableBlending();
         stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
-        stage.getBatch().enableBlending();
         stage.getBatch().end();
 
         stage.act();
@@ -120,6 +120,9 @@ public class LevelSelectScreen implements Screen {
 
     @Override
     public void show() {
+        //Fade In
+        stage.getRoot().getColor().a = 0;
+        stage.getRoot().addAction(fadeIn(0.5f));
 
         //Database
         db.createDatabase();
@@ -199,7 +202,7 @@ public class LevelSelectScreen implements Screen {
         playButton = new TextButton("Jouer", skin);
         playButton.setWidth(100);
         playButton.setHeight(25);
-        playButton.setPosition(150, 0);
+        playButton.setPosition(150, 5);
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -213,7 +216,7 @@ public class LevelSelectScreen implements Screen {
         title.setPosition(150, 180);
 
         locked = new Label("Locked", skin);
-        locked.setPosition(170, 0);
+        locked.setPosition(170, 5);
         locked.setVisible(false);
 
         //Add buttons to table
