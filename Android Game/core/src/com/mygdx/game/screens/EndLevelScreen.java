@@ -81,7 +81,7 @@ public class EndLevelScreen implements Screen {
         System.out.println("Ancien score : " + oldScore);
         newScore = hud.getScore();
 
-        shapeRenderer.setProjectionMatrix(gamecam.combined);
+        //shapeRenderer.setProjectionMatrix(gamecam.combined);
 
 
 
@@ -166,9 +166,10 @@ public class EndLevelScreen implements Screen {
         stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
         stage.getBatch().end();
 
+        shapeRenderer.setProjectionMatrix(game.batch.getProjectionMatrix());
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(125, 100, 400, 225);
+        shapeRenderer.rect(100, 40, 200, 100);
         shapeRenderer.end();
 
         stage.act();

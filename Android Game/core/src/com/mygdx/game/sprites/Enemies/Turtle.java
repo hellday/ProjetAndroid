@@ -72,19 +72,6 @@ public class Turtle extends  Enemy {
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
 
-        //Create the Head here:
-        PolygonShape head = new PolygonShape();
-        Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-5, 8).scl(1 / GameTest.PPM);
-        vertice[1] = new Vector2(5, 8).scl(1 / GameTest.PPM);
-        vertice[2] = new Vector2(-3, 3).scl(1 / GameTest.PPM);
-        vertice[3] = new Vector2(3, 3).scl(1 / GameTest.PPM);
-        head.set(vertice);
-
-        fdef.shape = head;
-        fdef.restitution = 0.7f; //Hauteur de saut après avoir toucher la tête
-        fdef.filter.categoryBits = GameTest.ENEMY_HEAD_BIT;
-        b2body.createFixture(fdef).setUserData(this);
     }
 
     public TextureRegion getFrame(float dt){

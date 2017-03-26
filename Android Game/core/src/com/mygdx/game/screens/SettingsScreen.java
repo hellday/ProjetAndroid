@@ -3,6 +3,7 @@ package com.mygdx.game.screens;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -139,16 +140,15 @@ public class SettingsScreen implements Screen {
                 if(vibreurIsOn){
                     //Vibreur désactivé
                     onOffButton.setText("Off");
-                    onOffButton.setColor(Color.RED);
                     vibreurIsOn = false;
                     db.updateData("settings", "vibreur", "off", "idUser", db.getIdFromNameUser(usernameSession));
                 }else {
                     //Vibreur activé
                     onOffButton.setText("On");
-                    onOffButton.setColor(Color.GREEN);
                     vibreurIsOn = true;
                     db.updateData("settings", "vibreur", "on", "idUser", db.getIdFromNameUser(usernameSession));
                 }
+                GameTest.manager.get("audio/sounds/switch.ogg", Sound.class).play();
             }
         });
 

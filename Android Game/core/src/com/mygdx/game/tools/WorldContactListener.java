@@ -35,12 +35,6 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((InteractiveTileObject) fixA.getUserData()).onHeadHit((Mario) fixB.getUserData());
                 break;
-            case GameTest.ENEMY_HEAD_BIT | GameTest.MARIO_FOOT_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.ENEMY_HEAD_BIT)
-                    ((Enemy)fixA.getUserData()).hitOnHead((Mario) fixB.getUserData());
-                else
-                    ((Enemy)fixB.getUserData()).hitOnHead((Mario) fixA.getUserData());
-                break;
             case GameTest.ENEMY_BIT | GameTest.OBJECT_BIT:
                 if(fixA.getFilterData().categoryBits == GameTest.ENEMY_BIT)
                     ((Enemy)fixA.getUserData()).reverseVelocity(true, false);
@@ -100,8 +94,8 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((FireBall)fixB.getUserData()).onFireBallHit((Enemy) fixA.getUserData(), fixA.getBody());
                 break;
-            case GameTest.FIREBALL_BIT | GameTest.MARIO_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.FIREBALL_BIT)
+            case GameTest.FIREBOSS_BIT | GameTest.MARIO_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.FIREBOSS_BIT)
                     ((FireBoss)fixA.getUserData()).onFireBossHit((Mario) fixB.getUserData(), fixB.getBody());
                 else
                     ((FireBoss)fixB.getUserData()).onFireBossHit((Mario) fixA.getUserData(), fixA.getBody());

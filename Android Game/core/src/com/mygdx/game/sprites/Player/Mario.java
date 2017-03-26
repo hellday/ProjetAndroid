@@ -217,11 +217,10 @@ public class Mario extends Sprite {
                 GameTest.BRICK_BIT |
                 GameTest.ENEMY_BIT |
                 GameTest.OBJECT_BIT |
-                GameTest.ENEMY_HEAD_BIT |
                 GameTest.ITEM_BIT |
                 GameTest.DEAD_ZONE_BIT |
                 GameTest.AREA_BIT |
-                GameTest.FIREBALL_BIT;
+                GameTest.FIREBOSS_BIT;
 
         fdef.shape = shape;
         fdef.friction = 0;
@@ -519,11 +518,10 @@ public class Mario extends Sprite {
                 GameTest.BRICK_BIT |
                 GameTest.ENEMY_BIT |
                 GameTest.OBJECT_BIT |
-                GameTest.ENEMY_HEAD_BIT |
                 GameTest.ITEM_BIT |
                 GameTest.DEAD_ZONE_BIT |
                 GameTest.AREA_BIT|
-                GameTest.FIREBALL_BIT;
+                GameTest.FIREBOSS_BIT;
 
         filter.categoryBits = filterBit;
         mainFixture.setFilterData(filter);
@@ -571,7 +569,7 @@ public class Mario extends Sprite {
     public void die(){
 
                 //On stop la musique
-                GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
+                GameTest.manager.get("audio/music/music.mp3", Music.class).stop();
                 //On lance le son de la mort du Hero
                 GameTest.manager.get("audio/sounds/dead_hero.wav", Sound.class).play(0.2f);
                 marioIsDead = true;

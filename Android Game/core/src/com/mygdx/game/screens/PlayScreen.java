@@ -90,8 +90,10 @@ public class PlayScreen implements Screen{
     //Sprites
     private static Mario player;
 
-
+    //Musique
     private Music music;
+    private float MUSIC_FADE_STEP = 0.01f;
+    private float fadeRate = 0.1f;
 
     private Array<Item> items;
     private LinkedBlockingQueue<ItemDef> itemsToSpawn;
@@ -196,9 +198,10 @@ public class PlayScreen implements Screen{
         world.setContactListener(wcl);
 
         //Musique utilisation
-        music = GameTest.manager.get("audio/music/mario_music.ogg", Music.class);
+        music = GameTest.manager.get("audio/music/music.mp3", Music.class);
+        music.setVolume(0.5f);
         music.setLooping(true);
-        //music.play();
+        music.play();
 
         //Items
         items = new Array<Item>();
@@ -331,15 +334,15 @@ public class PlayScreen implements Screen{
                     }
 
                     //Controller
-                    if (controller.isUpPressed() && controller.isDownPressed()) {
-                        if (player.getBuff() == Mario.Color.GREY) {
-                            player.setBuff("red");
-                        } else if (player.getBuff() == Mario.Color.RED) {
-                            player.setBuff("blue");
-                        } else if (player.getBuff() == Mario.Color.BLUE) {
-                            player.setBuff("grey");
-                        }
-                    }
+//                    if (controller.isUpPressed() && controller.isDownPressed()) {
+//                        if (player.getBuff() == Mario.Color.GREY) {
+//                            player.setBuff("red");
+//                        } else if (player.getBuff() == Mario.Color.RED) {
+//                            player.setBuff("blue");
+//                        } else if (player.getBuff() == Mario.Color.BLUE) {
+//                            player.setBuff("grey");
+//                        }
+//                    }
 
                     if (controller.isRightPressed())
                         player.b2body.setLinearVelocity(new Vector2(1, player.b2body.getLinearVelocity().y));
@@ -382,6 +385,8 @@ public class PlayScreen implements Screen{
                     }
 
                     if (controller.isPausePressed()) {
+                        GameTest.manager.get("audio/sounds/pause.wav", Sound.class).play();
+                        music.pause();
                         paused = true;
                         controller.setPausePressed(false);
                     }
@@ -503,8 +508,20 @@ public class PlayScreen implements Screen{
             controller.dispose();
             hud.dispose();
 
-            //GameTest.manager.get("audio/music/mario_music.ogg", Music.class).stop();
-            //GameTest.manager.get("audio/music/stage_clear.ogg", Music.class).play();
+            Timer.schedule(new Timer.Task() {
+                @Override
+                public void run() {
+                    if (music.getVolume() >= MUSIC_FADE_STEP)
+                        music.setVolume(music.getVolume()-MUSIC_FADE_STEP);
+                    else {
+                        music.stop();
+                        this.cancel();
+                    }
+                }
+            }, 0f, fadeRate);
+
+            //GameTest.manager.get("audio/music/music.mp3", Music.class).stop();
+            GameTest.manager.get("audio/music/end_level.wav", Music.class).play();
 
             float delay = 4; // seconds
 
@@ -525,6 +542,7 @@ public class PlayScreen implements Screen{
         Gdx.input.setInputProcessor(pause.stage);
 
         if(pause.isResume()){
+            music.play();
             Gdx.input.setInputProcessor(controller.stage);
             player.b2body.setLinearVelocity(new Vector2(0, player.b2body.getLinearVelocity().y));
             paused = false;
@@ -532,6 +550,7 @@ public class PlayScreen implements Screen{
         }
 
         if(pause.isQuit()){
+            music.stop();
             game.setScreen(new LevelSelectScreen(game, usernameSession));
             pause.setQuit(false);
         }
@@ -801,6 +820,7 @@ public class PlayScreen implements Screen{
     public static void setColorKnight(String color){
         player.setBuff(color);
         hud.addScore(300);
+        GameTest.manager.get("audio/sounds/power_knight.ogg", Sound.class).play();
     }
 
 

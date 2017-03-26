@@ -7,25 +7,20 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.List;
-import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Database.DataBaseTest;
@@ -58,8 +53,6 @@ public class ScoreScreen implements Screen {
 
     public DataBaseTest db;
 
-    private ShapeRenderer shapeRenderer;
-
     public ScoreScreen(GameTest pgame, String user)
     {
         this.game = pgame;
@@ -80,8 +73,6 @@ public class ScoreScreen implements Screen {
 
         //Database
         db = new DataBaseTest();
-
-        shapeRenderer = new ShapeRenderer();
 
         //Stage should control input:
         Gdx.input.setInputProcessor(stage);
@@ -175,14 +166,6 @@ public class ScoreScreen implements Screen {
         stage.getBatch().begin();
         stage.getBatch().draw(background,0,0,GameTest.V_WIDTH,GameTest.V_HEIGHT);
         stage.getBatch().end();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.BLACK);
-        shapeRenderer.rect(0, 0, 250, 50);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(5, 5, 240, 40);
-        shapeRenderer.end();
-
 
         stage.act();
         stage.draw();

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="468">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="240" height="30" tilewidth="16" tileheight="16" nextobjectid="469">
  <tileset firstgid="1" name="tileset_gutter" tilewidth="16" tileheight="16" spacing="2" margin="1" tilecount="924" columns="33">
   <image source="tileset_gutter.png" width="594" height="504"/>
   <tile id="0">
@@ -186,9 +186,8 @@
   <object id="276" x="352" y="272"/>
   <object id="289" x="560" y="256"/>
   <object id="290" x="752" y="256"/>
-  <object id="320" x="1312" y="48"/>
   <object id="327" x="1568" y="368"/>
-  <object id="328" x="1600" y="368"/>
+  <object id="328" x="1655" y="367"/>
   <object id="362" x="2295" y="301"/>
   <object id="405" x="2528" y="224"/>
   <object id="416" x="2936" y="347"/>
@@ -208,24 +207,21 @@
   <object id="404" x="2560" y="208" width="16" height="32"/>
   <object id="417" x="2880" y="336" width="16" height="32"/>
   <object id="418" x="2976" y="336" width="16" height="32"/>
-  <object id="435" x="1264" y="32" width="16" height="32"/>
-  <object id="436" x="1328" y="32" width="16" height="32"/>
   <object id="445" x="3024" y="192" width="16" height="32"/>
   <object id="446" x="3264" y="192" width="16" height="32"/>
   <object id="447" x="3456" y="192" width="16" height="32"/>
  </objectgroup>
  <objectgroup name="DeadZone">
   <object id="364" x="1856" y="384" width="48" height="32"/>
-  <object id="365" x="1952" y="384" width="48" height="32"/>
   <object id="366" x="1200" y="432" width="64" height="48"/>
   <object id="367" x="608" y="304" width="64" height="48"/>
   <object id="368" x="960" y="240" width="64" height="48"/>
   <object id="414" x="2640" y="467" width="591" height="13"/>
   <object id="456" x="2080" y="400" width="48" height="16"/>
+  <object id="468" x="1952" y="384" width="48" height="32"/>
  </objectgroup>
  <objectgroup name="Area">
   <object id="297" x="960" y="240" width="64" height="48"/>
-  <object id="345" x="1952" y="368" width="48" height="48"/>
   <object id="363" x="3781" y="159" width="11" height="64">
    <properties>
     <property name="endLevel" value=""/>

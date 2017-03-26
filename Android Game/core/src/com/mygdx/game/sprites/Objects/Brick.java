@@ -21,12 +21,12 @@ public class Brick extends InteractiveTileObject {
 
     @Override
     public void onHeadHit(com.mygdx.game.sprites.Player.Mario mario) { //quand le joueur touche une brique avec sa tête
-        if(mario.isBig()) {
+
             setCategoryFilter(GameTest.DESTROYED_BIT);
             getCell().setTile(null);
             Hud.addScore(100);
             GameTest.manager.get("audio/sounds/breakblock.wav", Sound.class).play();
-        }else GameTest.manager.get("audio/sounds/bump.wav", Sound.class).play();
+            GameTest.manager.get("audio/sounds/bump.wav", Sound.class).play();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.mygdx.game.scenes;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -60,6 +61,7 @@ public class Pause{
         resumeButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameTest.manager.get("audio/sounds/pause.wav", Sound.class).play();
                 System.out.println("Continuer");
                 resume = true;
 
@@ -67,19 +69,6 @@ public class Pause{
         });
 
 
-//        resumeButton.addListener(new InputListener() {
-//
-//            @Override
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                resume = true;
-//                return true;
-//            }
-//
-//            @Override
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                resume =  false;
-//            }
-//        });
 
         quitButton = new TextButton("Quitter", skin);
         quitButton.setWidth(100);
@@ -88,6 +77,7 @@ public class Pause{
         quitButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                GameTest.manager.get("audio/sounds/pause.wav", Sound.class).play();
                 System.out.println("Quitter");
                 quit = true;
 

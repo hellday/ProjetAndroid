@@ -24,7 +24,7 @@ public class GameTest extends com.badlogic.gdx.Game {
 	public static final short DESTROYED_BIT = 16;
 	public static final short OBJECT_BIT = 32;
 	public static final short ENEMY_BIT = 64;
-	public static final short ENEMY_HEAD_BIT = 128;
+	public static final short FIREBOSS_BIT = 128;
 	public static final short ITEM_BIT = 256;
 	public static final short MARIO_HEAD_BIT = 512;
 	public static final short FIREBALL_BIT = 1024;
@@ -44,8 +44,9 @@ public class GameTest extends com.badlogic.gdx.Game {
 	public void create () {
 		batch = new SpriteBatch();
 		manager = new AssetManager();
-		manager.load("audio/music/mario_music.ogg", Music.class);
-		manager.load("audio/music/stage_clear.ogg", Music.class);
+		manager.load("audio/music/music.mp3", Music.class);
+		manager.load("audio/music/end_level.wav", Music.class);
+		manager.load("audio/sounds/switch.ogg", Sound.class);
 		manager.load("audio/sounds/coin.wav", Sound.class);
 		manager.load("audio/sounds/bump.wav", Sound.class);
 		manager.load("audio/sounds/breakblock.wav", Sound.class);
@@ -53,7 +54,6 @@ public class GameTest extends com.badlogic.gdx.Game {
 		manager.load("audio/sounds/powerup.wav", Sound.class);
 		manager.load("audio/sounds/powerdown.wav", Sound.class);
 		manager.load("audio/sounds/stomp.wav", Sound.class);
-		manager.load("audio/sounds/mariodie.wav", Sound.class);
 		manager.load("audio/sounds/fireball.ogg", Sound.class);
 		manager.load("audio/sounds/kick.ogg", Sound.class);
 		manager.load("audio/sounds/jump_small.wav", Sound.class);
@@ -62,6 +62,8 @@ public class GameTest extends com.badlogic.gdx.Game {
 		manager.load("audio/sounds/dead_spectre.wav", Sound.class);
 		manager.load("audio/sounds/dead_hero.wav", Sound.class);
 		manager.load("audio/sounds/hit.wav", Sound.class);
+		manager.load("audio/sounds/pause.wav", Sound.class);
+		manager.load("audio/sounds/power_knight.ogg", Sound.class);
 		manager.finishLoading();
 
 		DataBaseTest db = new DataBaseTest();

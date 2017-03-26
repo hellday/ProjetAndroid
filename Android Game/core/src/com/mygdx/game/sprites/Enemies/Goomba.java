@@ -147,20 +147,6 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
 
-        //Création de la tête:
-        PolygonShape head = new PolygonShape();
-        Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-4, 9).scl(1 / GameTest.PPM);
-        vertice[1] = new Vector2(4, 9).scl(1 / GameTest.PPM);
-        vertice[2] = new Vector2(-4, 5).scl(1 / GameTest.PPM);
-        vertice[3] = new Vector2(4, 4).scl(1 / GameTest.PPM);
-        head.set(vertice);
-
-        fdef.shape = head;
-        fdef.restitution = 0.5f; //Hauteur de saut du joueur après avoir toucher la tête
-        fdef.filter.categoryBits = GameTest.ENEMY_HEAD_BIT;
-        b2body.createFixture(fdef).setUserData(this);
-
     }
 
     public void draw(Batch batch){ //Disparition du Goomba
@@ -204,7 +190,7 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
     }
 
     public void callRemove(){
-        float delay = 1; // seconds
+        float delay = 0; // seconds
         Timer.schedule(new Timer.Task(){
             @Override
             public void run() {
