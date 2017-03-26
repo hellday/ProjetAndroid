@@ -34,6 +34,8 @@ import com.mygdx.game.GameTest;
 
 import java.util.ArrayList;
 
+import sun.awt.im.InputMethodManager;
+
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
 /**
@@ -209,6 +211,7 @@ public class MainMenuScreen implements Screen {
                                     usernameSession = newUsername;
                                     mainTable.setVisible(true);
                                     db.closeDatabase();
+                                    Gdx.input.setOnscreenKeyboardVisible(false);
                                 }else{
                                     ((Game) Gdx.app.getApplicationListener()).setScreen(new MainMenuScreen(game, null));
                                 }
