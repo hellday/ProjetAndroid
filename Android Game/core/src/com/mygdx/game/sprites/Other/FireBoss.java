@@ -62,7 +62,7 @@ public class FireBoss extends Sprite {
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
         shape.setRadius(3 / GameTest.PPM);
-        fdef.filter.categoryBits = GameTest.FIREBALL_BIT;
+        fdef.filter.categoryBits = GameTest.FIREBOSS_BIT;
         fdef.filter.maskBits = GameTest.GROUND_BIT |
                 GameTest.COIN_BIT |
                 GameTest.BRICK_BIT |

@@ -20,7 +20,7 @@ public class DataBaseTest {
     public static final String TABLE_SETTINGS = "settings";
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_ID_USER = "idUser";
-    public static final String COLUMN_VOLUME = "volume";
+    public static final String COLUMN_MUSIC = "music";
     public static final String COLUMN_VIBREUR = "vibreur";
 
     public static final String TABLE_SCORES = "scores";
@@ -45,7 +45,7 @@ public class DataBaseTest {
             + TABLE_SETTINGS + "("
             + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_ID_USER + " integer not null, "
-            + COLUMN_VOLUME + " integer not null, "
+            + COLUMN_MUSIC + " varchar not null, "
             + COLUMN_VIBREUR + " varchar not null);";
     private static final String DATABASE_CREATE_2 = "create table if not exists "
             + TABLE_SCORES + "("
@@ -103,7 +103,7 @@ public class DataBaseTest {
 
     public void newUserData(String username){
         try {
-            dbHandler.execSQL("INSERT INTO settings ('idUser', 'volume', 'vibreur') VALUES (" + getIdFromNameUser(username) + ", 1, 'on')");
+            dbHandler.execSQL("INSERT INTO settings ('idUser', 'music', 'vibreur') VALUES (" + getIdFromNameUser(username) + ", 1, 'on')");
 
             dbHandler.execSQL("INSERT INTO scores ('idUser', 'nameLevel', 'maxScore', 'finished') VALUES (" + getIdFromNameUser(username) + ", 'level1', 0, 'false')");
             dbHandler.execSQL("INSERT INTO scores ('idUser', 'nameLevel', 'maxScore', 'finished') VALUES (" + getIdFromNameUser(username) + ", 'level2', 0, 'false')");
@@ -185,9 +185,15 @@ public class DataBaseTest {
         }
 
         if(cursor != null) {
-            if(table.equalsIgnoreCase("settings")) {
+            if(table.equalsIgnoreCase("settings") && column.equalsIgnoreCase("vibreur")) {
                 while (cursor.next()) {
                     test = String.valueOf(cursor.getString(3));
+                }
+            }
+
+            if(table.equalsIgnoreCase("settings") && column.equalsIgnoreCase("music")) {
+                while (cursor.next()) {
+                    test = String.valueOf(cursor.getString(2));
                 }
             }
 

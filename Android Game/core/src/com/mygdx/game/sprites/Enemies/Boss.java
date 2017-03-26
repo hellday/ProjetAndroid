@@ -218,6 +218,7 @@ public class Boss extends Enemy {
     public void onBladeHit(){
         health--;
         System.out.println("Vie restante : " + health);
+        GameTest.manager.get("audio/sounds/dead_spectre.wav", Sound.class).play(0.2f);
 
         //On retire de la vie sur la HealthBar
         HealthBarBoss.setHealth();
@@ -226,7 +227,7 @@ public class Boss extends Enemy {
         if(health == 0) {
             setToDestroy = true;
             currentState = State.DEAD;
-            GameTest.manager.get("audio/sounds/dead_spectre.wav", Sound.class).play(0.2f);
+            GameTest.manager.get("audio/sounds/dead_spectre.wav", Sound.class).play(0.5f);
             Hud.addScore(1000);
             HealthBarBoss.delete();
         }else currentState = State.HIT;

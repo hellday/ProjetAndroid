@@ -36,6 +36,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Controller;
+import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.Effects.Particles;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.Items.Item;
@@ -135,6 +136,9 @@ public class PlayScreen implements Screen{
     private static Fixture fixtureStartBoss, fixtureEndBoss;
     private Area endBossWall;
 
+    //Database
+    DataBaseTest db;
+
 
 
     /** Constructeur de l'écran */
@@ -146,6 +150,9 @@ public class PlayScreen implements Screen{
         this.usernameSession = user;
         this.level = lvl;
 
+        //Database
+        db = new DataBaseTest();
+        db.createDatabase();
 
         //Création d'une caméra qui va suivre notre personnage dans notre monde
         gamecam = new OrthographicCamera();
@@ -201,7 +208,10 @@ public class PlayScreen implements Screen{
         music = GameTest.manager.get("audio/music/music.mp3", Music.class);
         music.setVolume(0.5f);
         music.setLooping(true);
-        music.play();
+
+        if(db.returnData("settings", "music", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si la musique est activé dans les paramètres
+            music.play();
+        }
 
         //Items
         items = new Array<Item>();
@@ -542,7 +552,9 @@ public class PlayScreen implements Screen{
         Gdx.input.setInputProcessor(pause.stage);
 
         if(pause.isResume()){
-            music.play();
+            if(db.returnData("settings", "music", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si la musique est activé dans les paramètres
+                music.play();
+            }
             Gdx.input.setInputProcessor(controller.stage);
             player.b2body.setLinearVelocity(new Vector2(0, player.b2body.getLinearVelocity().y));
             paused = false;

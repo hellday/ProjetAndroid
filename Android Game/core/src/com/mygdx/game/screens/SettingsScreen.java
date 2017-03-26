@@ -42,8 +42,8 @@ public class SettingsScreen implements Screen {
     protected Skin skin;
     protected GameTest game;
 
-    private boolean vibreurIsOn;
-    private TextButton onOffButton;
+    private boolean vibreurIsOn, musicIsOn;
+    private TextButton onOffVibrateButton, onOffMusicButton;
     private String usernameSession;
     private Texture background;
 
@@ -95,6 +95,11 @@ public class SettingsScreen implements Screen {
             vibreurIsOn = true;
         }else vibreurIsOn = false;
 
+        //Music
+        if(db.returnData("settings", "music", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) {
+            musicIsOn = true;
+        }else musicIsOn = false;
+
         //Create Table
         Table mainTable = new Table();
         //Set table to fill stage
@@ -112,10 +117,16 @@ public class SettingsScreen implements Screen {
 
 
         if(vibreurIsOn) {
-            onOffButton = new TextButton("On", skin);
+            onOffVibrateButton = new TextButton("On", skin);
+        }else {
+            onOffVibrateButton = new TextButton("Off", skin);
+        }
+
+        if(musicIsOn) {
+            onOffMusicButton = new TextButton("On", skin);
             //onOffButton.setColor(Color.GREEN);
         }else {
-            onOffButton = new TextButton("Off", skin);
+            onOffMusicButton = new TextButton("Off", skin);
             //onOffButton.setColor(Color.RED);
         }
 
@@ -134,19 +145,37 @@ public class SettingsScreen implements Screen {
             }
         });
 
-        onOffButton.addListener(new ClickListener(){
+        onOffVibrateButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(vibreurIsOn){
                     //Vibreur désactivé
-                    onOffButton.setText("Off");
+                    onOffVibrateButton.setText("Off");
                     vibreurIsOn = false;
                     db.updateData("settings", "vibreur", "off", "idUser", db.getIdFromNameUser(usernameSession));
                 }else {
                     //Vibreur activé
-                    onOffButton.setText("On");
+                    onOffVibrateButton.setText("On");
                     vibreurIsOn = true;
                     db.updateData("settings", "vibreur", "on", "idUser", db.getIdFromNameUser(usernameSession));
+                }
+                GameTest.manager.get("audio/sounds/switch.ogg", Sound.class).play();
+            }
+        });
+
+        onOffMusicButton.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                if(musicIsOn){
+                    //Musique désactivé
+                    onOffMusicButton.setText("Off");
+                    musicIsOn = false;
+                    db.updateData("settings", "music", "off", "idUser", db.getIdFromNameUser(usernameSession));
+                }else {
+                    //Musique activé
+                    onOffMusicButton.setText("On");
+                    musicIsOn = true;
+                    db.updateData("settings", "music", "on", "idUser", db.getIdFromNameUser(usernameSession));
                 }
                 GameTest.manager.get("audio/sounds/switch.ogg", Sound.class).play();
             }
@@ -157,16 +186,17 @@ public class SettingsScreen implements Screen {
         title = new Label("Parametres", skin);
         title.setFontScale(2);
         vibreur = new Label("Vibreur :", skin);
-        volume = new Label("Volume :", skin);
+        volume = new Label("Musique :", skin);
 
         //Add buttons to table
         mainTable.add(returnButton).width(100).height(25);
         mainTable.add(title).expandX();
         mainTable.row();
         mainTable.add(volume).expandX().padTop(25);
+        mainTable.add(onOffMusicButton).width(100).height(25).padTop(25);
         mainTable.row();
         mainTable.add(vibreur).expandX().padTop(25);
-        mainTable.add(onOffButton).width(100).height(25).padTop(25);
+        mainTable.add(onOffVibrateButton).width(100).height(25).padTop(25);
         mainTable.row();
 
 
