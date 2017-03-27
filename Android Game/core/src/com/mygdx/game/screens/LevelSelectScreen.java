@@ -104,6 +104,7 @@ public class LevelSelectScreen implements Screen {
 
     }
 
+    @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(.1f, .12f, .16f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -206,7 +207,7 @@ public class LevelSelectScreen implements Screen {
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                    ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, levelAmount));
+                    ((Game) Gdx.app.getApplicationListener()).setScreen(new TutorialScreen(game, usernameSession, levelAmount));
             }
         });
 

@@ -29,7 +29,7 @@ public class Hud  implements Disposable{
     public Stage stage;
     public Viewport viewport;
 
-    private Integer worldTimer;
+    private static Integer worldTimer;
     private float timeCount;
     private static Integer score;
     public static int heartcount;
@@ -48,7 +48,7 @@ public class Hud  implements Disposable{
 
     /** Informations au top de l'écran (score etc...), fondu avec le Playscreen **/
     public Hud(SpriteBatch sb){
-        worldTimer = 300;
+        worldTimer = 90;
         timeCount = 0;
         score = 0;
 
@@ -107,9 +107,11 @@ public class Hud  implements Disposable{
         timeCount += dt;
 
         if(timeCount >= 1){
-            worldTimer--;
-            countdownLabel.setText(String.format("%03d", worldTimer));
-            timeCount = 0;
+            if(worldTimer > 0) {
+                worldTimer--;
+                countdownLabel.setText(String.format("%03d", worldTimer));
+                timeCount = 0;
+            }
         }
     }
 
@@ -138,5 +140,9 @@ public class Hud  implements Disposable{
 
     public Integer getScore() {
         return score;
+    }
+
+    public static Integer getWorldTimer(){
+        return worldTimer;
     }
 }

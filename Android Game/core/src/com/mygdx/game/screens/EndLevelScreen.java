@@ -106,14 +106,14 @@ public class EndLevelScreen implements Screen {
             intScoreLabel.setColor(Color.BLACK);
         }
 
-        playButton = new TextButton("Rejouer", skin);
+        playButton = new TextButton("Quitter", skin);
         playButton.setWidth(100);
         playButton.setHeight(25);
         playButton.setPosition(100, 10);
         playButton.addListener(new ClickListener(){
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                ((Game) Gdx.app.getApplicationListener()).setScreen(new PlayScreen(game, usernameSession, level));
+                ((Game) Gdx.app.getApplicationListener()).setScreen(new LevelSelectScreen(game, usernameSession));
 
             }
         });

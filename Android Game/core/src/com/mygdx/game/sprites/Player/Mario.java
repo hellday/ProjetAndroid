@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.GameTest;
+import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Enemies.Turtle;
@@ -86,6 +87,8 @@ public class Mario extends Sprite {
 
     private Array<FireBall> fireballs;
 
+    private boolean isDead;
+
     public Mario(PlayScreen screen, String user){
         this.screen = screen;
         this.world = screen.getWorld();
@@ -121,6 +124,8 @@ public class Mario extends Sprite {
         //Database
         db = new DataBaseTest();
         db.createDatabase();
+
+        isDead = false;
     }
 
     public void update(float dt){
@@ -165,6 +170,10 @@ public class Mario extends Sprite {
             }
 
 
+        if(Hud.getWorldTimer() == 0 && !isDead){
+            die();
+            isDead = true;
+        }
 
 
     }

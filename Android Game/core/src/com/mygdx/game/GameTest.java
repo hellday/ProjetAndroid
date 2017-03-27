@@ -9,6 +9,7 @@ import com.mygdx.game.Database.DataBaseTest;
 import com.mygdx.game.Effects.Particles;
 import com.mygdx.game.screens.MainMenuScreen;
 import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.screens.TutorialScreen;
 
 public class GameTest extends com.badlogic.gdx.Game {
 	public static final int V_WIDTH = 400;
@@ -76,8 +77,8 @@ public class GameTest extends com.badlogic.gdx.Game {
 
 		setScreen(new MainMenuScreen(this, null));
 		//setScreen(new PlayScreen(this, "Terry", 3));
+		//setScreen(new TutorialScreen(this, "Terry", 3));
 
-		//setScreen(new Particles());
 	}
 
 	@Override

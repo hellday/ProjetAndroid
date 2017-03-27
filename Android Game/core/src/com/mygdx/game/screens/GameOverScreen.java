@@ -33,7 +33,7 @@ public class GameOverScreen implements Screen{
         this.level = lvl;
 
         viewport = new FitViewport(GameTest.V_WIDTH, GameTest.V_HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport, ((GameTest) game).batch);
+        stage = new Stage(viewport, game.batch);
 
         Label.LabelStyle font = new Label.LabelStyle(new BitmapFont(), Color.WHITE);
 

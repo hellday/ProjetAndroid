@@ -46,7 +46,7 @@ public class Goomba extends com.mygdx.game.sprites.Enemies.Enemy {
 
     public Goomba(PlayScreen screen, float x, float y) {
         super(screen, x, y);
-        velocity = new Vector2(-1, -2); //Vitesse de l'ennemi
+        velocity = new Vector2(1, -2); //Vitesse de l'ennemi
         frames = new Array<TextureRegion>();
 
         atlas = new TextureAtlas("sprites/ghost.pack");
