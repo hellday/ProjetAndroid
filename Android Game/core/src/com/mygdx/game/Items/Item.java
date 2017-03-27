@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 
 /**
  * Created by Terry on 11/11/2016.
@@ -32,7 +32,7 @@ public abstract class Item extends Sprite {
     }
 
     public abstract void defineItem();
-    public abstract void use(Mario mario);
+    public abstract void use(Player player);
 
     public void update(float dt){
         if(toDestroy && !destroyed){

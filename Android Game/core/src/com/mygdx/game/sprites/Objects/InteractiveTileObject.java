@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
+import com.mygdx.game.sprites.Player.Player;
 
 /**
  * Created by Terry on 10/11/2016.
@@ -54,8 +55,8 @@ public abstract class InteractiveTileObject {
         fixture = body.createFixture(fdef);
     }
 
-    public abstract void onHeadHit(com.mygdx.game.sprites.Player.Mario mario);
-    public abstract void areaEffect(com.mygdx.game.sprites.Player.Mario mario);
+    public abstract void onHeadHit(Player player);
+    public abstract void areaEffect(Player player);
 
 
     public void setCategoryFilter(short filterBit){

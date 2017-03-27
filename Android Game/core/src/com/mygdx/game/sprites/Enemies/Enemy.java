@@ -5,8 +5,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.World;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Other.FireBall;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 
 /**
  * Created by Terry on 10/11/2016.
@@ -28,7 +27,7 @@ public abstract class Enemy extends Sprite {
 
     protected abstract void defineEnemy();
     public abstract void update(float dt);
-    public abstract void hitOnHead(Mario mario);
+    public abstract void hitOnHead(Player player);
 
     public void reverseVelocity(boolean x, boolean y){
         if(x)

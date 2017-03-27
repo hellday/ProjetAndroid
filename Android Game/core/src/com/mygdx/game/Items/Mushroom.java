@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 
 /**
  * Created by Terry on 11/11/2016.
@@ -43,7 +43,7 @@ public class Mushroom extends  Item {
     }
 
     @Override
-    public void use(Mario mario) {
+    public void use(Player player) {
         destroy();
     }
 

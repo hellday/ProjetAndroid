@@ -1,16 +1,12 @@
 package com.mygdx.game.sprites.Enemies;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -20,8 +16,7 @@ import com.badlogic.gdx.utils.Timer;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Other.FireBall;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 import com.mygdx.game.tools.B2WorldCreator;
 
 /**
@@ -156,7 +151,7 @@ public class Ghost extends com.mygdx.game.sprites.Enemies.Enemy {
     }
 
     @Override
-    public void hitOnHead(Mario mario) {
+    public void hitOnHead(Player player) {
         setToDestroy = true;
         GameTest.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }

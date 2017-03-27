@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 
 /**
  * Created by Terry on 09/03/2017.
@@ -98,14 +98,14 @@ public class FireBoss extends Sprite {
         return destroyed;
     }
 
-    public void onFireBossHit(Mario player, Body body){
+    public void onFireBossHit(Player player, Body body){
 
         //Destruction de la boule de feu
         setToDestroy();
         GameTest.manager.get("audio/sounds/kick.ogg", Sound.class).play();
         System.out.println("HitBoss : Player");
 
-        if(player instanceof Mario){
+        if(player instanceof Player){
             player.hitBoss(this);
             System.out.println("HitBoss : Player");
         }

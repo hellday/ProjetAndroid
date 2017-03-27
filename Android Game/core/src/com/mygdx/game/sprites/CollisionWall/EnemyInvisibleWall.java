@@ -5,7 +5,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Objects.InteractiveTileObject;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 
 /**
  * Created by Terry on 11/11/2016.
@@ -24,12 +24,12 @@ public class EnemyInvisibleWall extends InteractiveTileObject {
     }
 
     @Override
-    public void onHeadHit(com.mygdx.game.sprites.Player.Mario mario) {
+    public void onHeadHit(Player player) {
 
     }
 
     @Override
-    public void areaEffect(Mario mario) {
+    public void areaEffect(Player player) {
 
     }
 

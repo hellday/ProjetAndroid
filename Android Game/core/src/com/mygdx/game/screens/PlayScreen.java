@@ -9,24 +9,19 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.RayCastCallback;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -48,7 +43,7 @@ import com.mygdx.game.sprites.CollisionWall.Area;
 import com.mygdx.game.sprites.Enemies.Boss;
 import com.mygdx.game.sprites.Enemies.Enemy;
 import com.mygdx.game.sprites.Other.FireBoss;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 import com.mygdx.game.tools.B2WorldCreator;
 import com.mygdx.game.tools.WorldContactListener;
 
@@ -85,7 +80,7 @@ public class PlayScreen implements Screen{
     private B2WorldCreator creator;
 
     //Sprites
-    private static Mario player;
+    private static Player player;
 
     //Musique
     private Music music;
@@ -192,7 +187,7 @@ public class PlayScreen implements Screen{
         creator = new B2WorldCreator(this);
 
         //Création de Mario dans notre monde
-        player = new Mario(this, usernameSession);
+        player = new Player(this, usernameSession);
 
         wcl = new WorldContactListener();
         world.setContactListener(wcl);
@@ -292,13 +287,13 @@ public class PlayScreen implements Screen{
         if(!paused) {
             //Si mario n'est pas mort, sinon on n'active pas les touches
             if (canPlay) {
-                if (player.currentState != Mario.State.DEAD) {
+                if (player.currentState != Player.State.DEAD) {
                     if (Gdx.input.isKeyJustPressed(Input.Keys.UP) && player.b2body.getLinearVelocity().y == 0 && wcl.isPlayerIsOnGround()) { //SAUT
                         player.b2body.applyLinearImpulse(new Vector2(0, 3f), player.b2body.getWorldCenter(), true);
                         GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
 
                         //Si le joueur est BLEU il peut sauter 2 fois
-                        if (player.getBuff() == Mario.Color.BLUE) {
+                        if (player.getBuff() == Player.Color.BLUE) {
                             canDoubleJump = true;
                         }
                         controller.setUpPressed(false);
@@ -323,11 +318,11 @@ public class PlayScreen implements Screen{
                     }
 
                     if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-                        if (player.getBuff() == Mario.Color.GREY) {
+                        if (player.getBuff() == Player.Color.GREY) {
                             player.setBuff("red");
-                        } else if (player.getBuff() == Mario.Color.RED) {
+                        } else if (player.getBuff() == Player.Color.RED) {
                             player.setBuff("blue");
-                        } else if (player.getBuff() == Mario.Color.BLUE) {
+                        } else if (player.getBuff() == Player.Color.BLUE) {
                             player.setBuff("grey");
                         }
                     }
@@ -366,7 +361,7 @@ public class PlayScreen implements Screen{
                         GameTest.manager.get("audio/sounds/jump_small.wav", Sound.class).play();
 
                         //Si le joueur est BLEU il peut sauter 2 fois
-                        if (player.getBuff() == Mario.Color.BLUE) {
+                        if (player.getBuff() == Player.Color.BLUE) {
                             canDoubleJump = true;
                         }
                         controller.setUpPressed(false);
@@ -467,7 +462,7 @@ public class PlayScreen implements Screen{
         startY = gamecam.viewportHeight / 2;
 
         //Controle de la caméra
-        if(player.currentState != Mario.State.DEAD) {
+        if(player.currentState != Player.State.DEAD) {
 
             //Si la caméra n'a pas été changé pour un évènement
             if(!cameraChange) {
@@ -683,7 +678,7 @@ public class PlayScreen implements Screen{
 
     public boolean gameOver(){
         //Si il est mort depuis 3 secondes
-        if(player.currentState == Mario.State.DEAD && player.getStateTimer() >3){
+        if(player.currentState == Player.State.DEAD && player.getStateTimer() >3){
             return true;
         }else return false;
     }
@@ -754,7 +749,7 @@ public class PlayScreen implements Screen{
         gamecam.update();
     }
 
-    public static Mario getPlayer(){
+    public static Player getPlayer(){
         return player;
     }
 

@@ -10,7 +10,7 @@ import com.mygdx.game.Items.ItemDef;
 import com.mygdx.game.Items.Mushroom;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 
 /**
  * Created by Terry on 10/11/2016.
@@ -29,7 +29,7 @@ public class Coin extends InteractiveTileObject {
     }
 
     @Override
-    public void onHeadHit(com.mygdx.game.sprites.Player.Mario mario) {
+    public void onHeadHit(Player player) {
         Gdx.app.log("Coin", "Collision");
         if(getCell().getTile().getId() == BLANK_COIN) {
             GameTest.manager.get("audio/sounds/bump.wav", Sound.class).play();
@@ -50,7 +50,7 @@ public class Coin extends InteractiveTileObject {
     }
 
     @Override
-    public void areaEffect(Mario mario) {
+    public void areaEffect(Player player) {
 
     }
 

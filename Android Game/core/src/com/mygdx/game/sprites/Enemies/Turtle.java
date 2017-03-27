@@ -1,6 +1,5 @@
 package com.mygdx.game.sprites.Enemies;
 
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -9,12 +8,10 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Other.FireBall;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 import com.mygdx.game.tools.B2WorldCreator;
 
 /**
@@ -131,12 +128,12 @@ public class Turtle extends  Enemy {
     }
 
     @Override
-    public void hitOnHead(Mario mario) {
+    public void hitOnHead(Player player) {
         if(currentState != State.STANDING_SHELL){
             currentState = State.STANDING_SHELL;
             velocity.x = 0;
         }else { //Si la tortue est en carapace et ne bouge pas
-            kick(mario.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
+            kick(player.getX() <= this.getX() ? KICK_RIGHT_SPEED : KICK_LEFT_SPEED);
         }
     }
 

@@ -17,7 +17,7 @@ import com.mygdx.game.GameTest;
 import com.mygdx.game.scenes.HealthBarBoss;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Player.Mario;
+import com.mygdx.game.sprites.Player.Player;
 import com.mygdx.game.tools.B2WorldCreator;
 
 /**
@@ -202,7 +202,7 @@ public class Boss extends Enemy {
     }
 
     @Override
-    public void hitOnHead(Mario mario) {
+    public void hitOnHead(Player player) {
         setToDestroy = true;
         GameTest.manager.get("audio/sounds/stomp.wav", Sound.class).play();
     }
