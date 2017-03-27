@@ -182,7 +182,7 @@
  </objectgroup>
  <objectgroup name="Coins"/>
  <objectgroup name="Bricks"/>
- <objectgroup name="Goombas">
+ <objectgroup name="Ghosts">
   <object id="276" x="352" y="272"/>
   <object id="289" x="560" y="256"/>
   <object id="290" x="752" y="256"/>
@@ -196,7 +196,6 @@
   <object id="449" x="3632" y="208" width="16" height="16"/>
   <object id="453" x="1920" y="288" width="16" height="16"/>
  </objectgroup>
- <objectgroup name="Turtles"/>
  <objectgroup name="InvisibleWalls">
   <object id="374" x="606" y="239" width="12" height="33"/>
   <object id="375" x="662" y="238" width="12" height="34"/>

@@ -157,11 +157,7 @@ public class Ghost extends com.mygdx.game.sprites.Enemies.Enemy {
     }
 
     public void onEnemyHit(Enemy enemy){
-        if(enemy instanceof Turtle && ((Turtle) enemy).currentState == Turtle.State.MOVING_SHELL){
-            killed();
-        }else {
-            reverseVelocity(true, false);
-        }
+
     }
 
     public void onBladeHit(){

@@ -20,7 +20,6 @@ import com.mygdx.game.sprites.Enemies.Ghost;
 import com.mygdx.game.sprites.Objects.Brick;
 import com.mygdx.game.sprites.Objects.Coin;
 import com.mygdx.game.sprites.Enemies.Enemy;
-import com.mygdx.game.sprites.Enemies.Turtle;
 import com.mygdx.game.sprites.CollisionWall.EnemyInvisibleWall;
 
 /**
@@ -29,7 +28,6 @@ import com.mygdx.game.sprites.CollisionWall.EnemyInvisibleWall;
 
 public class B2WorldCreator {
     private static Array<Ghost> ghosts;
-    private static Array<Turtle> turtles;
     private static Array<Boss> boss;
 
     private Vector2 startPosition;
@@ -90,28 +88,21 @@ public class B2WorldCreator {
             ghosts.add(new Ghost(screen, rect.getX() / GameTest.PPM, rect.getY() / GameTest.PPM));
         }
 
-        //Création des Tortues
-        turtles = new Array<Turtle>();
-
-        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)){
-            Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            turtles.add(new Turtle(screen, rect.getX() / GameTest.PPM, rect.getY() / GameTest.PPM));
-        }
 
         //Création des Murs invisibles
-        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(7).getObjects().getByType(RectangleMapObject.class)){
 
             new EnemyInvisibleWall(screen, object);
         }
 
         //Création des Dead Zone
-        for(MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(8).getObjects().getByType(RectangleMapObject.class)){
 
             new DeadZone(screen, object);
         }
 
         //Création des Area
-        for(MapObject object : map.getLayers().get(10).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(9).getObjects().getByType(RectangleMapObject.class)){
 
             new Area(screen, object);
         }
@@ -119,7 +110,7 @@ public class B2WorldCreator {
         //Création du Boss
         boss = new Array<Boss>();
 
-        for(MapObject object : map.getLayers().get(11).getObjects().getByType(RectangleMapObject.class)){
+        for(MapObject object : map.getLayers().get(10).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
             boss.add(new Boss(screen, rect.getX() / GameTest.PPM, rect.getY() / GameTest.PPM));
         }
@@ -133,21 +124,14 @@ public class B2WorldCreator {
         return ghosts;
     }
 
-    public Array<Turtle> getTurtles() {
-        return turtles;
-    }
 
     public  Array<Enemy> getEnemies(){
         Array<Enemy> enemies = new Array<Enemy>();
         enemies.addAll(ghosts);
-        enemies.addAll(turtles);
         enemies.addAll(boss);
         return enemies;
     }
 
-    public static void removeTurtle(Turtle turtle){
-        turtles.removeValue(turtle, true);
-    }
     public static void removeGhost(Ghost ghost){
         ghosts.removeValue(ghost, true);
     }

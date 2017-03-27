@@ -84,7 +84,7 @@ public class PlayScreen implements Screen{
 
     //Musique
     private Music music;
-    private float MUSIC_FADE_STEP = 0.01f;
+    private float MUSIC_FADE_STEP = 0.02f;
     private float fadeRate = 0.1f;
 
     private Array<Item> items;
@@ -194,7 +194,7 @@ public class PlayScreen implements Screen{
 
         //Musique utilisation
         music = GameTest.manager.get("audio/music/music.mp3", Music.class);
-        music.setVolume(0.5f);
+        music.setVolume(0.75f);
         music.setLooping(true);
 
         if(db.returnData("settings", "music", "idUser", db.getIdFromNameUser(usernameSession)).equalsIgnoreCase("on")) { //Si la musique est activé dans les paramètres
@@ -517,8 +517,9 @@ public class PlayScreen implements Screen{
                 }
             }, 0f, fadeRate);
 
-            //GameTest.manager.get("audio/music/music.mp3", Music.class).stop();
-            GameTest.manager.get("audio/music/end_level.wav", Music.class).play();
+            Music music = GameTest.manager.get("audio/music/end_level.wav", Music.class);
+            music.setVolume(0.75f);
+            music.play();
 
             float delay = 4; // seconds
 
