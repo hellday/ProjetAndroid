@@ -16,10 +16,10 @@ import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.CollisionWall.Area;
 import com.mygdx.game.sprites.CollisionWall.DeadZone;
 import com.mygdx.game.sprites.Enemies.Boss;
+import com.mygdx.game.sprites.Enemies.Ghost;
 import com.mygdx.game.sprites.Objects.Brick;
 import com.mygdx.game.sprites.Objects.Coin;
 import com.mygdx.game.sprites.Enemies.Enemy;
-import com.mygdx.game.sprites.Enemies.Goomba;
 import com.mygdx.game.sprites.Enemies.Turtle;
 import com.mygdx.game.sprites.CollisionWall.EnemyInvisibleWall;
 
@@ -28,7 +28,7 @@ import com.mygdx.game.sprites.CollisionWall.EnemyInvisibleWall;
  */
 
 public class B2WorldCreator {
-    private static Array<Goomba> goombas;
+    private static Array<Ghost> ghosts;
     private static Array<Turtle> turtles;
     private static Array<Boss> boss;
 
@@ -82,12 +82,12 @@ public class B2WorldCreator {
             new Coin(screen, object);
         }
 
-        //Création des Goomba
-        goombas = new Array<Goomba>();
+        //Création des Ghost
+        ghosts = new Array<Ghost>();
 
         for(MapObject object : map.getLayers().get(6).getObjects().getByType(RectangleMapObject.class)){
             Rectangle rect = ((RectangleMapObject) object).getRectangle();
-            goombas.add(new Goomba(screen, rect.getX() / GameTest.PPM, rect.getY() / GameTest.PPM));
+            ghosts.add(new Ghost(screen, rect.getX() / GameTest.PPM, rect.getY() / GameTest.PPM));
         }
 
         //Création des Tortues
@@ -129,8 +129,8 @@ public class B2WorldCreator {
 
     }
 
-    public Array<Goomba> getGoombas() {
-        return goombas;
+    public Array<Ghost> getGhosts() {
+        return ghosts;
     }
 
     public Array<Turtle> getTurtles() {
@@ -139,7 +139,7 @@ public class B2WorldCreator {
 
     public  Array<Enemy> getEnemies(){
         Array<Enemy> enemies = new Array<Enemy>();
-        enemies.addAll(goombas);
+        enemies.addAll(ghosts);
         enemies.addAll(turtles);
         enemies.addAll(boss);
         return enemies;
@@ -148,8 +148,8 @@ public class B2WorldCreator {
     public static void removeTurtle(Turtle turtle){
         turtles.removeValue(turtle, true);
     }
-    public static void removeGoomba(Goomba goomba){
-        goombas.removeValue(goomba, true);
+    public static void removeGhost(Ghost ghost){
+        ghosts.removeValue(ghost, true);
     }
     public static void removeBoss(Boss bosse){
         boss.removeValue(bosse, true);

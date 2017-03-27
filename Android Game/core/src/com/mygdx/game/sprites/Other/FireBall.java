@@ -11,16 +11,13 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.Filter;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTest;
-import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
 import com.mygdx.game.sprites.Enemies.Boss;
 import com.mygdx.game.sprites.Enemies.Enemy;
-import com.mygdx.game.sprites.Enemies.Goomba;
-import com.mygdx.game.sprites.Enemies.Turtle;
+import com.mygdx.game.sprites.Enemies.Ghost;
 
 
 public class FireBall extends Sprite {
@@ -106,7 +103,7 @@ public class FireBall extends Sprite {
         setToDestroy();
         GameTest.manager.get("audio/sounds/kick.ogg", Sound.class).play();
 
-        if(enemy instanceof Goomba){
+        if(enemy instanceof Ghost){
 
             enemy.onBladeHit();
             System.out.println("Fireball : Goomba");

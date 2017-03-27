@@ -14,12 +14,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.mygdx.game.GameTest;
-import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.screens.PlayScreen;
-import com.mygdx.game.sprites.Enemies.Boss;
-import com.mygdx.game.sprites.Enemies.Enemy;
-import com.mygdx.game.sprites.Enemies.Goomba;
-import com.mygdx.game.sprites.Enemies.Turtle;
 import com.mygdx.game.sprites.Player.Mario;
 
 /**

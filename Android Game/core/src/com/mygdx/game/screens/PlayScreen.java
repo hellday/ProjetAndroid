@@ -37,12 +37,10 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.mygdx.game.Controller;
 import com.mygdx.game.Database.DataBaseTest;
-import com.mygdx.game.Effects.Particles;
 import com.mygdx.game.GameTest;
 import com.mygdx.game.Items.Item;
 import com.mygdx.game.Items.ItemDef;
 import com.mygdx.game.Items.Mushroom;
-import com.mygdx.game.scenes.EndLevel;
 import com.mygdx.game.scenes.HealthBarBoss;
 import com.mygdx.game.scenes.Hud;
 import com.mygdx.game.scenes.Pause;
@@ -56,7 +54,6 @@ import com.mygdx.game.tools.WorldContactListener;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-import static com.badlogic.gdx.scenes.scene2d.actions.Actions.fadeIn;
 
 /**
  * Created by Terry on 09/11/2016.
@@ -72,7 +69,6 @@ public class PlayScreen implements Screen{
     private static Hud hud;
     private HealthBarBoss hbb;
     private Pause pause;
-    private EndLevel endLevel;
 
     //WorldContactListener
     private WorldContactListener wcl;
@@ -176,9 +172,6 @@ public class PlayScreen implements Screen{
 
         //Création de l'écran de Pause
         pause = new Pause();
-
-        //Création de l'écran de fin de niveau
-        endLevel = new EndLevel(game.batch);
 
         //Chargement de la map
         map = new TmxMapLoader().load("level" + level + ".tmx");
@@ -468,7 +461,6 @@ public class PlayScreen implements Screen{
         }
 
         hud.update(dt);
-        endLevel.update(dt);
 
 
         startX = gamecam.viewportWidth / 2;
