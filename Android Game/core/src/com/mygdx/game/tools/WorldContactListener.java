@@ -28,9 +28,9 @@ public class WorldContactListener implements ContactListener {
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
         switch (cDef){
-            case GameTest.MARIO_HEAD_BIT | GameTest.BRICK_BIT:
-            case GameTest.MARIO_HEAD_BIT | GameTest.COIN_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.MARIO_HEAD_BIT)
+            case GameTest.PLAYER_HEAD_BIT | GameTest.BRICK_BIT:
+            case GameTest.PLAYER_HEAD_BIT | GameTest.COIN_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.PLAYER_HEAD_BIT)
                     ((InteractiveTileObject) fixB.getUserData()).onHeadHit((Player) fixA.getUserData());
                 else
                     ((InteractiveTileObject) fixA.getUserData()).onHeadHit((Player) fixB.getUserData());
@@ -53,8 +53,8 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Enemy)fixB.getUserData()).onBladeHit();
                 break;
-            case GameTest.MARIO_BIT | GameTest.ENEMY_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)
+            case GameTest.PLAYER_BIT | GameTest.ENEMY_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.PLAYER_BIT)
                     ((Player) fixA.getUserData()).hit((Enemy)fixB.getUserData());
                 else
                     ((Player) fixB.getUserData()).hit((Enemy)fixA.getUserData());
@@ -76,7 +76,7 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((Item)fixB.getUserData()).reverseVelocity(true, false);
                 break;
-            case GameTest.ITEM_BIT | GameTest.MARIO_BIT: //Collision Mario et Item
+            case GameTest.ITEM_BIT | GameTest.PLAYER_BIT: //Collision Mario et Item
                 if(fixA.getFilterData().categoryBits == GameTest.ITEM_BIT)
                     ((Item)fixA.getUserData()).use((Player) fixB.getUserData());
                 else
@@ -94,35 +94,35 @@ public class WorldContactListener implements ContactListener {
                 else
                     ((FireBall)fixB.getUserData()).onFireBallHit((Enemy) fixA.getUserData(), fixA.getBody());
                 break;
-            case GameTest.FIREBOSS_BIT | GameTest.MARIO_BIT:
+            case GameTest.FIREBOSS_BIT | GameTest.PLAYER_BIT:
                 if(fixA.getFilterData().categoryBits == GameTest.FIREBOSS_BIT)
                     ((FireBoss)fixA.getUserData()).onFireBossHit((Player) fixB.getUserData(), fixB.getBody());
                 else
                     ((FireBoss)fixB.getUserData()).onFireBossHit((Player) fixA.getUserData(), fixA.getBody());
                 break;
-            case GameTest.MARIO_BIT | GameTest.DEAD_ZONE_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)
+            case GameTest.PLAYER_BIT | GameTest.DEAD_ZONE_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.PLAYER_BIT)
                     ((Player) fixA.getUserData()).die();
                 else
                     ((Player) fixB.getUserData()).die();
                 break;
             case GameTest.DESTROYED_BIT | GameTest.DEAD_ZONE_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)
+                if(fixA.getFilterData().categoryBits == GameTest.PLAYER_BIT)
                     ((Player) fixA.getUserData()).die();
                 else
                     ((Player) fixB.getUserData()).die();
                 break;
-            case GameTest.MARIO_BIT | GameTest.AREA_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.MARIO_BIT)
+            case GameTest.PLAYER_BIT | GameTest.AREA_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.PLAYER_BIT)
                     ((InteractiveTileObject) fixB.getUserData()).areaEffect((Player) fixA.getUserData());
                 else
                     ((InteractiveTileObject) fixA.getUserData()).areaEffect((Player) fixB.getUserData());
                 break;
-            case GameTest.MARIO_FOOT_BIT | GameTest.GROUND_BIT:
-            case GameTest.MARIO_FOOT_BIT | GameTest.OBJECT_BIT:
-            case GameTest.MARIO_FOOT_BIT | GameTest.BRICK_BIT:
-            case GameTest.MARIO_FOOT_BIT | GameTest.COIN_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.MARIO_FOOT_BIT)
+            case GameTest.PLAYER_FOOT_BIT | GameTest.GROUND_BIT:
+            case GameTest.PLAYER_FOOT_BIT | GameTest.OBJECT_BIT:
+            case GameTest.PLAYER_FOOT_BIT | GameTest.BRICK_BIT:
+            case GameTest.PLAYER_FOOT_BIT | GameTest.COIN_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.PLAYER_FOOT_BIT)
                     numFootContacts++;
                 else
                     numFootContacts++;
@@ -141,11 +141,11 @@ public class WorldContactListener implements ContactListener {
         int cDef = fixA.getFilterData().categoryBits | fixB.getFilterData().categoryBits;
 
         switch (cDef){
-            case GameTest.MARIO_FOOT_BIT | GameTest.GROUND_BIT:
-            case GameTest.MARIO_FOOT_BIT | GameTest.OBJECT_BIT:
-            case GameTest.MARIO_FOOT_BIT | GameTest.BRICK_BIT:
-            case GameTest.MARIO_FOOT_BIT | GameTest.COIN_BIT:
-                if(fixA.getFilterData().categoryBits == GameTest.MARIO_FOOT_BIT)
+            case GameTest.PLAYER_FOOT_BIT | GameTest.GROUND_BIT:
+            case GameTest.PLAYER_FOOT_BIT | GameTest.OBJECT_BIT:
+            case GameTest.PLAYER_FOOT_BIT | GameTest.BRICK_BIT:
+            case GameTest.PLAYER_FOOT_BIT | GameTest.COIN_BIT:
+                if(fixA.getFilterData().categoryBits == GameTest.PLAYER_FOOT_BIT)
                     numFootContacts--;
                 else
                     numFootContacts--;

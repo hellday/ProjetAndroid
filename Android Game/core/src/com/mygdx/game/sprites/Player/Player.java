@@ -36,32 +36,32 @@ import static com.mygdx.game.scenes.Hud.heartcount;
  */
 
 public class Player extends Sprite {
-    public enum State { FALLING, JUMPING, STANDING, RUNNING, GROWING, ATTACKING, DEAD}
+    public enum State { FALLING, JUMPING, STANDING, RUNNING, ATTACKING, DEAD}
     public enum Color {GREY, RED, BLUE}
-    public Color buff;
+    private Color buff;
     public State currentState;
-    public State previousState;
+    private State previousState;
     public World world;
     public Body b2body;
-    public BodyDef bdef;
-    public Fixture leftBlade;
-    public Fixture rightBlade;
-    public Fixture mainFixture;
+    private BodyDef bdef;
+    private Fixture leftBlade;
+    private Fixture rightBlade;
+    private Fixture mainFixture;
 
-    private Animation marioStand;
-    private Animation marioRun;
-    private TextureRegion marioJump;
-    private TextureRegion marioDead;
+    private Animation playerStand;
+    private Animation playerRun;
+    private TextureRegion playerJump;
+    private TextureRegion playerDead;
 
-    private Animation marioAttack;
+    private Animation playerAttack;
 
 
     private float stateTimer;
     private boolean runningRight;
-    private boolean marioIsDead;
+    private boolean playerIsDead;
 
-    private boolean marioIsAttacking;
-    private boolean marioCanAttack;
+    private boolean playerIsAttacking;
+    private boolean playerCanAttack;
     private long bladeTime;
     private long invincibleTime;
     private boolean attack;
@@ -86,8 +86,8 @@ public class Player extends Sprite {
         stateTimer = 0;
         buff = Color.GREY;
         runningRight = true;
-        marioIsAttacking = false;
-        marioCanAttack = true;
+        playerIsAttacking = false;
+        playerCanAttack = true;
 
 
         //Texture Grey Knight
@@ -101,7 +101,7 @@ public class Player extends Sprite {
         atlasAttack_blue = new TextureAtlas("sprites/knight_blue_attack.pack");
 
         applyBuff();
-        defineMario();
+        definePlayer();
         setBounds(0, 0, 48 / GameTest.PPM, 48 / GameTest.PPM);
 
         //Fireball
@@ -124,13 +124,13 @@ public class Player extends Sprite {
         setRegion(getFrame(dt));
 
 
-        if(marioIsAttacking)
+        if(playerIsAttacking)
         {
-            marioIsAttacking = false;
+            playerIsAttacking = false;
             Timer.schedule(new Timer.Task(){
                 @Override
                 public void run() {
-                    marioCanAttack = true;
+                    playerCanAttack = true;
                 }
             }, 0.56f);
         }
@@ -148,7 +148,7 @@ public class Player extends Sprite {
 
         }
 
-        if(!marioIsDead)
+        if(!playerIsDead)
         {
             if(TimeUtils.timeSinceNanos(invincibleTime) > 1250000000)
             {
@@ -191,7 +191,7 @@ public class Player extends Sprite {
     }
 
 
-    public void defineMario(){
+    public void definePlayer(){
         bdef = new BodyDef();
         bdef.position.set(100 / GameTest.PPM, 280 / GameTest.PPM);
         bdef.type = BodyDef.BodyType.DynamicBody;
@@ -201,7 +201,7 @@ public class Player extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(6 / GameTest.PPM, 12 / GameTest.PPM); //Taille du personnage
 
-        fdef.filter.categoryBits = GameTest.MARIO_BIT;
+        fdef.filter.categoryBits = GameTest.PLAYER_BIT;
         fdef.filter.maskBits = GameTest.GROUND_BIT |
                 GameTest.COIN_BIT |
                 GameTest.BRICK_BIT |
@@ -219,18 +219,18 @@ public class Player extends Sprite {
         mainFixture.setUserData(this);
         //b2body.createFixture(fdef).setUserData(this);
 
-        // Mario's head
+        // Player's head
         EdgeShape head = new EdgeShape();
         head.set(new Vector2(-2 / GameTest.PPM, 6 / GameTest.PPM), new Vector2(2 / GameTest.PPM, 6 / GameTest.PPM));
-        fdef.filter.categoryBits = GameTest.MARIO_HEAD_BIT;
+        fdef.filter.categoryBits = GameTest.PLAYER_HEAD_BIT;
         fdef.shape = head;
         fdef.friction = 0;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
 
-        // Mario's feet
+        // Player's feet
         head.set(new Vector2(-(3 / GameTest.PPM), -(12 / GameTest.PPM)), new Vector2(3 / GameTest.PPM, -(12 / GameTest.PPM)));
-        fdef.filter.categoryBits = GameTest.MARIO_FOOT_BIT;
+        fdef.filter.categoryBits = GameTest.PLAYER_FOOT_BIT;
         fdef.shape = head;
         fdef.isSensor = true;
         b2body.createFixture(fdef).setUserData(this);
@@ -284,7 +284,7 @@ public class Player extends Sprite {
                     frames.add(new TextureRegion(atlas_red.findRegion("knight_walk"), i * 234, 0, 234, 255));
                 }
 
-                marioRun = new Animation(0.08f, frames);
+                playerRun = new Animation(0.08f, frames);
                 frames.clear();
 
                 //Animation ATTACK
@@ -294,19 +294,19 @@ public class Player extends Sprite {
                 for(int i = 0; i < 3; i++){
                     frames.add(new TextureRegion(atlasAttack_red.findRegion("knight_attack"), i * 156, 170, 156, 170));
                 }
-                marioAttack = new Animation(0.08f, frames);
+                playerAttack = new Animation(0.08f, frames);
                 frames.clear();
 
-                marioJump = new TextureRegion(atlas_red.findRegion("knight_walk"), 234, 255, 234, 255);
+                playerJump = new TextureRegion(atlas_red.findRegion("knight_walk"), 234, 255, 234, 255);
 
                 //Création de l'animation pour Mario immobile
                 frames.add(new TextureRegion(atlas_red.findRegion("knight_walk"), 0, 0, 234, 255));
                 frames.add(new TextureRegion(atlas_red.findRegion("knight_walk"), 0, 255, 234, 255));
-                marioStand = new Animation(0.8f, frames);
+                playerStand = new Animation(0.8f, frames);
                 frames.clear();
 
                 //Création de la texture Mario mort
-                marioDead = new TextureRegion(atlas_red.findRegion("knight_walk"), 0, 0, 234, 255);
+                playerDead = new TextureRegion(atlas_red.findRegion("knight_walk"), 0, 0, 234, 255);
                 break;
 
             case BLUE:
@@ -315,7 +315,7 @@ public class Player extends Sprite {
                     frames.add(new TextureRegion(atlas_blue.findRegion("knight_walk"), i * 234, 0, 234, 255));
                 }
 
-                marioRun = new Animation(0.08f, frames);
+                playerRun = new Animation(0.08f, frames);
                 frames.clear();
 
                 //Animation ATTACK
@@ -325,19 +325,19 @@ public class Player extends Sprite {
                 for(int i = 0; i < 3; i++){
                     frames.add(new TextureRegion(atlasAttack_blue.findRegion("knight_attack"), i * 156, 170, 156, 170));
                 }
-                marioAttack = new Animation(0.08f, frames);
+                playerAttack = new Animation(0.08f, frames);
                 frames.clear();
 
-                marioJump = new TextureRegion(atlas_blue.findRegion("knight_walk"), 234, 255, 234, 255);
+                playerJump = new TextureRegion(atlas_blue.findRegion("knight_walk"), 234, 255, 234, 255);
 
                 //Création de l'animation pour Mario immobile
                 frames.add(new TextureRegion(atlas_blue.findRegion("knight_walk"), 0, 0, 234, 255));
                 frames.add(new TextureRegion(atlas_blue.findRegion("knight_walk"), 0, 255, 234, 255));
-                marioStand = new Animation(0.8f, frames);
+                playerStand = new Animation(0.8f, frames);
                 frames.clear();
 
                 //Création de la texture Mario mort
-                marioDead = new TextureRegion(atlas_blue.findRegion("knight_walk"), 0, 0, 234, 255);
+                playerDead = new TextureRegion(atlas_blue.findRegion("knight_walk"), 0, 0, 234, 255);
                 break;
 
 
@@ -348,7 +348,7 @@ public class Player extends Sprite {
                     frames.add(new TextureRegion(atlas_grey.findRegion("knight_walk"), i * 234, 0, 234, 255));
                 }
 
-                marioRun = new Animation(0.08f, frames);
+                playerRun = new Animation(0.08f, frames);
                 frames.clear();
 
                 //Animation ATTACK
@@ -358,19 +358,19 @@ public class Player extends Sprite {
                 for(int i = 0; i < 3; i++){
                     frames.add(new TextureRegion(atlasAttack_grey.findRegion("knight_attack"), i * 156, 170, 156, 170));
                 }
-                marioAttack = new Animation(0.08f, frames);
+                playerAttack = new Animation(0.08f, frames);
                 frames.clear();
 
-                marioJump = new TextureRegion(atlas_grey.findRegion("knight_walk"), 234, 255, 234, 255);
+                playerJump = new TextureRegion(atlas_grey.findRegion("knight_walk"), 234, 255, 234, 255);
 
                 //Création de l'animation pour Mario immobile
                 frames.add(new TextureRegion(atlas_grey.findRegion("knight_walk"), 0, 0, 234, 255));
                 frames.add(new TextureRegion(atlas_grey.findRegion("knight_walk"), 0, 255, 234, 255));
-                marioStand = new Animation(0.8f, frames);
+                playerStand = new Animation(0.8f, frames);
                 frames.clear();
 
                 //Création de la texture Mario mort
-                marioDead = new TextureRegion(atlas_grey.findRegion("knight_walk"), 0, 0, 234, 255);
+                playerDead = new TextureRegion(atlas_grey.findRegion("knight_walk"), 0, 0, 234, 255);
                 break;
         }
     }
@@ -383,21 +383,21 @@ public class Player extends Sprite {
         TextureRegion region;
         switch(currentState){
             case DEAD:
-                region = marioDead;
+                region = playerDead;
                 break;
             case JUMPING:
             case FALLING:
-                region = marioJump;
+                region = playerJump;
                 break;
             case RUNNING:
-                region = marioRun.getKeyFrame(stateTimer, true);
+                region = playerRun.getKeyFrame(stateTimer, true);
                 break;
             case STANDING:
             default:
-                region = marioStand.getKeyFrame(stateTimer, true);
+                region = playerStand.getKeyFrame(stateTimer, true);
                 break;
             case ATTACKING:
-                region = marioAttack.getKeyFrame(stateTimer, true);
+                region = playerAttack.getKeyFrame(stateTimer, true);
                 break;
         }
 
@@ -427,11 +427,11 @@ public class Player extends Sprite {
     public State getState(){
 
         //Si il meurt
-        if(marioIsDead){
+        if(playerIsDead){
             return State.DEAD;
-        }else if (attack && marioCanAttack) {
-            marioIsAttacking = true;
-            marioCanAttack = false;
+        }else if (attack && playerCanAttack) {
+            playerIsAttacking = true;
+            playerCanAttack = false;
             attack = false;
             return State.ATTACKING;
 
@@ -441,9 +441,9 @@ public class Player extends Sprite {
         }
         else if(b2body.getLinearVelocity().y > 0){
             return State.FALLING;
-        }else if(b2body.getLinearVelocity().x != 0 && marioCanAttack){
+        }else if(b2body.getLinearVelocity().x != 0 && playerCanAttack){
             return State.RUNNING;
-        }else if(!marioCanAttack)
+        }else if(!playerCanAttack)
             return State.ATTACKING;
         else return State.STANDING;
     }
@@ -483,7 +483,7 @@ public class Player extends Sprite {
         }
         else
         {
-            setCategoryFilter(GameTest.MARIO_BIT);
+            setCategoryFilter(GameTest.PLAYER_BIT);
 
         }
 
@@ -551,7 +551,7 @@ public class Player extends Sprite {
         GameTest.manager.get("audio/music/music.mp3", Music.class).stop();
         //On lance le son de la mort du Hero
         GameTest.manager.get("audio/sounds/dead_hero.wav", Sound.class).play(0.2f);
-        marioIsDead = true;
+        playerIsDead = true;
 
         //On applique un filtre pour enlever les collisions
         Filter filter = new Filter();
@@ -568,7 +568,7 @@ public class Player extends Sprite {
     }
 
     public boolean isDead(){
-        return marioIsDead;
+        return playerIsDead;
     }
 
     public float getStateTimer() {

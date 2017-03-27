@@ -30,7 +30,7 @@ public class Mushroom extends  Item {
         CircleShape shape = new CircleShape();
         shape.setRadius(6 / GameTest.PPM); //Taille du personnage
         fdef.filter.categoryBits = GameTest.ITEM_BIT;
-        fdef.filter.maskBits = GameTest.MARIO_BIT |
+        fdef.filter.maskBits = GameTest.PLAYER_BIT |
                 GameTest.OBJECT_BIT |
                 GameTest.GROUND_BIT |
                 GameTest.COIN_BIT |

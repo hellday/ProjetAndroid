@@ -134,7 +134,7 @@ public class Ghost extends com.mygdx.game.sprites.Enemies.Enemy {
                 GameTest.BRICK_BIT |
                 GameTest.ENEMY_BIT |
                 GameTest.OBJECT_BIT |
-                GameTest.MARIO_BIT |
+                GameTest.PLAYER_BIT |
                 GameTest.FIREBALL_BIT |
                 GameTest.ATTACK_BIT|
                 GameTest.ENEMY_WALL_BIT; //Avec quoi il y a collision

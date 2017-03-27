@@ -61,7 +61,7 @@ public class FireBoss extends Sprite {
         fdef.filter.maskBits = GameTest.GROUND_BIT |
                 GameTest.COIN_BIT |
                 GameTest.BRICK_BIT |
-                GameTest.MARIO_BIT |
+                GameTest.PLAYER_BIT |
                 GameTest.OBJECT_BIT;
 
         fdef.shape = shape;
